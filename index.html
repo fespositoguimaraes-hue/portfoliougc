@@ -1,0 +1,1930 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fernannda Esposito Guimarães | Portfólio UGC</title>
+<meta name="description" content="Portfólio de UGC Creator de Fernannda Esposito Guimarães: vídeos, fotos e conteúdo para marcas de beleza, moda, casa, fitness e mais.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Outfit:wght@400;500;600&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.0"></script>
+<style>
+  :root{
+    /* Paleta da marca (Fernannda): rosa e verde em destaque, o resto para fundo e detalhe */
+    --paper:#f6f3ee;
+    --paper-warm:#ede5dd;
+    --detail:#c4c2bd;
+    --green:#859b8a;
+    --green-dark:#5a695e;
+    --pink:#dd8893;
+    --pink-dark:#965c64;
+    --ink:#000000;
+    --ink-soft:#6b6c6d;
+    --margin-line:#965c64;
+    --ring-w:64px;
+    --margin-w:10px;
+    --binder-total: calc(var(--ring-w) + var(--margin-w));
+    --radius:18px;
+    --shadow-sheet: 0 10px 30px -14px rgba(0,0,0,0.22), 0 2px 6px rgba(0,0,0,0.06);
+    --ff-head:'Archivo', sans-serif;
+    --ff-body:'Outfit', sans-serif;
+    --ff-hand:'Kalam', cursive;
+  }
+
+  @media (max-width: 720px){
+    :root{
+      --ring-w:34px;
+      --margin-w:6px;
+    }
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+  }
+
+  body{
+    margin:0;
+    font-family:var(--ff-body);
+    color:var(--ink);
+    background:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3,h4{
+    font-family:var(--ff-head);
+    margin:0;
+    line-height:1.1;
+    color:var(--ink);
+  }
+
+  p{ margin:0; }
+  ul{ margin:0; padding:0; list-style:none; }
+  a{ color:inherit; text-decoration:none; }
+  img,button,input,textarea{ font-family:inherit; }
+  button{ cursor:pointer; font-family:inherit; }
+
+  .skip-link{
+    position:absolute;
+    left:-999px;
+    top:0;
+    background:var(--pink);
+    color:var(--ink);
+    padding:12px 18px;
+    z-index:999;
+    border-radius:0 0 8px 0;
+    font-weight:600;
+  }
+  .skip-link:focus{ left:0; }
+
+  :focus-visible{
+    outline:3px solid var(--pink-dark);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+
+  /* ===================== FICHÁRIO / RING BINDER ===================== */
+
+  .binder-rings{
+    position:fixed;
+    left:0;
+    top:0;
+    width:var(--ring-w);
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-around;
+    align-items:center;
+    background:linear-gradient(180deg,var(--paper-warm),var(--detail));
+    box-shadow: inset -8px 0 14px -10px rgba(0,0,0,0.35);
+    z-index:40;
+  }
+
+  .ring{
+    width:calc(var(--ring-w) * 0.6);
+    height:calc(var(--ring-w) * 0.6);
+    border-radius:50%;
+    background:linear-gradient(135deg,#f4f4f4,#959697 45%,#7c8288 55%,#eceff1);
+    box-shadow:
+      0 2px 4px rgba(0,0,0,0.35),
+      inset 0 1px 2px rgba(255,255,255,0.8);
+    position:relative;
+    flex-shrink:0;
+  }
+  .ring::after{
+    content:"";
+    position:absolute;
+    inset:28%;
+    border-radius:50%;
+    background:var(--ink);
+    box-shadow: inset 0 2px 3px rgba(0,0,0,0.6);
+  }
+
+  .margin-line{
+    position:fixed;
+    left:var(--ring-w);
+    top:0;
+    width:var(--margin-w);
+    height:100vh;
+    background:repeating-linear-gradient(
+      180deg,
+      var(--margin-line),
+      var(--margin-line) 10px,
+      var(--pink) 10px,
+      var(--pink) 12px
+    );
+    opacity:0.85;
+    z-index:39;
+  }
+
+  .page{
+    margin-left:var(--binder-total);
+    background:var(--paper);
+    min-height:100vh;
+  }
+
+  /* dotted paper texture applied per-sheet */
+  .sheet{
+    position:relative;
+    background-color:var(--paper);
+    background-image: radial-gradient(circle, rgba(0,0,0,0.16) 1px, transparent 1.4px);
+    background-size: 22px 22px;
+    border-left:8px solid var(--green);
+    border-radius:0 var(--radius) var(--radius) 0;
+    box-shadow:var(--shadow-sheet);
+    margin: 0 clamp(10px, 3vw, 28px) 34px 0;
+    padding: clamp(28px, 5vw, 64px) clamp(20px, 5vw, 56px);
+    overflow:hidden;
+  }
+  .sheet.border-pink{ border-left-color:var(--pink); }
+  .sheet.border-detail{ border-left-color:var(--ink); }
+
+  .sheet-eyebrow{
+    display:inline-block;
+    font-family:var(--ff-hand);
+    font-size:1.15rem;
+    color:var(--pink-dark);
+    transform:rotate(-2deg);
+    margin-bottom:6px;
+  }
+
+  .section-title{
+    font-size:clamp(1.6rem, 3.2vw, 2.4rem);
+    margin-bottom:8px;
+  }
+  .section-sub{
+    color:var(--ink-soft);
+    max-width:60ch;
+    margin-bottom:32px;
+    font-size:1.02rem;
+  }
+
+  /* ===================== REVEAL ANIMATION ===================== */
+  .reveal{
+    opacity:0;
+    transform:translateY(22px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.is-visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+  }
+
+  /* ===================== NAV ===================== */
+  header.site-nav{
+    position:fixed;
+    top:0;
+    left:var(--binder-total);
+    right:0;
+    z-index:50;
+    background:rgba(251,250,247,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:2px solid rgba(0,0,0,0.15);
+  }
+  .nav-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px clamp(16px,4vw,40px);
+  }
+  .nav-name{
+    font-family:var(--ff-head);
+    font-weight:800;
+    font-size:1.15rem;
+    color:var(--green-dark);
+  }
+  .nav-links{
+    display:flex;
+    gap:clamp(10px,2vw,28px);
+  }
+  .nav-links a{
+    font-weight:500;
+    font-size:0.98rem;
+    color:var(--ink);
+    padding:6px 2px;
+    border-bottom:2px solid transparent;
+    transition:border-color 0.2s ease, color 0.2s ease;
+  }
+  .nav-links a:hover{
+    color:var(--pink-dark);
+    border-bottom-color:var(--pink);
+  }
+
+  .nav-toggle{
+    display:none;
+    background:none;
+    border:2px solid var(--green);
+    border-radius:8px;
+    width:42px;
+    height:38px;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:5px;
+  }
+  .nav-toggle span{
+    display:block;
+    width:20px;
+    height:2px;
+    background:var(--green-dark);
+    border-radius:2px;
+  }
+
+  @media (max-width: 820px){
+    .nav-toggle{ display:flex; }
+    .nav-links{
+      position:absolute;
+      top:100%;
+      left:0;
+      right:0;
+      background:var(--paper);
+      flex-direction:column;
+      padding:10px clamp(16px,4vw,40px) 20px;
+      gap:4px;
+      border-bottom:2px solid rgba(0,0,0,0.15);
+      transform:translateY(-8px);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity 0.2s ease, transform 0.2s ease;
+    }
+    .nav-links.open{
+      transform:translateY(0);
+      opacity:1;
+      pointer-events:auto;
+    }
+    .nav-links a{ padding:10px 4px; border-bottom:1px solid rgba(0,0,0,0.08); }
+  }
+
+  /* ===================== HERO / CAPA ===================== */
+  .hero-sheet{
+    padding-top: clamp(96px, 14vw, 140px);
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: clamp(24px,4vw,56px);
+    align-items:center;
+  }
+  @media (max-width: 900px){
+    .hero-grid{ grid-template-columns:1fr; }
+  }
+
+  .hero-name{
+    font-size:clamp(1.6rem, 3.5vw, 2.8rem);
+    font-weight:800;
+    color:var(--ink);
+  }
+  .hero-tagline{
+    font-family:var(--ff-hand);
+    font-size:clamp(1.2rem, 2.4vw, 1.6rem);
+    color:var(--pink-dark);
+    margin-top:10px;
+    transform:rotate(-1deg);
+    display:inline-block;
+  }
+
+  .hero-description{
+    font-size:clamp(0.95rem, 1.8vw, 1.1rem);
+    color:var(--ink-soft);
+    display:none;
+    margin-top:12px;
+    margin-bottom:24px;
+    line-height:1.5;
+    max-width:500px;
+  }
+
+  .hero-buttons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    margin-top:28px;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:14px 26px;
+    border-radius:10px;
+    font-weight:600;
+    font-size:0.98rem;
+    border:2px solid transparent;
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn:hover{ transform:translateY(-2px); }
+  .btn-primary{
+    background:var(--pink);
+    color:var(--ink);
+    box-shadow:0 8px 18px -8px rgba(221,136,147,0.6);
+  }
+  .btn-primary:hover{ background:var(--pink-dark); color:#fff; }
+  .btn-outline{
+    background:transparent;
+    border-color:var(--green-dark);
+    color:var(--green-dark);
+  }
+  .btn-outline:hover{ background:var(--green-dark); color:#fff; }
+
+  .hero-socials{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+    flex-wrap:wrap;
+  }
+  .hero-socials a{
+    width:36px;
+    height:36px;
+    border-radius:9px;
+    border:1.5px solid var(--ink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--ink);
+    transition:background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  }
+  .hero-socials a svg{ width:18px; height:18px; }
+  .hero-socials a:hover{
+    background:var(--pink);
+    border-color:var(--pink-dark);
+    transform:translateY(-2px);
+  }
+
+  .hero-stats{
+    display:flex;
+    gap:clamp(18px,4vw,40px);
+    margin-top:40px;
+    flex-wrap:wrap;
+  }
+  .hero-stat-num{
+    font-family:var(--ff-head);
+    font-weight:800;
+    font-size:clamp(1.6rem,3vw,2.2rem);
+    color:var(--pink);
+  }
+  .hero-stat-label{
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    max-width:14ch;
+  }
+
+  .photo-frame{
+    position:relative;
+    aspect-ratio:4/5;
+    border-radius:16px;
+    background:linear-gradient(145deg, var(--green-dark), var(--pink-dark));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    text-align:center;
+    padding:20px;
+    font-weight:500;
+    box-shadow:0 20px 40px -20px rgba(0,0,0,0.4);
+  }
+  .photo-image{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:14px;
+    display:block;
+  }
+  /* clipe de metal segurando a foto */
+  .photo-clip{
+    position:absolute;
+    top:-16px;
+    left:50%;
+    transform:translateX(-50%) rotate(-4deg);
+    width:70px;
+    height:34px;
+    border-radius:6px;
+    background:linear-gradient(135deg,#f1f1f1,#b6bcc2 40%,#8b9198 55%,#f1f1f1);
+    box-shadow:0 6px 10px rgba(0,0,0,0.35);
+  }
+  .photo-clip::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:100%;
+    transform:translateX(-50%);
+    width:4px;
+    height:18px;
+    background:#8b9198;
+  }
+
+  .brands-strip{
+    margin-top:56px;
+    padding-top:28px;
+    border-top:2px dashed rgba(0,0,0,0.25);
+    overflow:hidden;
+  }
+  .brands-strip-label{
+    font-size:0.82rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:14px;
+  }
+  .marquee{
+    display:flex;
+    width:max-content;
+    gap:48px;
+    animation: marquee 28s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .marquee{ animation:none; overflow-x:auto; }
+  }
+  @keyframes marquee{
+    from{ transform:translateX(0); }
+    to{ transform:translateX(-50%); }
+  }
+  .marquee span{
+    font-family:var(--ff-head);
+    font-weight:700;
+    font-size:1.1rem;
+    color:var(--green);
+    opacity:0.75;
+    white-space:nowrap;
+  }
+
+  /* ===================== SOBRE ===================== */
+  .sobre-grid{
+    display:grid;
+    grid-template-columns:0.8fr 1.2fr;
+    gap:clamp(24px,4vw,56px);
+    align-items:center;
+  }
+  @media (max-width:820px){
+    .sobre-grid{ grid-template-columns:1fr; }
+  }
+  .sobre-photo{
+    aspect-ratio:4/5;
+    border-radius:14px;
+    background:linear-gradient(160deg,var(--pink-dark),var(--green-dark));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-weight:500;
+    text-align:center;
+    padding:16px;
+    box-shadow:0 16px 30px -18px rgba(0,0,0,0.4);
+  }
+  .sobre-text p{
+    font-size:1.05rem;
+    line-height:1.7;
+    color:var(--ink);
+  }
+  .promises{
+    margin-top:24px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .promises li{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    font-weight:500;
+  }
+  .promise-check{
+    flex-shrink:0;
+    width:26px;
+    height:26px;
+    border-radius:50%;
+    background:var(--green-dark);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:0.85rem;
+    font-weight:700;
+  }
+  .signature{
+    margin-top:28px;
+    font-family:var(--ff-hand);
+    font-size:1.8rem;
+    color:var(--green-dark);
+    transform:rotate(-2deg);
+  }
+
+  /* ===================== DESTAQUES ===================== */
+  .destaques-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:24px;
+  }
+  @media (max-width:900px){
+    .destaques-grid{ grid-template-columns:1fr; max-width:420px; margin:0 auto; }
+  }
+  .destaque-card{
+    display:block;
+    border-radius:14px;
+    overflow:hidden;
+    background:#fff;
+    box-shadow:0 14px 26px -18px rgba(0,0,0,0.5);
+    border:1px solid rgba(0,0,0,0.12);
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .destaque-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 20px 34px -18px rgba(0,0,0,0.55);
+  }
+  .destaque-cover{
+    position:relative;
+    aspect-ratio:9/16;
+    background:linear-gradient(160deg,var(--green-dark),var(--pink-dark));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    text-align:center;
+    padding:14px;
+    font-size:0.9rem;
+  }
+  .play-btn{
+    position:absolute;
+    inset:0;
+    margin:auto;
+    width:58px;
+    height:58px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.9);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .play-btn::after{
+    content:"";
+    border-style:solid;
+    border-width:10px 0 10px 16px;
+    border-color:transparent transparent transparent var(--green-dark);
+    margin-left:4px;
+  }
+  .destaque-metric{
+    position:absolute;
+    bottom:12px;
+    left:12px;
+    background:rgba(90,105,94,0.9);
+    padding:6px 10px;
+    border-radius:8px;
+    text-align:left;
+  }
+  .destaque-metric strong{
+    display:block;
+    font-family:var(--ff-head);
+    font-size:1.2rem;
+  }
+  .destaque-metric span{
+    font-size:0.7rem;
+    opacity:0.9;
+  }
+  .destaque-body{
+    padding:16px 18px 20px;
+  }
+  .destaque-body h3{
+    font-size:1.05rem;
+    margin-bottom:6px;
+    color:var(--ink);
+  }
+  .destaque-body p{
+    font-size:0.9rem;
+    color:var(--ink-soft);
+  }
+
+  /* ===================== TRABALHOS / FILTROS ===================== */
+  .filters{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:32px;
+  }
+  .filter-tab{
+    position:relative;
+    background:#fff;
+    border:1px solid rgba(0,0,0,0.2);
+    border-top:5px solid var(--green);
+    border-radius:4px 4px 10px 10px;
+    padding:10px 16px 8px;
+    font-size:0.85rem;
+    font-weight:600;
+    color:var(--ink-soft);
+    transition:transform 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .filter-tab:hover{ transform:translateY(-2px); }
+  .filter-tab[aria-pressed="true"]{
+    color:var(--ink);
+    background:var(--green);
+    border-top-color:var(--pink);
+  }
+
+  .gallery{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(230px,1fr));
+    gap:22px;
+  }
+  .gallery-item{
+    background:#fff;
+    border-radius:12px;
+    overflow:hidden;
+    border:1px solid rgba(0,0,0,0.12);
+    box-shadow:0 10px 20px -16px rgba(0,0,0,0.4);
+    transition:opacity 0.25s ease, transform 0.25s ease;
+  }
+  .gallery-item.hidden-item{
+    display:none;
+  }
+  .gallery-thumb{
+    aspect-ratio:4/5;
+    background:linear-gradient(150deg,var(--green-dark),var(--pink-dark));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    text-align:center;
+    padding:12px;
+    font-size:0.85rem;
+  }
+  .gallery-info{
+    padding:14px 16px 18px;
+  }
+  .gallery-tag{
+    display:inline-block;
+    font-size:0.7rem;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--green-dark);
+    background:rgba(133,155,138,0.18);
+    padding:3px 9px;
+    border-radius:20px;
+    margin-bottom:8px;
+  }
+  .gallery-info h3{
+    font-size:1rem;
+    color:var(--ink);
+  }
+  .gallery-link{
+    display:block;
+    text-align:left;
+    cursor:pointer;
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .gallery-link:hover .gallery-item{
+    transform:translateY(-4px);
+    box-shadow:0 16px 32px -12px rgba(0,0,0,0.5);
+  }
+  .gallery-link:focus-visible{
+    outline:3px solid var(--pink-dark);
+    outline-offset:3px;
+    border-radius:12px;
+  }
+
+  /* ===================== SERVIÇOS ===================== */
+  .services-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+  }
+  @media (max-width:900px){
+    .services-grid{ grid-template-columns:repeat(2,1fr); }
+  }
+  @media (max-width:600px){
+    .services-grid{ grid-template-columns:1fr; }
+  }
+  .service-card{
+    background:#fff;
+    border-radius:12px;
+    padding:24px 20px;
+    border:1px solid rgba(0,0,0,0.12);
+    box-shadow:0 10px 20px -16px rgba(0,0,0,0.35);
+  }
+  .service-num{
+    font-family:var(--ff-head);
+    font-weight:800;
+    font-size:1.6rem;
+    color:var(--pink);
+    margin-bottom:10px;
+  }
+  .service-card h3{
+    font-size:1.08rem;
+    margin-bottom:8px;
+    color:var(--ink);
+  }
+  .service-card p{
+    font-size:0.9rem;
+    color:var(--ink-soft);
+    line-height:1.55;
+  }
+
+  /* ===================== NÚMEROS / DEPOIMENTOS ===================== */
+  .subsection-heading{
+    font-family:var(--ff-hand);
+    font-size:1.15rem;
+    color:var(--green);
+    margin:40px 0 16px;
+    transform:rotate(-1deg);
+  }
+  .subsection-heading:first-of-type{ margin-top:0; }
+
+  .metrics-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+  }
+  @media (max-width:760px){
+    .metrics-grid{ grid-template-columns:repeat(2,1fr); }
+  }
+  .metric-card{
+    text-align:center;
+    background:#fff;
+    border-radius:12px;
+    padding:22px 12px;
+    border:1px solid rgba(0,0,0,0.12);
+  }
+  .metric-value{
+    font-family:var(--ff-head);
+    font-weight:800;
+    font-size:clamp(1.6rem,3vw,2.1rem);
+    color:var(--green);
+  }
+  .metric-label{
+    font-size:0.82rem;
+    color:var(--ink-soft);
+    margin-top:6px;
+  }
+
+  .campaigns-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+  }
+  @media (max-width:820px){
+    .campaigns-grid{ grid-template-columns:1fr; }
+  }
+  .campaign-card{
+    background:#fff;
+    border-radius:12px;
+    padding:20px;
+    border-left:5px solid var(--pink);
+    box-shadow:0 10px 20px -16px rgba(0,0,0,0.3);
+  }
+  .campaign-result{
+    font-family:var(--ff-head);
+    font-weight:800;
+    font-size:1.6rem;
+    color:var(--pink);
+  }
+  .campaign-card h3{
+    font-size:0.98rem;
+    margin:8px 0 6px;
+    color:var(--ink);
+  }
+  .campaign-card p{
+    font-size:0.85rem;
+    color:var(--ink-soft);
+  }
+
+  .testimonials-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+  }
+  @media (max-width:700px){
+    .testimonials-grid{ grid-template-columns:1fr; }
+  }
+  .testimonial-card{
+    background:#fff;
+    border-radius:12px;
+    padding:22px;
+    border:1px solid rgba(0,0,0,0.12);
+  }
+  .testimonial-quote{
+    font-size:0.95rem;
+    color:var(--ink);
+    line-height:1.6;
+  }
+  .testimonial-author{
+    margin-top:14px;
+    font-weight:600;
+    color:var(--ink);
+    font-size:0.9rem;
+  }
+  .testimonial-author span{
+    display:block;
+    font-weight:400;
+    color:var(--ink-soft);
+    font-size:0.82rem;
+  }
+
+  /* ===================== CONTATO ===================== */
+  .contato-grid{
+    display:grid;
+    grid-template-columns:1fr 0.9fr;
+    gap:clamp(24px,4vw,50px);
+  }
+  @media (max-width:860px){
+    .contato-grid{ grid-template-columns:1fr; }
+  }
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    margin-bottom:18px;
+  }
+  .field label{
+    font-size:0.85rem;
+    font-weight:600;
+    color:var(--ink);
+  }
+  .field input,
+  .field textarea{
+    border:2px solid rgba(0,0,0,0.25);
+    border-radius:8px;
+    padding:12px 14px;
+    font-size:0.95rem;
+    background:#fff;
+    color:var(--ink);
+  }
+  .field input:focus,
+  .field textarea:focus{
+    border-color:var(--green);
+  }
+  .field textarea{ resize:vertical; min-height:110px; }
+
+  .form-confirm{
+    display:none;
+    margin-top:6px;
+    background:rgba(133,155,138,0.18);
+    border:1px solid var(--green);
+    color:var(--green-dark);
+    padding:14px 16px;
+    border-radius:10px;
+    font-weight:500;
+  }
+  .form-confirm.show{ display:block; }
+
+  .direct-links{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    align-self:start;
+  }
+  .direct-link{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:#fff;
+    border:1px solid rgba(0,0,0,0.15);
+    border-radius:12px;
+    padding:16px 18px;
+    font-weight:600;
+    color:var(--ink);
+    transition:transform 0.15s ease, background 0.15s ease;
+  }
+  .direct-link:hover{
+    transform:translateX(4px);
+    background:rgba(0,0,0,0.06);
+  }
+  .direct-icon{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-size:1.1rem;
+    flex-shrink:0;
+  }
+  .direct-icon.whats{ background:var(--green-dark); }
+  .direct-icon.mail{ background:var(--pink-dark); }
+  .direct-icon.insta{ background:var(--ink); }
+
+  /* ===================== FOOTER ===================== */
+  footer.site-footer{
+    background:var(--ink);
+    color:var(--paper);
+    padding:clamp(32px,5vw,48px) clamp(20px,5vw,56px) 40px;
+    margin-right:clamp(10px,3vw,28px);
+    border-radius:0 var(--radius) 0 0;
+  }
+  .footer-inner{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    align-items:center;
+    gap:18px;
+    border-bottom:1px solid rgba(255,255,255,0.15);
+    padding-bottom:20px;
+    margin-bottom:16px;
+  }
+  .footer-name{
+    font-family:var(--ff-head);
+    font-weight:700;
+    font-size:1.15rem;
+  }
+  .footer-socials{
+    display:flex;
+    gap:18px;
+    font-size:0.9rem;
+  }
+  .footer-socials a:hover{ color:var(--pink); }
+  .footer-bottom{
+    font-size:0.8rem;
+    color:rgba(242,239,232,0.65);
+  }
+
+  /* ===================== MODAL DE CAPTURA ===================== */
+  .modal-backdrop{
+    position:fixed;
+    inset:0;
+    background:rgba(22,30,29,0.6);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:200;
+  }
+  .modal-backdrop.open{ display:flex; }
+  .capture-modal{
+    background:var(--paper);
+    background-image: radial-gradient(circle, rgba(0,0,0,0.14) 1px, transparent 1.4px);
+    background-size:20px 20px;
+    max-width:420px;
+    width:100%;
+    border-radius:16px;
+    border-left:8px solid var(--pink);
+    padding:32px 28px;
+    position:relative;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.5);
+  }
+  .modal-close{
+    position:absolute;
+    top:12px;
+    right:14px;
+    background:none;
+    border:none;
+    font-size:1.4rem;
+    line-height:1;
+    color:var(--ink-soft);
+    padding:6px;
+  }
+  .capture-modal h3{
+    font-size:1.3rem;
+    color:var(--ink);
+    margin-bottom:8px;
+    padding-right:20px;
+  }
+  .capture-modal p{
+    font-size:0.9rem;
+    color:var(--ink-soft);
+    margin-bottom:18px;
+  }
+  .capture-confirm{
+    display:none;
+    background:rgba(133,155,138,0.18);
+    border:1px solid var(--green);
+    padding:14px 16px;
+    border-radius:10px;
+    color:var(--green-dark);
+    font-weight:500;
+  }
+  .capture-confirm.show{ display:block; }
+
+  @media (max-width:480px){
+    .sheet{ padding:24px 16px; }
+  }
+
+  /* ===================== MODAL DE VÍDEO ===================== */
+  .video-modal-backdrop{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.85);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:999;
+    opacity:0;
+    transition:opacity 0.3s ease;
+  }
+  .video-modal-backdrop.open{
+    display:flex;
+    opacity:1;
+  }
+  .video-modal-content{
+    position:relative;
+    width:90%;
+    max-width:800px;
+    aspect-ratio:16/9;
+    background:#000;
+    border-radius:12px;
+    overflow:hidden;
+  }
+  .video-modal-close{
+    position:absolute;
+    top:12px;
+    right:12px;
+    width:40px;
+    height:40px;
+    background:rgba(255,255,255,0.2);
+    border:none;
+    border-radius:50%;
+    color:#fff;
+    font-size:24px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+    transition:background 0.2s ease;
+  }
+  .video-modal-close:hover{
+    background:rgba(255,255,255,0.4);
+  }
+  .video-modal-iframe{
+    width:100%;
+    height:100%;
+    border:none;
+  }
+  @media (max-width:768px){
+    .video-modal-content{
+      width:95%;
+      aspect-ratio:9/16;
+      max-width:500px;
+    }
+  }
+</style>
+<script src="./js/banco.js"></script>
+</head>
+<body>
+
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+<!-- ===== FICHÁRIO: ARGOLAS FIXAS À ESQUERDA ===== -->
+<div class="binder-rings" aria-hidden="true">
+  <div class="ring"></div>
+  <div class="ring"></div>
+  <div class="ring"></div>
+  <div class="ring"></div>
+  <div class="ring"></div>
+  <div class="ring"></div>
+  <div class="ring"></div>
+  <div class="ring"></div>
+</div>
+<div class="margin-line" aria-hidden="true"></div>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <span class="nav-name">Fernanda Esposito Guimarães</span>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Abrir menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="navLinks" class="nav-links" aria-label="Navegação principal">
+      <a href="#sobre">Sobre</a>
+      <a href="#destaques">Destaques</a>
+      <a href="#trabalhos">Trabalhos</a>
+      <a href="#servicos">Serviços</a>
+      <a href="#numeros">Números</a>
+      <a href="#contato">Contato</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page" id="conteudo">
+
+  <!-- ===================== 1. CAPA ===================== -->
+  <section class="sheet hero-sheet" id="inicio" aria-label="Capa">
+    <div class="hero-grid">
+      <div class="hero-text reveal">
+        <p class="hero-tagline" id="heroTagline"></p>
+        <p class="hero-description" id="heroDescription"></p>
+        <h1 class="hero-name">Vídeos estratégicos, criativos e profissionais para redes sociais.</h1>
+        <div class="hero-buttons">
+          <a class="btn btn-primary" href="#contato">Falar comigo</a>
+          <a class="btn btn-outline" href="#trabalhos">Ver os trabalhos</a>
+        </div>
+        <nav class="hero-socials" id="heroSocials" aria-label="Minhas redes sociais"></nav>
+        <div class="hero-stats" id="heroStats"></div>
+      </div>
+      <div class="hero-photo reveal">
+        <div class="photo-frame">
+          <div class="photo-clip"></div>
+          <img src="fernannda-hero.jpg" alt="Fernanda Esposito Guimarães, UGC creator" class="photo-image">
+        </div>
+      </div>
+    </div>
+
+    <div class="brands-strip reveal">
+      <p class="brands-strip-label">Marcas que já confiaram no meu trabalho</p>
+      <div class="marquee" id="brandsMarquee"></div>
+    </div>
+  </section>
+
+  <!-- ===================== 2. SOBRE MIM ===================== -->
+  <section class="sheet border-pink" id="sobre" aria-label="Sobre mim">
+    <div class="sobre-grid">
+      <div class="sobre-photo reveal" role="img" aria-label="Foto de Fernannda, formato vertical 4:5. Substitua este bloco por uma imagem real.">
+        foto pessoal<br>formato 4:5
+      </div>
+      <div class="sobre-text reveal">
+        <p class="sheet-eyebrow">sobre mim</p>
+        <h2 class="section-title">Quem cria com você</h2>
+        <p>
+          Oi, eu sou a Fernannda! Crio conteúdo autêntico para marcas que querem se conectar de verdade
+          com as pessoas. Gosto de entender o produto antes de gravar, contar histórias simples e entregar
+          um vídeo que parece feed de amiga, não anúncio de vitrine. Trabalho com carinho em cada etapa,
+          do roteiro à entrega final.
+        </p>
+        <ul class="promises">
+          <li><span class="promise-check" aria-hidden="true">✓</span> Roteiro aprovado antes de gravar</li>
+          <li><span class="promise-check" aria-hidden="true">✓</span> Uma rodada de ajuste inclusa</li>
+          <li><span class="promise-check" aria-hidden="true">✓</span> Entrega em até 72 horas úteis</li>
+        </ul>
+        <p class="signature">Fernannda Esposito</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 3. CONTEÚDOS DE DESTAQUE ===================== -->
+  <section class="sheet border-detail" id="destaques" aria-label="Conteúdos de destaque">
+    <p class="sheet-eyebrow">portfólio em vídeo</p>
+    <h2 class="section-title">Conteúdos de destaque</h2>
+    <p class="section-sub">Alguns vídeos que mostram como eu conto a história de uma marca em poucos segundos.</p>
+    <div class="destaques-grid" id="destaquesGrid"></div>
+  </section>
+
+  <!-- ===================== 4. TRABALHOS POR NICHO ===================== -->
+  <section class="sheet" id="trabalhos" aria-label="Trabalhos por nicho">
+    <p class="sheet-eyebrow">galeria</p>
+    <h2 class="section-title">Trabalhos por nicho</h2>
+    <p class="section-sub">Clique em um nicho para ver só os trabalhos daquela categoria.</p>
+    <div class="filters" id="filterTabs" role="group" aria-label="Filtrar trabalhos por nicho"></div>
+    <div class="gallery" id="galleryGrid"></div>
+  </section>
+
+  <!-- ===================== 5. COMO EU TE AJUDO ===================== -->
+  <section class="sheet border-pink" id="servicos" aria-label="Serviços">
+    <p class="sheet-eyebrow">serviços</p>
+    <h2 class="section-title">Como eu te ajudo</h2>
+    <p class="section-sub">Formatos de conteúdo que costumo entregar para marcas parceiras.</p>
+    <div class="services-grid" id="servicesGrid"></div>
+  </section>
+
+  <!-- ===================== 6. NÚMEROS E DEPOIMENTOS ===================== -->
+  <section class="sheet border-detail" id="numeros" aria-label="Números e depoimentos">
+    <p class="sheet-eyebrow">resultados</p>
+    <h2 class="section-title">Números e depoimentos</h2>
+    <p class="section-sub">Um retrato rápido do meu trabalho, direto de quem já viveu a experiência.</p>
+
+    <div class="metrics-grid" id="metricsGrid"></div>
+
+    <h3 class="subsection-heading">Resultados de campanha</h3>
+    <div class="campaigns-grid" id="campaignsGrid"></div>
+
+    <h3 class="subsection-heading">O que dizem sobre mim</h3>
+    <div class="testimonials-grid" id="testimonialsGrid"></div>
+  </section>
+
+  <!-- ===================== 7. BORA CRIAR JUNTOS ===================== -->
+  <section class="sheet" id="contato" aria-label="Contato">
+    <p class="sheet-eyebrow">vamos conversar</p>
+    <h2 class="section-title">Bora criar juntos</h2>
+    <p class="section-sub">Me conta um pouco sobre a sua marca e eu te respondo com uma proposta.</p>
+
+    <div class="contato-grid">
+      <form id="contactForm" class="reveal" novalidate>
+        <div class="field">
+          <label for="nome">Nome</label>
+          <input type="text" id="nome" name="nome" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="mensagem">Mensagem</label>
+          <textarea id="mensagem" name="mensagem" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar mensagem</button>
+        <p class="form-confirm" id="formConfirm" role="status">Mensagem enviada! Em breve eu te respondo por e-mail.</p>
+      </form>
+
+      <div class="direct-links reveal">
+        <a class="direct-link" id="whatsappLink" href="#" target="_blank" rel="noopener">
+          <span class="direct-icon whats" aria-hidden="true">W</span> Chamar no WhatsApp
+        </a>
+        <a class="direct-link" id="emailLink" href="#">
+          <span class="direct-icon mail" aria-hidden="true">@</span> Enviar e-mail
+        </a>
+        <a class="direct-link" id="instaLink" href="#" target="_blank" rel="noopener">
+          <span class="direct-icon insta" aria-hidden="true">IG</span> Ver Instagram
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 8. RODAPÉ ===================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-name">Fernannda Esposito Guimarães</p>
+      <div class="footer-socials" id="footerSocials"></div>
+    </div>
+    <p class="footer-bottom">© <span id="footerYear"></span> Fernannda Esposito Guimarães. Todos os direitos reservados.</p>
+  </footer>
+
+</div>
+
+<!-- ===================== CARD DE CAPTURA (MÍDIA KIT) ===================== -->
+<div class="modal-backdrop" id="captureBackdrop">
+  <div class="capture-modal" role="dialog" aria-modal="true" aria-labelledby="captureTitle">
+    <button class="modal-close" id="captureClose" aria-label="Fechar">×</button>
+    <h3 id="captureTitle">Quer meu mídia kit completo?</h3>
+    <p>Deixe seu nome e e-mail que eu te envio com todos os detalhes do meu trabalho.</p>
+    <form id="captureForm">
+      <div class="field">
+        <label for="captureNome">Nome</label>
+        <input type="text" id="captureNome" name="captureNome" required autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="captureEmail">E-mail</label>
+        <input type="email" id="captureEmail" name="captureEmail" required autocomplete="email">
+      </div>
+      <button type="submit" class="btn btn-primary">Quero receber</button>
+      <p class="capture-confirm" id="captureConfirm" role="status">Prontinho! Em breve você recebe o mídia kit no seu e-mail.</p>
+    </form>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =====================================================================
+     DADOS EDITÁVEIS
+     Troque os valores abaixo para atualizar o site sem mexer no HTML/CSS.
+  ===================================================================== */
+
+  // Frase curta que aparece no topo da capa (ainda não definida, edite aqui).
+  var TAGLINE = "UGC CREATOR | DIGITAL INFLUENCER | VIDEOMAKER | CREATOR SHOP";
+
+  // Descrição debaixo do tagline
+  var HERO_DESCRIPTION = "Vídeos estratégicos, criativos e profissionais para redes sociais das marcas";
+
+  // Três números da primeira dobra (capa). "value" é o número final.
+  // EDITE: troque os valores 0 pelos seus números reais antes de publicar.
+  var heroStats = [
+    { value: 0, suffix: "+", label: "vídeos entregues" },
+    { value: 0, suffix: "+", label: "marcas atendidas" },
+    { value: 0, suffix: "M+", label: "views somadas" }
+  ];
+
+  // Marcas que já trabalharam com você. As três primeiras são reais;
+  // as demais são placeholders para você editar ("Marca 04" em diante).
+  var brands = [
+    "Avon", "Eucerin", "Imecap",
+    "Marca 04", "Marca 05", "Marca 06", "Marca 07",
+    "Marca 08", "Marca 09", "Marca 10", "Marca 11", "Marca 12"
+  ];
+
+  // Conteúdos de destaque (seção 3). Três vídeos em formato 9:16.
+  // "link": cole aqui a URL do vídeo (reels, tiktok, youtube etc).
+  // "cover": troque o bloco de degradê por uma <img> real com a capa vertical do vídeo.
+  var destaques = [
+    {
+      title: "Reel em destaque",
+      context: "Vídeo publicado no Instagram, formato reels.",
+      metricValue: "+5,6M",
+      metricLabel: "views no Reels",
+      link: "https://www.instagram.com/reel/DayXBsxCQg6/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA=="
+    },
+    {
+      title: "Título do conteúdo 02",
+      context: "Troque por uma frase curta contando o contexto desse vídeo.",
+      metricValue: "+000",
+      metricLabel: "SEU NÚMERO (ex: visualizações)",
+      link: "#"
+    },
+    {
+      title: "Título do conteúdo 03",
+      context: "Troque por uma frase curta contando o contexto desse vídeo.",
+      metricValue: "+000",
+      metricLabel: "SEU NÚMERO (ex: visualizações)",
+      link: "#"
+    }
+  ];
+
+  // Nichos atendidos. "key" é usado internamente pelo filtro, "label" é o texto exibido.
+  var niches = [
+    { key: "beleza", label: "Beleza" },
+    { key: "skincare", label: "Skincare" },
+    { key: "moda", label: "Moda" },
+    { key: "comida", label: "Comida" },
+    { key: "casa", label: "Casa e Decoração" },
+    { key: "fitness", label: "Fitness" },
+    { key: "pet", label: "Pet" },
+    { key: "viagem", label: "Viagem" },
+    { key: "tech", label: "Tech" }
+  ];
+
+  // Trabalhos da galeria (seção 4). Duplique um objeto para adicionar mais trabalhos
+  // no mesmo nicho. "niche" precisa bater com um dos "key" da lista acima.
+  var gallery = [
+    { niche: "beleza", title: "Avon", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/b_z_vyop1HA" },
+    { niche: "beleza", title: "Eucerin", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/_MUli28JSV0" },
+    { niche: "beleza", title: "Etat Pur", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/-Rhy1Ab-bbU" },
+    { niche: "beleza", title: "Sweet Aromas", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/523l-ISCnas" },
+    { niche: "beleza", title: "Skelt", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/sHZ3E8SLcdg" },
+    { niche: "beleza", title: "Sere Skin", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/06cKMcSM0sk" },
+    { niche: "beleza", title: "Taiff", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/bez-b_ZyGbg" },
+    { niche: "skincare", title: "Trabalho de skincare, Marca 02", format: "vídeo unboxing 9:16" },
+    { niche: "moda", title: "Trabalho de moda, Marca 03", format: "foto still 4:5" },
+    { niche: "comida", title: "Trabalho de comida, Marca 04", format: "vídeo UGC 9:16" },
+    { niche: "casa", title: "Trabalho de casa e decoração, Marca 05", format: "foto do produto 4:5" },
+    { niche: "fitness", title: "Trabalho de fitness, Marca 06", format: "vídeo UGC 9:16" },
+    { niche: "pet", title: "Trabalho pet, Marca 07", format: "foto do produto 4:5" },
+    { niche: "viagem", title: "Trabalho de viagem, Marca 08", format: "vídeo UGC 9:16" },
+    { niche: "tech", title: "Trabalho de tech, Marca 09", format: "vídeo unboxing 9:16" }
+  ];
+
+  // Seis serviços (seção 5).
+  var services = [
+    { title: "Vídeo UGC", desc: "Vídeo autêntico estilo rede social, roteirizado e gravado especialmente para a sua marca." },
+    { title: "Corte para anúncio", desc: "Edição otimizada para performance, pronta para rodar como anúncio no Meta Ads ou TikTok Ads." },
+    { title: "Fotos do produto", desc: "Still fotográfico do seu produto em cenários que combinam com a identidade da marca." },
+    { title: "Unboxing", desc: "Abertura de caixa em vídeo, mostrando a primeira impressão real do produto." },
+    { title: "Publicação no meu perfil", desc: "Post no meu Instagram apresentando a sua marca para a minha audiência." },
+    { title: "Pacote mensal", desc: "Conteúdo recorrente todo mês, com roteiro e entrega combinados em um só pacote." }
+  ];
+
+  // Quatro métricas com contador animado (seção 6).
+  // EDITE: troque os valores 0 pelos seus números reais antes de publicar.
+  var metrics = [
+    { target: 0, suffix: "+", label: "vídeos entregues" },
+    { target: 0, suffix: "+", label: "marcas atendidas" },
+    { target: 0, suffix: "M+", label: "views somadas" },
+    { target: 0, suffix: "%", label: "roteiros aprovados de primeira" }
+  ];
+
+  // Três resultados de campanha (seção 6).
+  var campaigns = [
+    { result: "+00%", title: "Resultado de campanha 01", desc: "Descreva aqui o resultado real dessa campanha." },
+    { result: "+00%", title: "Resultado de campanha 02", desc: "Descreva aqui o resultado real dessa campanha." },
+    { result: "+00%", title: "Resultado de campanha 03", desc: "Descreva aqui o resultado real dessa campanha." }
+  ];
+
+  // Quatro depoimentos (seção 6).
+  var testimonials = [
+    { quote: "Escreva aqui o depoimento real desse cliente sobre o seu trabalho.", name: "Cliente 01", company: "Empresa 01" },
+    { quote: "Escreva aqui o depoimento real desse cliente sobre o seu trabalho.", name: "Cliente 02", company: "Empresa 02" },
+    { quote: "Escreva aqui o depoimento real desse cliente sobre o seu trabalho.", name: "Cliente 03", company: "Empresa 03" },
+    { quote: "Escreva aqui o depoimento real desse cliente sobre o seu trabalho.", name: "Cliente 04", company: "Empresa 04" }
+  ];
+
+  // Dados de contato.
+  var contactInfo = {
+    whatsapp: "5511987676748",
+    whatsappDisplay: "(11) 98767-6748",
+    email: "fespositoguimaraes@gmail.com",
+    city: "São Paulo"
+  };
+
+  // Redes sociais, exibidas como ícones pequenos e clicáveis na capa.
+  // Para adicionar ou remover uma rede, edite esta lista (a ordem aqui é a ordem exibida).
+  var socialLinks = [
+    { key: "instagram", label: "Instagram", url: "https://www.instagram.com/feguimaraes.creator" },
+    { key: "tiktok", label: "TikTok", url: "https://www.tiktok.com/@byfeguimaraes" },
+    { key: "linkedin", label: "LinkedIn", url: "https://www.linkedin.com/in/fernanda-esposito-guimar%C3%A3es-11674011a/" },
+    { key: "pinterest", label: "Pinterest", url: "https://br.pinterest.com/byfeguimaraes/" },
+    { key: "youtube", label: "YouTube", url: "https://www.youtube.com/@byfeguimaraes/shorts" }
+  ];
+
+  /* =====================================================================
+     RENDERIZAÇÃO
+  ===================================================================== */
+
+  function el(tag, className, html){
+    var e = document.createElement(tag);
+    if(className) e.className = className;
+    if(html !== undefined) e.innerHTML = html;
+    return e;
+  }
+
+  // Tagline da capa
+  document.getElementById("heroTagline").textContent = TAGLINE;
+  document.getElementById("heroDescription").textContent = HERO_DESCRIPTION;
+
+  // Stats da capa
+  (function renderHeroStats(){
+    var wrap = document.getElementById("heroStats");
+    heroStats.forEach(function(s){
+      var item = el("div", "hero-stat");
+      item.appendChild(el("p", "hero-stat-num", s.value.toLocaleString("pt-BR") + s.suffix));
+      item.appendChild(el("p", "hero-stat-label", s.label));
+      wrap.appendChild(item);
+    });
+  })();
+
+  // Ícones das redes sociais (SVG simples, sem dependências externas).
+  var socialIconsSvg = {
+    instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="0.6" fill="currentColor" stroke="none"/></svg>',
+    tiktok: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2 1.7 3.6 3.5 4v3c-1.4 0-2.7-.4-3.8-1.1v6.6a5.5 5.5 0 1 1-5.5-5.5c.3 0 .6 0 .9.1v3.1a2.4 2.4 0 1 0 1.7 2.3V3h3.2z"/></svg>',
+    linkedin: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="7" r="2"/><rect x="4.5" y="10" width="3" height="10"/><path d="M11 10h3v1.6c.6-1 1.8-1.8 3.3-1.8 3 0 3.7 1.9 3.7 4.5V20h-3v-5.1c0-1.2 0-2.7-1.6-2.7s-1.9 1.3-1.9 2.6V20h-3V10z"/></svg>',
+    pinterest: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.6 19.3c-.05-.8-.1-2 .02-2.9l1.3-5.6s-.3-.7-.3-1.6c0-1.5.9-2.6 2-2.6.9 0 1.4.7 1.4 1.6 0 1-.6 2.4-.9 3.7-.3 1.1.5 2 1.6 2 1.9 0 3.2-2.4 3.2-5.3 0-2.2-1.5-3.9-4.2-3.9-3.1 0-5 2.3-5 4.8 0 .9.3 1.5.7 2 .2.2.2.3.1.6l-.2.9c-.1.3-.3.4-.6.3-1.6-.6-2.3-2.4-2.3-4.4 0-3.3 2.8-7.2 8.2-7.2 4.4 0 7.3 3.2 7.3 6.6 0 4.5-2.5 7.9-6.1 7.9-1.2 0-2.3-.7-2.7-1.4l-.8 3c-.2.9-.6 1.9-1 2.6A10 10 0 1 0 12 2z"/></svg>',
+    youtube: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4.5" width="20" height="15" rx="4.5"/><path d="M10 8.5l6 3.5-6 3.5v-7z" fill="currentColor" stroke="none"/></svg>'
+  };
+
+  // Ícones de redes sociais na capa
+  (function renderHeroSocials(){
+    var wrap = document.getElementById("heroSocials");
+    socialLinks.forEach(function(s){
+      var a = el("a", null, socialIconsSvg[s.key] || "");
+      a.href = s.url;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.setAttribute("aria-label", s.label);
+      wrap.appendChild(a);
+    });
+  })();
+
+  // Faixa de marcas (duplicada para o efeito de rolagem contínua)
+  (function renderBrands(){
+    var wrap = document.getElementById("brandsMarquee");
+    var list = brands.concat(brands);
+    list.forEach(function(b){
+      wrap.appendChild(el("span", null, b));
+    });
+  })();
+
+  // Conteúdos de destaque
+  (function renderDestaques(){
+    var wrap = document.getElementById("destaquesGrid");
+    destaques.forEach(function(d){
+      var card = el("a", "destaque-card reveal");
+      card.href = d.link;
+      if(d.link && d.link !== "#"){
+        card.target = "_blank";
+        card.rel = "noopener";
+      }
+      card.setAttribute("aria-label", d.title + ", " + d.metricValue + " " + d.metricLabel);
+
+      var cover = el("div", "destaque-cover");
+      cover.innerHTML =
+        '<div class="play-btn" aria-hidden="true"></div>' +
+        '<div class="destaque-metric"><strong>' + d.metricValue + '</strong><span>' + d.metricLabel + '</span></div>' +
+        '<span>capa vertical 9:16</span>';
+      card.appendChild(cover);
+
+      var body = el("div", "destaque-body");
+      body.appendChild(el("h3", null, d.title));
+      body.appendChild(el("p", null, d.context));
+      card.appendChild(body);
+
+      wrap.appendChild(card);
+    });
+  })();
+
+  // Buscar vídeos do Supabase
+  (async function loadVideosFromSupabase(){
+    try {
+      if(!window.supabase || !SUPABASE_URL || !SUPABASE_ANON_KEY) return;
+
+      const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const { data: videos, error } = await sb
+        .from('videos')
+        .select('*')
+        .eq('visivel', true)
+        .order('ordem', { ascending: true });
+
+      if(!error && videos && videos.length > 0) {
+        gallery = videos.map(v => ({
+          niche: v.nicho,
+          title: v.marca || 'Trabalho',
+          format: 'vídeo UGC 9:16',
+          link: v.link
+        }));
+      }
+
+      // Renderizar a galeria com os vídeos carregados
+      renderTrabalhos();
+
+      // Registrar visita
+      try {
+        await sb.from('visitas').insert({
+          pagina: window.location.pathname || '/',
+          de_onde: document.referrer || 'direto'
+        });
+      } catch(e) {}
+    } catch(err) {
+      console.log('Supabase não disponível, usando dados locais');
+      renderTrabalhos();
+    }
+  })();
+
+  // Filtros de nicho + galeria
+  function renderTrabalhos(){
+    var filterWrap = document.getElementById("filterTabs");
+    var galleryWrap = document.getElementById("galleryGrid");
+    var nicheByKey = {};
+    niches.forEach(function(n){ nicheByKey[n.key] = n.label; });
+
+    var allTabs = [{ key: "todos", label: "Todos" }].concat(niches);
+
+    allTabs.forEach(function(n, idx){
+      var btn = el("button", "filter-tab", n.label);
+      btn.type = "button";
+      btn.dataset.filter = n.key;
+      btn.setAttribute("aria-pressed", idx === 0 ? "true" : "false");
+      btn.addEventListener("click", function(){
+        Array.prototype.forEach.call(filterWrap.children, function(b){
+          b.setAttribute("aria-pressed", "false");
+        });
+        btn.setAttribute("aria-pressed", "true");
+        applyFilter(n.key);
+      });
+      filterWrap.appendChild(btn);
+    });
+
+    gallery.forEach(function(g){
+      var item = el("div", "gallery-item reveal");
+      item.dataset.niche = g.niche;
+
+      var thumb = el("div", "gallery-thumb", g.format);
+      item.appendChild(thumb);
+
+      var info = el("div", "gallery-info");
+      info.appendChild(el("span", "gallery-tag", nicheByKey[g.niche] || g.niche));
+      info.appendChild(el("h3", null, g.title));
+      item.appendChild(info);
+
+      if(g.link){
+        var link = el("button", "gallery-link reveal");
+        link.dataset.niche = g.niche;
+        link.type = "button";
+        link.style.border = "none";
+        link.style.background = "none";
+        link.style.padding = "0";
+        link.style.cursor = "pointer";
+        link.appendChild(item);
+        link.addEventListener("click", function(e){
+          e.preventDefault();
+          window.openVideoModal(g.link);
+        });
+        galleryWrap.appendChild(link);
+      } else {
+        galleryWrap.appendChild(item);
+      }
+    });
+
+    function applyFilter(key){
+      Array.prototype.forEach.call(galleryWrap.children, function(item){
+        var show = key === "todos" || item.dataset.niche === key;
+        item.classList.toggle("hidden-item", !show);
+      });
+    }
+  }
+
+  // Serviços
+  (function renderServices(){
+    var wrap = document.getElementById("servicesGrid");
+    services.forEach(function(s, i){
+      var card = el("div", "service-card reveal");
+      card.appendChild(el("p", "service-num", String(i + 1).padStart(2, "0")));
+      card.appendChild(el("h3", null, s.title));
+      card.appendChild(el("p", null, s.desc));
+      wrap.appendChild(card);
+    });
+  })();
+
+  // Métricas animadas
+  (function renderMetrics(){
+    var wrap = document.getElementById("metricsGrid");
+    metrics.forEach(function(m){
+      var card = el("div", "metric-card reveal");
+      var value = el("p", "metric-value");
+      value.dataset.target = m.target;
+      value.dataset.suffix = m.suffix;
+      value.textContent = "0" + m.suffix;
+      card.appendChild(value);
+      card.appendChild(el("p", "metric-label", m.label));
+      wrap.appendChild(card);
+    });
+  })();
+
+  // Resultados de campanha
+  (function renderCampaigns(){
+    var wrap = document.getElementById("campaignsGrid");
+    campaigns.forEach(function(c){
+      var card = el("div", "campaign-card reveal");
+      card.appendChild(el("p", "campaign-result", c.result));
+      card.appendChild(el("h3", null, c.title));
+      card.appendChild(el("p", null, c.desc));
+      wrap.appendChild(card);
+    });
+  })();
+
+  // Depoimentos
+  (function renderTestimonials(){
+    var wrap = document.getElementById("testimonialsGrid");
+    testimonials.forEach(function(t){
+      var card = el("div", "testimonial-card reveal");
+      card.appendChild(el("p", "testimonial-quote", '"' + t.quote + '"'));
+      var author = el("p", "testimonial-author", t.name);
+      author.appendChild(el("span", null, t.company));
+      card.appendChild(author);
+      wrap.appendChild(card);
+    });
+  })();
+
+  // Busca a URL de uma rede social pela chave (mesma fonte usada nos ícones da capa)
+  function getSocialUrl(key){
+    var found = socialLinks.filter(function(s){ return s.key === key; })[0];
+    return found ? found.url : "#";
+  }
+
+  // Links de contato direto
+  (function renderContactLinks(){
+    document.getElementById("whatsappLink").href = "https://wa.me/" + contactInfo.whatsapp;
+    document.getElementById("emailLink").href = "mailto:" + contactInfo.email;
+    document.getElementById("instaLink").href = getSocialUrl("instagram");
+  })();
+
+  // Rodapé
+  (function renderFooter(){
+    var wrap = document.getElementById("footerSocials");
+    var links = [
+      { label: "Instagram", href: getSocialUrl("instagram") },
+      { label: "WhatsApp", href: "https://wa.me/" + contactInfo.whatsapp },
+      { label: "E-mail", href: "mailto:" + contactInfo.email }
+    ];
+    links.forEach(function(l){
+      var a = el("a", null, l.label);
+      a.href = l.href;
+      if(l.label !== "E-mail"){ a.target = "_blank"; a.rel = "noopener"; }
+      wrap.appendChild(a);
+    });
+    document.getElementById("footerYear").textContent = new Date().getFullYear();
+  })();
+
+  /* =====================================================================
+     MENU MOBILE
+  ===================================================================== */
+  (function navToggle(){
+    var btn = document.getElementById("navToggle");
+    var links = document.getElementById("navLinks");
+    btn.addEventListener("click", function(){
+      var open = links.classList.toggle("open");
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    Array.prototype.forEach.call(links.querySelectorAll("a"), function(a){
+      a.addEventListener("click", function(){
+        links.classList.remove("open");
+        btn.setAttribute("aria-expanded", "false");
+      });
+    });
+  })();
+
+  /* =====================================================================
+     ANIMAÇÃO DE ENTRADA (IntersectionObserver)
+  ===================================================================== */
+  (function revealOnScroll(){
+    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var items = document.querySelectorAll(".reveal");
+
+    if(reduceMotion || !("IntersectionObserver" in window)){
+      items.forEach(function(i){ i.classList.add("is-visible"); });
+      return;
+    }
+
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    items.forEach(function(i){ observer.observe(i); });
+  })();
+
+  /* =====================================================================
+     CONTADOR ANIMADO NAS MÉTRICAS
+  ===================================================================== */
+  (function animateCounters(){
+    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var counters = document.querySelectorAll(".metric-value");
+
+    function setFinal(el){
+      var target = Number(el.dataset.target) || 0;
+      el.textContent = target.toLocaleString("pt-BR") + el.dataset.suffix;
+    }
+
+    if(reduceMotion || !("IntersectionObserver" in window)){
+      counters.forEach(setFinal);
+      return;
+    }
+
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(!entry.isIntersecting) return;
+        var elNode = entry.target;
+        var target = Number(elNode.dataset.target) || 0;
+        var suffix = elNode.dataset.suffix || "";
+        var duration = 1200;
+        var startTime = null;
+
+        function step(ts){
+          if(startTime === null) startTime = ts;
+          var progress = Math.min((ts - startTime) / duration, 1);
+          var current = Math.floor(progress * target);
+          elNode.textContent = current.toLocaleString("pt-BR") + suffix;
+          if(progress < 1){
+            requestAnimationFrame(step);
+          } else {
+            elNode.textContent = target.toLocaleString("pt-BR") + suffix;
+          }
+        }
+        requestAnimationFrame(step);
+        observer.unobserve(elNode);
+      });
+    }, { threshold: 0.4 });
+
+    counters.forEach(function(c){ observer.observe(c); });
+  })();
+
+  /* =====================================================================
+     FORMULÁRIO DE CONTATO (sem recarregar a página)
+  ===================================================================== */
+  (function contactForm(){
+    var form = document.getElementById("contactForm");
+    var confirm = document.getElementById("formConfirm");
+    form.addEventListener("submit", async function(e){
+      e.preventDefault();
+
+      var nome = document.getElementById("nome").value.trim();
+      var email = document.getElementById("email").value.trim();
+      var mensagem = document.getElementById("mensagem").value.trim();
+
+      try {
+        if(window.supabase && SUPABASE_URL && SUPABASE_ANON_KEY) {
+          const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+          await sb.from('marcas').insert({
+            nome: nome,
+            email: email,
+            obs: mensagem,
+            situacao: 'Lead'
+          });
+        }
+      } catch(err) {
+        console.log('Erro ao salvar no banco:', err);
+      }
+
+      confirm.classList.add("show");
+      form.reset();
+      setTimeout(function(){ confirm.classList.remove("show"); }, 5000);
+    });
+  })();
+
+  /* =====================================================================
+     CARD DE CAPTURA (MÍDIA KIT) - aparece uma vez por visita após 7s
+  ===================================================================== */
+  (function captureCard(){
+    var backdrop = document.getElementById("captureBackdrop");
+    var closeBtn = document.getElementById("captureClose");
+    var form = document.getElementById("captureForm");
+    var confirm = document.getElementById("captureConfirm");
+    var STORAGE_KEY = "ugcCaptureShown";
+    var lastFocused = null;
+
+    function openModal(){
+      if(sessionStorage.getItem(STORAGE_KEY)) return;
+      sessionStorage.setItem(STORAGE_KEY, "1");
+      lastFocused = document.activeElement;
+      backdrop.classList.add("open");
+      var firstInput = document.getElementById("captureNome");
+      if(firstInput) firstInput.focus();
+      document.addEventListener("keydown", onKeydown);
+    }
+
+    function closeModal(){
+      backdrop.classList.remove("open");
+      document.removeEventListener("keydown", onKeydown);
+      if(lastFocused && typeof lastFocused.focus === "function"){
+        lastFocused.focus();
+      }
+    }
+
+    function onKeydown(e){
+      if(e.key === "Escape") closeModal();
+    }
+
+    closeBtn.addEventListener("click", closeModal);
+    backdrop.addEventListener("click", function(e){
+      if(e.target === backdrop) closeModal();
+    });
+
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      confirm.classList.add("show");
+      form.reset();
+      setTimeout(closeModal, 1800);
+    });
+
+    try{
+      if(!sessionStorage.getItem(STORAGE_KEY)){
+        setTimeout(openModal, 7000);
+      }
+    }catch(err){
+      // sessionStorage indisponível (ex: navegação privada): não exibe o card.
+    }
+  })();
+
+  // Modal de vídeo
+  document.addEventListener("DOMContentLoaded", function(){
+    var backdrop = document.getElementById("videoModalBackdrop");
+    var closeBtn = document.getElementById("videoModalClose");
+    var iframe = document.getElementById("videoModalIframe");
+
+    if(!backdrop || !closeBtn || !iframe) {
+      console.error("Modal elements not found");
+      return;
+    }
+
+    function extractYouTubeId(url){
+      var patterns = [
+        /(?:youtube\.com\/shorts\/|youtu\.be\/)([a-zA-Z0-9_-]+)/,
+        /youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/,
+        /youtube\.com\/embed\/([a-zA-Z0-9_-]+)/
+      ];
+      for(var i = 0; i < patterns.length; i++){
+        var match = url.match(patterns[i]);
+        if(match) return match[1];
+      }
+      return null;
+    }
+
+    window.openVideoModal = function(link){
+      var videoId = extractYouTubeId(link);
+      if(!videoId) return;
+      iframe.src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
+      backdrop.classList.add("open");
+      document.addEventListener("keydown", closeOnEscape);
+    };
+
+    function closeVideoModal(){
+      backdrop.classList.remove("open");
+      iframe.src = "";
+      document.removeEventListener("keydown", closeOnEscape);
+    }
+
+    function closeOnEscape(e){
+      if(e.key === "Escape") closeVideoModal();
+    }
+
+    closeBtn.addEventListener("click", closeVideoModal);
+    backdrop.addEventListener("click", function(e){
+      if(e.target === backdrop) closeVideoModal();
+    });
+  });
+
+})();
+</script>
+
+<!-- Modal de vídeo -->
+<div class="video-modal-backdrop" id="videoModalBackdrop">
+  <div class="video-modal-content">
+    <button class="video-modal-close" id="videoModalClose" type="button" aria-label="Fechar vídeo">×</button>
+    <iframe class="video-modal-iframe" id="videoModalIframe" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+</div>
+
+</body>
+</html>
