@@ -309,6 +309,15 @@
     display:inline-block;
   }
 
+  .hero-description{
+    font-size:clamp(0.95rem, 1.8vw, 1.1rem);
+    color:var(--ink-soft);
+    margin-top:12px;
+    margin-bottom:24px;
+    line-height:1.5;
+    max-width:500px;
+  }
+
   .hero-buttons{
     display:flex;
     flex-wrap:wrap;
@@ -395,6 +404,13 @@
     padding:20px;
     font-weight:500;
     box-shadow:0 20px 40px -20px rgba(0,0,0,0.4);
+  }
+  .photo-image{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:14px;
+    display:block;
   }
   /* clipe de metal segurando a foto */
   .photo-clip{
@@ -1029,6 +1045,7 @@
     <div class="hero-grid">
       <div class="hero-text reveal">
         <p class="hero-tagline" id="heroTagline"></p>
+        <p class="hero-description" id="heroDescription"></p>
         <h1 class="hero-name">Fernannda Esposito Guimarães</h1>
         <div class="hero-buttons">
           <a class="btn btn-primary" href="#contato">Falar comigo</a>
@@ -1038,9 +1055,9 @@
         <div class="hero-stats" id="heroStats"></div>
       </div>
       <div class="hero-photo reveal">
-        <div class="photo-frame" role="img" aria-label="Foto da creator, formato vertical 4:5. Substitua este bloco por uma imagem real.">
+        <div class="photo-frame">
           <div class="photo-clip"></div>
-          <span>foto da creator<br>formato 4:5</span>
+          <img src="fernannda-hero.jpg" alt="Fernannda Esposito Guimarães, UGC creator" class="photo-image">
         </div>
       </div>
     </div>
@@ -1196,7 +1213,10 @@
   ===================================================================== */
 
   // Frase curta que aparece no topo da capa (ainda não definida, edite aqui).
-  var TAGLINE = "SUA FRASE AQUI: o que você faz por marcas em uma linha";
+  var TAGLINE = "UGC CREATOR | DIGITAL INFLUENCER | VIDEOMAKER | CREATOR SHOP";
+
+  // Descrição debaixo do tagline
+  var HERO_DESCRIPTION = "Vídeos estratégicos, criativos e profissionais para redes sociais das marcas";
 
   // Três números da primeira dobra (capa). "value" é o número final.
   // EDITE: troque os valores 0 pelos seus números reais antes de publicar.
@@ -1333,6 +1353,7 @@
 
   // Tagline da capa
   document.getElementById("heroTagline").textContent = TAGLINE;
+  document.getElementById("heroDescription").textContent = HERO_DESCRIPTION;
 
   // Stats da capa
   (function renderHeroStats(){
