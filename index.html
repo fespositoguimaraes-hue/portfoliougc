@@ -1278,7 +1278,13 @@
   // Trabalhos da galeria (seção 4). Duplique um objeto para adicionar mais trabalhos
   // no mesmo nicho. "niche" precisa bater com um dos "key" da lista acima.
   var gallery = [
-    { niche: "beleza", title: "Trabalho de beleza, Marca 01", format: "foto do produto 4:5" },
+    { niche: "beleza", title: "Avon", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/b_z_vyop1HA" },
+    { niche: "beleza", title: "Eucerin", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/_MUli28JSV0" },
+    { niche: "beleza", title: "Etat Pur", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/-Rhy1Ab-bbU" },
+    { niche: "beleza", title: "Sweet Aromas", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/523l-ISCnas" },
+    { niche: "beleza", title: "Skelt", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/sHZ3E8SLcdg" },
+    { niche: "beleza", title: "Sere Skin", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/06cKMcSM0sk" },
+    { niche: "beleza", title: "Taiff", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/bez-b_ZyGbg" },
     { niche: "skincare", title: "Trabalho de skincare, Marca 02", format: "vídeo unboxing 9:16" },
     { niche: "moda", title: "Trabalho de moda, Marca 03", format: "foto still 4:5" },
     { niche: "comida", title: "Trabalho de comida, Marca 04", format: "vídeo UGC 9:16" },
@@ -1462,7 +1468,16 @@
       info.appendChild(el("h3", null, g.title));
       item.appendChild(info);
 
-      galleryWrap.appendChild(item);
+      if(g.link){
+        var link = el("a", "gallery-link");
+        link.href = g.link;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.appendChild(item.cloneNode(true));
+        galleryWrap.appendChild(link);
+      } else {
+        galleryWrap.appendChild(item);
+      }
     });
 
     function applyFilter(key){
