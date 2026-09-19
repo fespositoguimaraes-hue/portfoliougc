@@ -1307,7 +1307,6 @@
     whatsapp: "5511987676748",
     whatsappDisplay: "(11) 98767-6748",
     email: "fespositoguimaraes@gmail.com",
-    instagramUser: "byfeguimaraes",
     city: "São Paulo"
   };
 
@@ -1504,18 +1503,24 @@
     });
   })();
 
+  // Busca a URL de uma rede social pela chave (mesma fonte usada nos ícones da capa)
+  function getSocialUrl(key){
+    var found = socialLinks.filter(function(s){ return s.key === key; })[0];
+    return found ? found.url : "#";
+  }
+
   // Links de contato direto
   (function renderContactLinks(){
     document.getElementById("whatsappLink").href = "https://wa.me/" + contactInfo.whatsapp;
     document.getElementById("emailLink").href = "mailto:" + contactInfo.email;
-    document.getElementById("instaLink").href = "https://instagram.com/" + contactInfo.instagramUser;
+    document.getElementById("instaLink").href = getSocialUrl("instagram");
   })();
 
   // Rodapé
   (function renderFooter(){
     var wrap = document.getElementById("footerSocials");
     var links = [
-      { label: "Instagram", href: "https://instagram.com/" + contactInfo.instagramUser },
+      { label: "Instagram", href: getSocialUrl("instagram") },
       { label: "WhatsApp", href: "https://wa.me/" + contactInfo.whatsapp },
       { label: "E-mail", href: "mailto:" + contactInfo.email }
     ];
