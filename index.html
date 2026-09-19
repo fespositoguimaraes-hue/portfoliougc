@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fernannda Esposito Guimarães | Portfólio UGC</title>
-<meta name="description" content="Portfólio de UGC Creator de Fernannda Esposito Guimarães: vídeos, fotos e conteúdo para marcas de beleza, moda, casa, fitness e mais.">
+<title>Fernannda Esposito Guimar√£es | Portf√≥lio UGC</title>
+<meta name="description" content="Portf√≥lio de UGC Creator de Fernannda Esposito Guimar√£es: v√≠deos, fotos e conte√∫do para marcas de beleza, moda, casa, fitness e mais.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Outfit:wght@400;500;600&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
@@ -86,7 +86,7 @@
     border-radius:4px;
   }
 
-  /* ===================== FICHÁRIO / RING BINDER ===================== */
+  /* ===================== FICH√ÅRIO / RING BINDER ===================== */
 
   .binder-rings{
     position:fixed;
@@ -687,8 +687,23 @@
     font-size:1rem;
     color:var(--ink);
   }
+  .gallery-link{
+    display:block;
+    text-align:left;
+    cursor:pointer;
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .gallery-link:hover .gallery-item{
+    transform:translateY(-4px);
+    box-shadow:0 16px 32px -12px rgba(0,0,0,0.5);
+  }
+  .gallery-link:focus-visible{
+    outline:3px solid var(--pink-dark);
+    outline-offset:3px;
+    border-radius:12px;
+  }
 
-  /* ===================== SERVIÇOS ===================== */
+  /* ===================== SERVI√áOS ===================== */
   .services-grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
@@ -725,7 +740,7 @@
     line-height:1.55;
   }
 
-  /* ===================== NÚMEROS / DEPOIMENTOS ===================== */
+  /* ===================== N√öMEROS / DEPOIMENTOS ===================== */
   .subsection-heading{
     font-family:var(--ff-hand);
     font-size:1.15rem;
@@ -1003,13 +1018,75 @@
   @media (max-width:480px){
     .sheet{ padding:24px 16px; }
   }
+
+  /* ===================== MODAL DE V√çDEO ===================== */
+  .video-modal-backdrop{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.85);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:999;
+    opacity:0;
+    transition:opacity 0.3s ease;
+  }
+  .video-modal-backdrop.open{
+    display:flex;
+    opacity:1;
+  }
+  .video-modal-content{
+    position:relative;
+    width:90%;
+    max-width:800px;
+    aspect-ratio:16/9;
+    background:#000;
+    border-radius:12px;
+    overflow:hidden;
+  }
+  .video-modal-close{
+    position:absolute;
+    top:12px;
+    right:12px;
+    width:40px;
+    height:40px;
+    background:rgba(255,255,255,0.2);
+    border:none;
+    border-radius:50%;
+    color:#fff;
+    font-size:24px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+    transition:background 0.2s ease;
+  }
+  .video-modal-close:hover{
+    background:rgba(255,255,255,0.4);
+  }
+  .video-modal-iframe{
+    width:100%;
+    height:100%;
+    border:none;
+  }
+  @media (max-width:768px){
+    .video-modal-content{
+      width:95%;
+      aspect-ratio:9/16;
+      max-width:500px;
+    }
+  }
 </style>
 </head>
 <body>
 
-<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<a class="skip-link" href="#conteudo">Pular para o conte√∫do</a>
 
-<!-- ===== FICHÁRIO: ARGOLAS FIXAS À ESQUERDA ===== -->
+<!-- ===== FICH√ÅRIO: ARGOLAS FIXAS √Ä ESQUERDA ===== -->
 <div class="binder-rings" aria-hidden="true">
   <div class="ring"></div>
   <div class="ring"></div>
@@ -1024,16 +1101,16 @@
 
 <header class="site-nav">
   <div class="nav-inner">
-    <span class="nav-name">Fernanda Esposito Guimarães</span>
+    <span class="nav-name">Fernanda Esposito Guimar√£es</span>
     <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Abrir menu">
       <span></span><span></span><span></span>
     </button>
-    <nav id="navLinks" class="nav-links" aria-label="Navegação principal">
+    <nav id="navLinks" class="nav-links" aria-label="Navega√ß√£o principal">
       <a href="#sobre">Sobre</a>
       <a href="#destaques">Destaques</a>
       <a href="#trabalhos">Trabalhos</a>
-      <a href="#servicos">Serviços</a>
-      <a href="#numeros">Números</a>
+      <a href="#servicos">Servi√ßos</a>
+      <a href="#numeros">N√∫meros</a>
       <a href="#contato">Contato</a>
     </nav>
   </div>
@@ -1047,7 +1124,7 @@
       <div class="hero-text reveal">
         <p class="hero-tagline" id="heroTagline"></p>
         <p class="hero-description" id="heroDescription"></p>
-        <h1 class="hero-name">Vídeos estratégicos, criativos e profissionais para redes sociais.</h1>
+        <h1 class="hero-name">V√≠deos estrat√©gicos, criativos e profissionais para redes sociais.</h1>
         <div class="hero-buttons">
           <a class="btn btn-primary" href="#contato">Falar comigo</a>
           <a class="btn btn-outline" href="#trabalhos">Ver os trabalhos</a>
@@ -1058,13 +1135,13 @@
       <div class="hero-photo reveal">
         <div class="photo-frame">
           <div class="photo-clip"></div>
-          <img src="fernannda-hero.jpg" alt="Fernanda Esposito Guimarães, UGC creator" class="photo-image">
+          <img src="fernannda-hero.jpg" alt="Fernanda Esposito Guimar√£es, UGC creator" class="photo-image">
         </div>
       </div>
     </div>
 
     <div class="brands-strip reveal">
-      <p class="brands-strip-label">Marcas que já confiaram no meu trabalho</p>
+      <p class="brands-strip-label">Marcas que j√° confiaram no meu trabalho</p>
       <div class="marquee" id="brandsMarquee"></div>
     </div>
   </section>
@@ -1077,28 +1154,28 @@
       </div>
       <div class="sobre-text reveal">
         <p class="sheet-eyebrow">sobre mim</p>
-        <h2 class="section-title">Quem cria com você</h2>
+        <h2 class="section-title">Quem cria com voc√™</h2>
         <p>
-          Oi, eu sou a Fernannda! Crio conteúdo autêntico para marcas que querem se conectar de verdade
-          com as pessoas. Gosto de entender o produto antes de gravar, contar histórias simples e entregar
-          um vídeo que parece feed de amiga, não anúncio de vitrine. Trabalho com carinho em cada etapa,
-          do roteiro à entrega final.
+          Oi, eu sou a Fernannda! Crio conte√∫do aut√™ntico para marcas que querem se conectar de verdade
+          com as pessoas. Gosto de entender o produto antes de gravar, contar hist√≥rias simples e entregar
+          um v√≠deo que parece feed de amiga, n√£o an√∫ncio de vitrine. Trabalho com carinho em cada etapa,
+          do roteiro √† entrega final.
         </p>
         <ul class="promises">
-          <li><span class="promise-check" aria-hidden="true">✓</span> Roteiro aprovado antes de gravar</li>
-          <li><span class="promise-check" aria-hidden="true">✓</span> Uma rodada de ajuste inclusa</li>
-          <li><span class="promise-check" aria-hidden="true">✓</span> Entrega em até 72 horas úteis</li>
+          <li><span class="promise-check" aria-hidden="true">‚úì</span> Roteiro aprovado antes de gravar</li>
+          <li><span class="promise-check" aria-hidden="true">‚úì</span> Uma rodada de ajuste inclusa</li>
+          <li><span class="promise-check" aria-hidden="true">‚úì</span> Entrega em at√© 72 horas √∫teis</li>
         </ul>
         <p class="signature">Fernannda Esposito</p>
       </div>
     </div>
   </section>
 
-  <!-- ===================== 3. CONTEÚDOS DE DESTAQUE ===================== -->
-  <section class="sheet border-detail" id="destaques" aria-label="Conteúdos de destaque">
-    <p class="sheet-eyebrow">portfólio em vídeo</p>
-    <h2 class="section-title">Conteúdos de destaque</h2>
-    <p class="section-sub">Alguns vídeos que mostram como eu conto a história de uma marca em poucos segundos.</p>
+  <!-- ===================== 3. CONTE√öDOS DE DESTAQUE ===================== -->
+  <section class="sheet border-detail" id="destaques" aria-label="Conte√∫dos de destaque">
+    <p class="sheet-eyebrow">portf√≥lio em v√≠deo</p>
+    <h2 class="section-title">Conte√∫dos de destaque</h2>
+    <p class="section-sub">Alguns v√≠deos que mostram como eu conto a hist√≥ria de uma marca em poucos segundos.</p>
     <div class="destaques-grid" id="destaquesGrid"></div>
   </section>
 
@@ -1106,24 +1183,24 @@
   <section class="sheet" id="trabalhos" aria-label="Trabalhos por nicho">
     <p class="sheet-eyebrow">galeria</p>
     <h2 class="section-title">Trabalhos por nicho</h2>
-    <p class="section-sub">Clique em um nicho para ver só os trabalhos daquela categoria.</p>
+    <p class="section-sub">Clique em um nicho para ver s√≥ os trabalhos daquela categoria.</p>
     <div class="filters" id="filterTabs" role="group" aria-label="Filtrar trabalhos por nicho"></div>
     <div class="gallery" id="galleryGrid"></div>
   </section>
 
   <!-- ===================== 5. COMO EU TE AJUDO ===================== -->
-  <section class="sheet border-pink" id="servicos" aria-label="Serviços">
-    <p class="sheet-eyebrow">serviços</p>
+  <section class="sheet border-pink" id="servicos" aria-label="Servi√ßos">
+    <p class="sheet-eyebrow">servi√ßos</p>
     <h2 class="section-title">Como eu te ajudo</h2>
-    <p class="section-sub">Formatos de conteúdo que costumo entregar para marcas parceiras.</p>
+    <p class="section-sub">Formatos de conte√∫do que costumo entregar para marcas parceiras.</p>
     <div class="services-grid" id="servicesGrid"></div>
   </section>
 
-  <!-- ===================== 6. NÚMEROS E DEPOIMENTOS ===================== -->
-  <section class="sheet border-detail" id="numeros" aria-label="Números e depoimentos">
+  <!-- ===================== 6. N√öMEROS E DEPOIMENTOS ===================== -->
+  <section class="sheet border-detail" id="numeros" aria-label="N√∫meros e depoimentos">
     <p class="sheet-eyebrow">resultados</p>
-    <h2 class="section-title">Números e depoimentos</h2>
-    <p class="section-sub">Um retrato rápido do meu trabalho, direto de quem já viveu a experiência.</p>
+    <h2 class="section-title">N√∫meros e depoimentos</h2>
+    <p class="section-sub">Um retrato r√°pido do meu trabalho, direto de quem j√° viveu a experi√™ncia.</p>
 
     <div class="metrics-grid" id="metricsGrid"></div>
 
@@ -1172,22 +1249,22 @@
     </div>
   </section>
 
-  <!-- ===================== 8. RODAPÉ ===================== -->
+  <!-- ===================== 8. RODAP√â ===================== -->
   <footer class="site-footer">
     <div class="footer-inner">
-      <p class="footer-name">Fernannda Esposito Guimarães</p>
+      <p class="footer-name">Fernannda Esposito Guimar√£es</p>
       <div class="footer-socials" id="footerSocials"></div>
     </div>
-    <p class="footer-bottom">© <span id="footerYear"></span> Fernannda Esposito Guimarães. Todos os direitos reservados.</p>
+    <p class="footer-bottom">¬© <span id="footerYear"></span> Fernannda Esposito Guimar√£es. Todos os direitos reservados.</p>
   </footer>
 
 </div>
 
-<!-- ===================== CARD DE CAPTURA (MÍDIA KIT) ===================== -->
+<!-- ===================== CARD DE CAPTURA (M√çDIA KIT) ===================== -->
 <div class="modal-backdrop" id="captureBackdrop">
   <div class="capture-modal" role="dialog" aria-modal="true" aria-labelledby="captureTitle">
-    <button class="modal-close" id="captureClose" aria-label="Fechar">×</button>
-    <h3 id="captureTitle">Quer meu mídia kit completo?</h3>
+    <button class="modal-close" id="captureClose" aria-label="Fechar">√ó</button>
+    <h3 id="captureTitle">Quer meu m√≠dia kit completo?</h3>
     <p>Deixe seu nome e e-mail que eu te envio com todos os detalhes do meu trabalho.</p>
     <form id="captureForm">
       <div class="field">
@@ -1199,7 +1276,7 @@
         <input type="email" id="captureEmail" name="captureEmail" required autocomplete="email">
       </div>
       <button type="submit" class="btn btn-primary">Quero receber</button>
-      <p class="capture-confirm" id="captureConfirm" role="status">Prontinho! Em breve você recebe o mídia kit no seu e-mail.</p>
+      <p class="capture-confirm" id="captureConfirm" role="status">Prontinho! Em breve voc√™ recebe o m√≠dia kit no seu e-mail.</p>
     </form>
   </div>
 </div>
@@ -1209,119 +1286,119 @@
   "use strict";
 
   /* =====================================================================
-     DADOS EDITÁVEIS
+     DADOS EDIT√ÅVEIS
      Troque os valores abaixo para atualizar o site sem mexer no HTML/CSS.
   ===================================================================== */
 
-  // Frase curta que aparece no topo da capa (ainda não definida, edite aqui).
+  // Frase curta que aparece no topo da capa (ainda n√£o definida, edite aqui).
   var TAGLINE = "UGC CREATOR | DIGITAL INFLUENCER | VIDEOMAKER | CREATOR SHOP";
 
-  // Descrição debaixo do tagline
-  var HERO_DESCRIPTION = "Vídeos estratégicos, criativos e profissionais para redes sociais das marcas";
+  // Descri√ß√£o debaixo do tagline
+  var HERO_DESCRIPTION = "V√≠deos estrat√©gicos, criativos e profissionais para redes sociais das marcas";
 
-  // Três números da primeira dobra (capa). "value" é o número final.
-  // EDITE: troque os valores 0 pelos seus números reais antes de publicar.
+  // Tr√™s n√∫meros da primeira dobra (capa). "value" √© o n√∫mero final.
+  // EDITE: troque os valores 0 pelos seus n√∫meros reais antes de publicar.
   var heroStats = [
-    { value: 0, suffix: "+", label: "vídeos entregues" },
+    { value: 0, suffix: "+", label: "v√≠deos entregues" },
     { value: 0, suffix: "+", label: "marcas atendidas" },
     { value: 0, suffix: "M+", label: "views somadas" }
   ];
 
-  // Marcas que já trabalharam com você. As três primeiras são reais;
-  // as demais são placeholders para você editar ("Marca 04" em diante).
+  // Marcas que j√° trabalharam com voc√™. As tr√™s primeiras s√£o reais;
+  // as demais s√£o placeholders para voc√™ editar ("Marca 04" em diante).
   var brands = [
     "Avon", "Eucerin", "Imecap",
     "Marca 04", "Marca 05", "Marca 06", "Marca 07",
     "Marca 08", "Marca 09", "Marca 10", "Marca 11", "Marca 12"
   ];
 
-  // Conteúdos de destaque (seção 3). Três vídeos em formato 9:16.
-  // "link": cole aqui a URL do vídeo (reels, tiktok, youtube etc).
-  // "cover": troque o bloco de degradê por uma <img> real com a capa vertical do vídeo.
+  // Conte√∫dos de destaque (se√ß√£o 3). Tr√™s v√≠deos em formato 9:16.
+  // "link": cole aqui a URL do v√≠deo (reels, tiktok, youtube etc).
+  // "cover": troque o bloco de degrad√™ por uma <img> real com a capa vertical do v√≠deo.
   var destaques = [
     {
       title: "Reel em destaque",
-      context: "Vídeo publicado no Instagram, formato reels.",
+      context: "V√≠deo publicado no Instagram, formato reels.",
       metricValue: "+5,6M",
       metricLabel: "views no Reels",
       link: "https://www.instagram.com/reel/DayXBsxCQg6/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA=="
     },
     {
-      title: "Título do conteúdo 02",
-      context: "Troque por uma frase curta contando o contexto desse vídeo.",
+      title: "T√≠tulo do conte√∫do 02",
+      context: "Troque por uma frase curta contando o contexto desse v√≠deo.",
       metricValue: "+000",
-      metricLabel: "SEU NÚMERO (ex: visualizações)",
+      metricLabel: "SEU N√öMERO (ex: visualiza√ß√µes)",
       link: "#"
     },
     {
-      title: "Título do conteúdo 03",
-      context: "Troque por uma frase curta contando o contexto desse vídeo.",
+      title: "T√≠tulo do conte√∫do 03",
+      context: "Troque por uma frase curta contando o contexto desse v√≠deo.",
       metricValue: "+000",
-      metricLabel: "SEU NÚMERO (ex: visualizações)",
+      metricLabel: "SEU N√öMERO (ex: visualiza√ß√µes)",
       link: "#"
     }
   ];
 
-  // Nichos atendidos. "key" é usado internamente pelo filtro, "label" é o texto exibido.
+  // Nichos atendidos. "key" √© usado internamente pelo filtro, "label" √© o texto exibido.
   var niches = [
     { key: "beleza", label: "Beleza" },
     { key: "skincare", label: "Skincare" },
     { key: "moda", label: "Moda" },
     { key: "comida", label: "Comida" },
-    { key: "casa", label: "Casa e Decoração" },
+    { key: "casa", label: "Casa e Decora√ß√£o" },
     { key: "fitness", label: "Fitness" },
     { key: "pet", label: "Pet" },
     { key: "viagem", label: "Viagem" },
     { key: "tech", label: "Tech" }
   ];
 
-  // Trabalhos da galeria (seção 4). Duplique um objeto para adicionar mais trabalhos
+  // Trabalhos da galeria (se√ß√£o 4). Duplique um objeto para adicionar mais trabalhos
   // no mesmo nicho. "niche" precisa bater com um dos "key" da lista acima.
   var gallery = [
-    { niche: "beleza", title: "Avon", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/b_z_vyop1HA" },
-    { niche: "beleza", title: "Eucerin", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/_MUli28JSV0" },
-    { niche: "beleza", title: "Etat Pur", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/-Rhy1Ab-bbU" },
-    { niche: "beleza", title: "Sweet Aromas", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/523l-ISCnas" },
-    { niche: "beleza", title: "Skelt", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/sHZ3E8SLcdg" },
-    { niche: "beleza", title: "Sere Skin", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/06cKMcSM0sk" },
-    { niche: "beleza", title: "Taiff", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/bez-b_ZyGbg" },
-    { niche: "skincare", title: "Trabalho de skincare, Marca 02", format: "vídeo unboxing 9:16" },
+    { niche: "beleza", title: "Avon", format: "v√≠deo UGC 9:16", link: "https://youtube.com/shorts/b_z_vyop1HA" },
+    { niche: "beleza", title: "Eucerin", format: "v√≠deo UGC 9:16", link: "https://youtube.com/shorts/_MUli28JSV0" },
+    { niche: "beleza", title: "Etat Pur", format: "v√≠deo UGC 9:16", link: "https://youtube.com/shorts/-Rhy1Ab-bbU" },
+    { niche: "beleza", title: "Sweet Aromas", format: "v√≠deo UGC 9:16", link: "https://youtube.com/shorts/523l-ISCnas" },
+    { niche: "beleza", title: "Skelt", format: "v√≠deo UGC 9:16", link: "https://youtube.com/shorts/sHZ3E8SLcdg" },
+    { niche: "beleza", title: "Sere Skin", format: "v√≠deo UGC 9:16", link: "https://youtube.com/shorts/06cKMcSM0sk" },
+    { niche: "beleza", title: "Taiff", format: "v√≠deo UGC 9:16", link: "https://youtube.com/shorts/bez-b_ZyGbg" },
+    { niche: "skincare", title: "Trabalho de skincare, Marca 02", format: "v√≠deo unboxing 9:16" },
     { niche: "moda", title: "Trabalho de moda, Marca 03", format: "foto still 4:5" },
-    { niche: "comida", title: "Trabalho de comida, Marca 04", format: "vídeo UGC 9:16" },
-    { niche: "casa", title: "Trabalho de casa e decoração, Marca 05", format: "foto do produto 4:5" },
-    { niche: "fitness", title: "Trabalho de fitness, Marca 06", format: "vídeo UGC 9:16" },
+    { niche: "comida", title: "Trabalho de comida, Marca 04", format: "v√≠deo UGC 9:16" },
+    { niche: "casa", title: "Trabalho de casa e decora√ß√£o, Marca 05", format: "foto do produto 4:5" },
+    { niche: "fitness", title: "Trabalho de fitness, Marca 06", format: "v√≠deo UGC 9:16" },
     { niche: "pet", title: "Trabalho pet, Marca 07", format: "foto do produto 4:5" },
-    { niche: "viagem", title: "Trabalho de viagem, Marca 08", format: "vídeo UGC 9:16" },
-    { niche: "tech", title: "Trabalho de tech, Marca 09", format: "vídeo unboxing 9:16" }
+    { niche: "viagem", title: "Trabalho de viagem, Marca 08", format: "v√≠deo UGC 9:16" },
+    { niche: "tech", title: "Trabalho de tech, Marca 09", format: "v√≠deo unboxing 9:16" }
   ];
 
-  // Seis serviços (seção 5).
+  // Seis servi√ßos (se√ß√£o 5).
   var services = [
-    { title: "Vídeo UGC", desc: "Vídeo autêntico estilo rede social, roteirizado e gravado especialmente para a sua marca." },
-    { title: "Corte para anúncio", desc: "Edição otimizada para performance, pronta para rodar como anúncio no Meta Ads ou TikTok Ads." },
-    { title: "Fotos do produto", desc: "Still fotográfico do seu produto em cenários que combinam com a identidade da marca." },
-    { title: "Unboxing", desc: "Abertura de caixa em vídeo, mostrando a primeira impressão real do produto." },
-    { title: "Publicação no meu perfil", desc: "Post no meu Instagram apresentando a sua marca para a minha audiência." },
-    { title: "Pacote mensal", desc: "Conteúdo recorrente todo mês, com roteiro e entrega combinados em um só pacote." }
+    { title: "V√≠deo UGC", desc: "V√≠deo aut√™ntico estilo rede social, roteirizado e gravado especialmente para a sua marca." },
+    { title: "Corte para an√∫ncio", desc: "Edi√ß√£o otimizada para performance, pronta para rodar como an√∫ncio no Meta Ads ou TikTok Ads." },
+    { title: "Fotos do produto", desc: "Still fotogr√°fico do seu produto em cen√°rios que combinam com a identidade da marca." },
+    { title: "Unboxing", desc: "Abertura de caixa em v√≠deo, mostrando a primeira impress√£o real do produto." },
+    { title: "Publica√ß√£o no meu perfil", desc: "Post no meu Instagram apresentando a sua marca para a minha audi√™ncia." },
+    { title: "Pacote mensal", desc: "Conte√∫do recorrente todo m√™s, com roteiro e entrega combinados em um s√≥ pacote." }
   ];
 
-  // Quatro métricas com contador animado (seção 6).
-  // EDITE: troque os valores 0 pelos seus números reais antes de publicar.
+  // Quatro m√©tricas com contador animado (se√ß√£o 6).
+  // EDITE: troque os valores 0 pelos seus n√∫meros reais antes de publicar.
   var metrics = [
-    { target: 0, suffix: "+", label: "vídeos entregues" },
+    { target: 0, suffix: "+", label: "v√≠deos entregues" },
     { target: 0, suffix: "+", label: "marcas atendidas" },
     { target: 0, suffix: "M+", label: "views somadas" },
     { target: 0, suffix: "%", label: "roteiros aprovados de primeira" }
   ];
 
-  // Três resultados de campanha (seção 6).
+  // Tr√™s resultados de campanha (se√ß√£o 6).
   var campaigns = [
     { result: "+00%", title: "Resultado de campanha 01", desc: "Descreva aqui o resultado real dessa campanha." },
     { result: "+00%", title: "Resultado de campanha 02", desc: "Descreva aqui o resultado real dessa campanha." },
     { result: "+00%", title: "Resultado de campanha 03", desc: "Descreva aqui o resultado real dessa campanha." }
   ];
 
-  // Quatro depoimentos (seção 6).
+  // Quatro depoimentos (se√ß√£o 6).
   var testimonials = [
     { quote: "Escreva aqui o depoimento real desse cliente sobre o seu trabalho.", name: "Cliente 01", company: "Empresa 01" },
     { quote: "Escreva aqui o depoimento real desse cliente sobre o seu trabalho.", name: "Cliente 02", company: "Empresa 02" },
@@ -1334,11 +1411,11 @@
     whatsapp: "5511987676748",
     whatsappDisplay: "(11) 98767-6748",
     email: "fespositoguimaraes@gmail.com",
-    city: "São Paulo"
+    city: "S√£o Paulo"
   };
 
-  // Redes sociais, exibidas como ícones pequenos e clicáveis na capa.
-  // Para adicionar ou remover uma rede, edite esta lista (a ordem aqui é a ordem exibida).
+  // Redes sociais, exibidas como √≠cones pequenos e clic√°veis na capa.
+  // Para adicionar ou remover uma rede, edite esta lista (a ordem aqui √© a ordem exibida).
   var socialLinks = [
     { key: "instagram", label: "Instagram", url: "https://www.instagram.com/feguimaraes.creator" },
     { key: "tiktok", label: "TikTok", url: "https://www.tiktok.com/@byfeguimaraes" },
@@ -1348,7 +1425,7 @@
   ];
 
   /* =====================================================================
-     RENDERIZAÇÃO
+     RENDERIZA√á√ÉO
   ===================================================================== */
 
   function el(tag, className, html){
@@ -1373,7 +1450,7 @@
     });
   })();
 
-  // Ícones das redes sociais (SVG simples, sem dependências externas).
+  // √çcones das redes sociais (SVG simples, sem depend√™ncias externas).
   var socialIconsSvg = {
     instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="0.6" fill="currentColor" stroke="none"/></svg>',
     tiktok: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2 1.7 3.6 3.5 4v3c-1.4 0-2.7-.4-3.8-1.1v6.6a5.5 5.5 0 1 1-5.5-5.5c.3 0 .6 0 .9.1v3.1a2.4 2.4 0 1 0 1.7 2.3V3h3.2z"/></svg>',
@@ -1382,7 +1459,7 @@
     youtube: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4.5" width="20" height="15" rx="4.5"/><path d="M10 8.5l6 3.5-6 3.5v-7z" fill="currentColor" stroke="none"/></svg>'
   };
 
-  // Ícones de redes sociais na capa
+  // √çcones de redes sociais na capa
   (function renderHeroSocials(){
     var wrap = document.getElementById("heroSocials");
     socialLinks.forEach(function(s){
@@ -1395,7 +1472,7 @@
     });
   })();
 
-  // Faixa de marcas (duplicada para o efeito de rolagem contínua)
+  // Faixa de marcas (duplicada para o efeito de rolagem cont√≠nua)
   (function renderBrands(){
     var wrap = document.getElementById("brandsMarquee");
     var list = brands.concat(brands);
@@ -1404,7 +1481,7 @@
     });
   })();
 
-  // Conteúdos de destaque
+  // Conte√∫dos de destaque
   (function renderDestaques(){
     var wrap = document.getElementById("destaquesGrid");
     destaques.forEach(function(d){
@@ -1469,12 +1546,18 @@
       item.appendChild(info);
 
       if(g.link){
-        var link = el("a", "gallery-link reveal");
+        var link = el("button", "gallery-link reveal");
         link.dataset.niche = g.niche;
-        link.href = g.link;
-        link.target = "_blank";
-        link.rel = "noopener";
+        link.type = "button";
+        link.style.border = "none";
+        link.style.background = "none";
+        link.style.padding = "0";
+        link.style.cursor = "pointer";
         link.appendChild(item);
+        link.addEventListener("click", function(e){
+          e.preventDefault();
+          window.openVideoModal(g.link);
+        });
         galleryWrap.appendChild(link);
       } else {
         galleryWrap.appendChild(item);
@@ -1489,7 +1572,7 @@
     }
   })();
 
-  // Serviços
+  // Servi√ßos
   (function renderServices(){
     var wrap = document.getElementById("servicesGrid");
     services.forEach(function(s, i){
@@ -1501,7 +1584,7 @@
     });
   })();
 
-  // Métricas animadas
+  // M√©tricas animadas
   (function renderMetrics(){
     var wrap = document.getElementById("metricsGrid");
     metrics.forEach(function(m){
@@ -1541,7 +1624,7 @@
     });
   })();
 
-  // Busca a URL de uma rede social pela chave (mesma fonte usada nos ícones da capa)
+  // Busca a URL de uma rede social pela chave (mesma fonte usada nos √≠cones da capa)
   function getSocialUrl(key){
     var found = socialLinks.filter(function(s){ return s.key === key; })[0];
     return found ? found.url : "#";
@@ -1554,7 +1637,7 @@
     document.getElementById("instaLink").href = getSocialUrl("instagram");
   })();
 
-  // Rodapé
+  // Rodap√©
   (function renderFooter(){
     var wrap = document.getElementById("footerSocials");
     var links = [
@@ -1590,7 +1673,7 @@
   })();
 
   /* =====================================================================
-     ANIMAÇÃO DE ENTRADA (IntersectionObserver)
+     ANIMA√á√ÉO DE ENTRADA (IntersectionObserver)
   ===================================================================== */
   (function revealOnScroll(){
     var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1614,7 +1697,7 @@
   })();
 
   /* =====================================================================
-     CONTADOR ANIMADO NAS MÉTRICAS
+     CONTADOR ANIMADO NAS M√âTRICAS
   ===================================================================== */
   (function animateCounters(){
     var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1659,7 +1742,7 @@
   })();
 
   /* =====================================================================
-     FORMULÁRIO DE CONTATO (sem recarregar a página)
+     FORMUL√ÅRIO DE CONTATO (sem recarregar a p√°gina)
   ===================================================================== */
   (function contactForm(){
     var form = document.getElementById("contactForm");
@@ -1672,7 +1755,7 @@
   })();
 
   /* =====================================================================
-     CARD DE CAPTURA (MÍDIA KIT) - aparece uma vez por visita após 7s
+     CARD DE CAPTURA (M√çDIA KIT) - aparece uma vez por visita ap√≥s 7s
   ===================================================================== */
   (function captureCard(){
     var backdrop = document.getElementById("captureBackdrop");
@@ -1721,11 +1804,68 @@
         setTimeout(openModal, 7000);
       }
     }catch(err){
-      // sessionStorage indisponível (ex: navegação privada): não exibe o card.
+      // sessionStorage indispon√≠vel (ex: navega√ß√£o privada): n√£o exibe o card.
     }
   })();
 
+  // Modal de v√≠deo
+  document.addEventListener("DOMContentLoaded", function(){
+    var backdrop = document.getElementById("videoModalBackdrop");
+    var closeBtn = document.getElementById("videoModalClose");
+    var iframe = document.getElementById("videoModalIframe");
+
+    if(!backdrop || !closeBtn || !iframe) {
+      console.error("Modal elements not found");
+      return;
+    }
+
+    function extractYouTubeId(url){
+      var patterns = [
+        /(?:youtube\.com\/shorts\/|youtu\.be\/)([a-zA-Z0-9_-]+)/,
+        /youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/,
+        /youtube\.com\/embed\/([a-zA-Z0-9_-]+)/
+      ];
+      for(var i = 0; i < patterns.length; i++){
+        var match = url.match(patterns[i]);
+        if(match) return match[1];
+      }
+      return null;
+    }
+
+    window.openVideoModal = function(link){
+      var videoId = extractYouTubeId(link);
+      if(!videoId) return;
+      iframe.src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
+      backdrop.classList.add("open");
+      document.addEventListener("keydown", closeOnEscape);
+    };
+
+    function closeVideoModal(){
+      backdrop.classList.remove("open");
+      iframe.src = "";
+      document.removeEventListener("keydown", closeOnEscape);
+    }
+
+    function closeOnEscape(e){
+      if(e.key === "Escape") closeVideoModal();
+    }
+
+    closeBtn.addEventListener("click", closeVideoModal);
+    backdrop.addEventListener("click", function(e){
+      if(e.target === backdrop) closeVideoModal();
+    });
+  });
+
 })();
 </script>
+
+<!-- Modal de v√≠deo -->
+<div class="video-modal-backdrop" id="videoModalBackdrop">
+  <div class="video-modal-content">
+    <button class="video-modal-close" id="videoModalClose" type="button" aria-label="Fechar v√≠deo">√ó</button>
+    <iframe class="video-modal-iframe" id="videoModalIframe" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+</div>
+
 </body>
 </html>
