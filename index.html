@@ -1469,11 +1469,12 @@
       item.appendChild(info);
 
       if(g.link){
-        var link = el("a", "gallery-link");
+        var link = el("a", "gallery-link reveal");
+        link.dataset.niche = g.niche;
         link.href = g.link;
         link.target = "_blank";
         link.rel = "noopener";
-        link.appendChild(item.cloneNode(true));
+        link.appendChild(item);
         galleryWrap.appendChild(link);
       } else {
         galleryWrap.appendChild(item);
