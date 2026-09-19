@@ -340,6 +340,30 @@
   }
   .btn-outline:hover{ background:var(--green-dark); color:#fff; }
 
+  .hero-socials{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+    flex-wrap:wrap;
+  }
+  .hero-socials a{
+    width:36px;
+    height:36px;
+    border-radius:9px;
+    border:1.5px solid var(--ink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--ink);
+    transition:background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  }
+  .hero-socials a svg{ width:18px; height:18px; }
+  .hero-socials a:hover{
+    background:var(--pink);
+    border-color:var(--pink-dark);
+    transform:translateY(-2px);
+  }
+
   .hero-stats{
     display:flex;
     gap:clamp(18px,4vw,40px);
@@ -1010,6 +1034,7 @@
           <a class="btn btn-primary" href="#contato">Falar comigo</a>
           <a class="btn btn-outline" href="#trabalhos">Ver os trabalhos</a>
         </div>
+        <nav class="hero-socials" id="heroSocials" aria-label="Minhas redes sociais"></nav>
         <div class="hero-stats" id="heroStats"></div>
       </div>
       <div class="hero-photo reveal">
@@ -1286,6 +1311,16 @@
     city: "São Paulo"
   };
 
+  // Redes sociais, exibidas como ícones pequenos e clicáveis na capa.
+  // Para adicionar ou remover uma rede, edite esta lista (a ordem aqui é a ordem exibida).
+  var socialLinks = [
+    { key: "instagram", label: "Instagram", url: "https://www.instagram.com/feguimaraes.creator" },
+    { key: "tiktok", label: "TikTok", url: "https://www.tiktok.com/@byfeguimaraes" },
+    { key: "linkedin", label: "LinkedIn", url: "https://www.linkedin.com/in/fernanda-esposito-guimar%C3%A3es-11674011a/" },
+    { key: "pinterest", label: "Pinterest", url: "https://br.pinterest.com/byfeguimaraes/" },
+    { key: "youtube", label: "YouTube", url: "https://www.youtube.com/@byfeguimaraes/shorts" }
+  ];
+
   /* =====================================================================
      RENDERIZAÇÃO
   ===================================================================== */
@@ -1308,6 +1343,28 @@
       item.appendChild(el("p", "hero-stat-num", s.value.toLocaleString("pt-BR") + s.suffix));
       item.appendChild(el("p", "hero-stat-label", s.label));
       wrap.appendChild(item);
+    });
+  })();
+
+  // Ícones das redes sociais (SVG simples, sem dependências externas).
+  var socialIconsSvg = {
+    instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="0.6" fill="currentColor" stroke="none"/></svg>',
+    tiktok: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2 1.7 3.6 3.5 4v3c-1.4 0-2.7-.4-3.8-1.1v6.6a5.5 5.5 0 1 1-5.5-5.5c.3 0 .6 0 .9.1v3.1a2.4 2.4 0 1 0 1.7 2.3V3h3.2z"/></svg>',
+    linkedin: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="7" r="2"/><rect x="4.5" y="10" width="3" height="10"/><path d="M11 10h3v1.6c.6-1 1.8-1.8 3.3-1.8 3 0 3.7 1.9 3.7 4.5V20h-3v-5.1c0-1.2 0-2.7-1.6-2.7s-1.9 1.3-1.9 2.6V20h-3V10z"/></svg>',
+    pinterest: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.6 19.3c-.05-.8-.1-2 .02-2.9l1.3-5.6s-.3-.7-.3-1.6c0-1.5.9-2.6 2-2.6.9 0 1.4.7 1.4 1.6 0 1-.6 2.4-.9 3.7-.3 1.1.5 2 1.6 2 1.9 0 3.2-2.4 3.2-5.3 0-2.2-1.5-3.9-4.2-3.9-3.1 0-5 2.3-5 4.8 0 .9.3 1.5.7 2 .2.2.2.3.1.6l-.2.9c-.1.3-.3.4-.6.3-1.6-.6-2.3-2.4-2.3-4.4 0-3.3 2.8-7.2 8.2-7.2 4.4 0 7.3 3.2 7.3 6.6 0 4.5-2.5 7.9-6.1 7.9-1.2 0-2.3-.7-2.7-1.4l-.8 3c-.2.9-.6 1.9-1 2.6A10 10 0 1 0 12 2z"/></svg>',
+    youtube: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4.5" width="20" height="15" rx="4.5"/><path d="M10 8.5l6 3.5-6 3.5v-7z" fill="currentColor" stroke="none"/></svg>'
+  };
+
+  // Ícones de redes sociais na capa
+  (function renderHeroSocials(){
+    var wrap = document.getElementById("heroSocials");
+    socialLinks.forEach(function(s){
+      var a = el("a", null, socialIconsSvg[s.key] || "");
+      a.href = s.url;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.setAttribute("aria-label", s.label);
+      wrap.appendChild(a);
     });
   })();
 
