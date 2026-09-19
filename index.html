@@ -657,11 +657,11 @@
     box-shadow:0 10px 20px -16px rgba(0,0,0,0.4);
     transition:opacity 0.25s ease, transform 0.25s ease;
   }
-  .gallery-item.hidden-item{
-    display:none;
+  .hidden-item{
+    display:none !important;
   }
   .gallery-thumb{
-    aspect-ratio:4/5;
+    aspect-ratio:9/16;
     background:linear-gradient(150deg,var(--green-dark),var(--pink-dark));
     display:flex;
     align-items:center;
@@ -670,6 +670,28 @@
     text-align:center;
     padding:12px;
     font-size:0.85rem;
+    position:relative;
+    overflow:hidden;
+  }
+  .gallery-thumb img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:1;
+  }
+  .gallery-thumb .gallery-thumb-fallback{
+    position:relative;
+    z-index:2;
+    background:rgba(0,0,0,0.4);
+    padding:20px;
+    border-radius:8px;
+  }
+  .gallery-thumb .play-btn{
+    position:relative;
+    z-index:3;
   }
   .gallery-info{
     padding:14px 16px 18px;
@@ -1390,6 +1412,10 @@
      Troque os valores abaixo para atualizar o site sem mexer no HTML/CSS.
   ===================================================================== */
 
+  // Constantes Supabase (necessárias para o backend funcionar)
+  const SUPABASE_URL = 'https://wimqztbttlcmjctledoo.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_IY8TwPK1YrjvkWBfPU1agA_7UfGRvNV';
+
   // Frase curta que aparece no topo da capa (ainda não definida, edite aqui).
   var TAGLINE = "UGC CREATOR | DIGITAL INFLUENCER | VIDEOMAKER | CREATOR SHOP";
 
@@ -1585,19 +1611,30 @@
   (function renderDestaques(){
     var wrap = document.getElementById("destaquesGrid");
     destaques.forEach(function(d){
-      var card = el("a", "destaque-card reveal");
-      card.href = d.link;
-      if(d.link && d.link !== "#"){
-        card.target = "_blank";
-        card.rel = "noopener";
+      var hasLink = d.link && d.link !== "#";
+      var card = hasLink ? el("button", "destaque-card reveal") : el("div", "destaque-card reveal");
+
+      if(hasLink){
+        card.type = "button";
+        card.style.border = "none";
+        card.style.background = "none";
+        card.style.padding = "0";
+        card.style.cursor = "pointer";
+        card.setAttribute("aria-label", d.title + ", " + d.metricValue + " " + d.metricLabel + ". Clique para abrir o vídeo");
+        card.addEventListener("click", function(e){
+          e.preventDefault();
+          window.openVideoModal(d.link);
+        });
+      } else {
+        card.style.cursor = "default";
       }
-      card.setAttribute("aria-label", d.title + ", " + d.metricValue + " " + d.metricLabel);
 
       var cover = el("div", "destaque-cover");
-      cover.innerHTML =
-        '<div class="play-btn" aria-hidden="true"></div>' +
-        '<div class="destaque-metric"><strong>' + d.metricValue + '</strong><span>' + d.metricLabel + '</span></div>' +
-        '<span>capa vertical 9:16</span>';
+      var coverContent = '<div class="destaque-metric"><strong>' + d.metricValue + '</strong><span>' + d.metricLabel + '</span></div><span>capa vertical 9:16</span>';
+      if(hasLink){
+        coverContent = '<div class="play-btn" aria-hidden="true"></div>' + coverContent;
+      }
+      cover.innerHTML = coverContent;
       card.appendChild(cover);
 
       var body = el("div", "destaque-body");
@@ -1612,7 +1649,10 @@
   // Buscar vídeos do Supabase
   (async function loadVideosFromSupabase(){
     try {
-      if(!window.supabase || !SUPABASE_URL || !SUPABASE_ANON_KEY) return;
+      if(!window.supabase || !SUPABASE_URL || !SUPABASE_ANON_KEY) {
+        renderTrabalhos();
+        return;
+      }
 
       const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       const { data: videos, error } = await sb
@@ -1646,6 +1686,20 @@
     }
   })();
 
+  // Função auxiliar: extrair ID do YouTube
+  function extractYouTubeIdForThumb(url){
+    var patterns = [
+      /(?:youtube\.com\/shorts\/|youtu\.be\/)([a-zA-Z0-9_-]+)/,
+      /youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/,
+      /youtube\.com\/embed\/([a-zA-Z0-9_-]+)/
+    ];
+    for(var i = 0; i < patterns.length; i++){
+      var match = url.match(patterns[i]);
+      if(match) return match[1];
+    }
+    return null;
+  }
+
   // Filtros de nicho + galeria
   function renderTrabalhos(){
     var filterWrap = document.getElementById("filterTabs");
@@ -1674,7 +1728,36 @@
       var item = el("div", "gallery-item reveal");
       item.dataset.niche = g.niche;
 
-      var thumb = el("div", "gallery-thumb", g.format);
+      var thumb = el("div", "gallery-thumb");
+      thumb.setAttribute("role", "img");
+      thumb.setAttribute("aria-label", "Capa do trabalho: " + g.title);
+
+      // Se tem link e é YouTube, renderizar capa
+      if(g.link){
+        var ytId = extractYouTubeIdForThumb(g.link);
+        if(ytId){
+          var img = el("img");
+          img.src = "https://img.youtube.com/vi/" + ytId + "/maxresdefault.jpg";
+          img.alt = "Capa: " + g.title;
+          img.loading = "lazy";
+          img.onerror = function(){
+            this.src = "https://img.youtube.com/vi/" + ytId + "/hqdefault.jpg";
+          };
+          thumb.appendChild(img);
+
+          var playBtn = el("div", "play-btn");
+          playBtn.setAttribute("aria-hidden", "true");
+          thumb.appendChild(playBtn);
+        }
+      }
+
+      // Fallback: mostrar marca se não tiver capa
+      if(!thumb.querySelector("img")){
+        var fallback = el("div", "gallery-thumb-fallback");
+        fallback.textContent = g.title;
+        thumb.appendChild(fallback);
+      }
+
       item.appendChild(thumb);
 
       var info = el("div", "gallery-info");
@@ -1683,7 +1766,7 @@
       item.appendChild(info);
 
       if(g.link){
-        var link = el("button", "gallery-link reveal");
+        var link = el("button", "gallery-link");
         link.dataset.niche = g.niche;
         link.type = "button";
         link.style.border = "none";
@@ -1703,10 +1786,14 @@
 
     function applyFilter(key){
       Array.prototype.forEach.call(galleryWrap.children, function(item){
-        var show = key === "todos" || item.dataset.niche === key;
+        var niche = item.dataset.niche || (item.firstChild && item.firstChild.dataset.niche);
+        var show = key === "todos" || niche === key;
         item.classList.toggle("hidden-item", !show);
       });
     }
+
+    // IMPORTANTE: Observar novos cards criados pela galeria
+    window.revelar(galleryWrap);
   }
 
   // Serviços
@@ -1810,27 +1897,51 @@
   })();
 
   /* =====================================================================
-     ANIMAÇÃO DE ENTRADA (IntersectionObserver)
+     ANIMAÇÃO DE ENTRADA (IntersectionObserver) - REUTILIZÁVEL
   ===================================================================== */
-  (function revealOnScroll(){
+  var revealObserver = null;
+
+  function setupRevealObserver(){
+    if(revealObserver) return;
     var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var items = document.querySelectorAll(".reveal");
 
     if(reduceMotion || !("IntersectionObserver" in window)){
-      items.forEach(function(i){ i.classList.add("is-visible"); });
+      document.querySelectorAll(".reveal:not(.is-visible)").forEach(function(i){
+        i.classList.add("is-visible");
+      });
       return;
     }
 
-    var observer = new IntersectionObserver(function(entries){
+    revealObserver = new IntersectionObserver(function(entries){
       entries.forEach(function(entry){
         if(entry.isIntersecting){
           entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
+          revealObserver.unobserve(entry.target);
         }
       });
     }, { threshold: 0.15 });
+  }
 
-    items.forEach(function(i){ observer.observe(i); });
+  window.revelar = function(escopo){
+    if(!revealObserver) setupRevealObserver();
+    var items = (escopo || document).querySelectorAll(".reveal:not(.is-visible)");
+    if(revealObserver){
+      items.forEach(function(i){ revealObserver.observe(i); });
+    } else {
+      items.forEach(function(i){ i.classList.add("is-visible"); });
+    }
+  };
+
+  (function revealOnScroll(){
+    setupRevealObserver();
+    window.revelar();
+
+    // Rede de segurança: 2s depois do load, tudo que ainda é .reveal vira .is-visible
+    setTimeout(function(){
+      document.querySelectorAll(".reveal:not(.is-visible)").forEach(function(i){
+        i.classList.add("is-visible");
+      });
+    }, 2000);
   })();
 
   /* =====================================================================
@@ -1991,10 +2102,16 @@
 
     window.openVideoModal = function(link){
       var videoId = extractYouTubeId(link);
-      if(!videoId) return;
-      iframe.src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
-      backdrop.classList.add("open");
-      document.addEventListener("keydown", closeOnEscape);
+
+      if(videoId){
+        // YouTube: abrir no modal
+        iframe.src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
+        backdrop.classList.add("open");
+        document.addEventListener("keydown", closeOnEscape);
+      } else {
+        // Não é YouTube (Instagram, TikTok, Drive, etc): abrir em nova aba
+        window.open(link, "_blank", "noopener");
+      }
     };
 
     function closeVideoModal(){
