@@ -1064,9 +1064,10 @@
   }
   .video-modal-content{
     position:relative;
-    width:90%;
-    max-width:800px;
-    aspect-ratio:16/9;
+    height:min(90vh, 850px);
+    width:auto;
+    aspect-ratio:9/16;
+    max-width:95vw;
     background:#000;
     border-radius:12px;
     overflow:hidden;
@@ -1097,11 +1098,9 @@
     height:100%;
     border:none;
   }
-  @media (max-width:768px){
+  @media (max-width:480px){
     .video-modal-content{
-      width:95%;
-      aspect-ratio:9/16;
-      max-width:500px;
+      height:min(85vh, 700px);
     }
   }
 </style>
