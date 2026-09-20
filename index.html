@@ -1564,7 +1564,7 @@
   // Nichos atendidos. "key" é usado internamente pelo filtro, "label" é o texto exibido.
   var niches = [
     { key: "beleza", label: "Beleza" },
-    { key: "bem-estar", label: "Bem-estar" },
+    { key: "bem-estar", label: "Bem-estar & Fit" },
     { key: "moda", label: "Moda" },
     { key: "comida", label: "Comida" },
     { key: "casa", label: "Casa e Decoração" },
@@ -1917,6 +1917,11 @@
 
     // IMPORTANTE: Observar novos cards criados pela galeria
     window.revelar(galleryWrap);
+
+    // Recalcula se as setas devem estar habilitadas, agora que os cards existem
+    if(typeof window.updateGalleryNav === "function"){
+      window.updateGalleryNav();
+    }
   }
 
   // Serviços
@@ -2051,12 +2056,16 @@
     function updateButtons(){
       var maxScroll = galleryEl.scrollWidth - galleryEl.clientWidth;
       prevBtn.disabled = galleryEl.scrollLeft <= 4;
-      nextBtn.disabled = galleryEl.scrollLeft >= maxScroll - 4;
+      nextBtn.disabled = maxScroll <= 4 || galleryEl.scrollLeft >= maxScroll - 4;
     }
 
     galleryEl.addEventListener("scroll", updateButtons);
     window.addEventListener("resize", updateButtons);
     setTimeout(updateButtons, 300);
+
+    // A galeria pode ser populada depois (ex: aguardando o Supabase), então
+    // recalcula sempre que renderTrabalhos() termina de criar os cards.
+    window.updateGalleryNav = updateButtons;
   })();
 
   /* =====================================================================
