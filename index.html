@@ -668,10 +668,8 @@
     .gallery > *{ width:150px; }
   }
   .gallery-item{
-    background:#fff;
-    border-radius:12px;
+    border-radius:14px;
     overflow:hidden;
-    border:1px solid rgba(0,0,0,0.12);
     box-shadow:0 10px 20px -16px rgba(0,0,0,0.4);
     transition:opacity 0.25s ease, transform 0.25s ease;
   }
@@ -681,13 +679,8 @@
   .gallery-thumb{
     aspect-ratio:9/16;
     background:linear-gradient(150deg,var(--green-dark),var(--pink-dark));
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display:block;
     color:#fff;
-    text-align:center;
-    padding:12px;
-    font-size:0.85rem;
     position:relative;
     overflow:hidden;
   }
@@ -700,34 +693,64 @@
     left:0;
     z-index:1;
   }
-  .gallery-thumb .gallery-thumb-fallback{
-    position:relative;
+  .gallery-thumb::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:60%;
+    background:linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0));
     z-index:2;
-    background:rgba(0,0,0,0.4);
+    pointer-events:none;
+  }
+  .gallery-thumb .gallery-thumb-fallback{
+    position:absolute;
+    inset:0;
+    z-index:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
     padding:20px;
-    border-radius:8px;
+    font-size:0.85rem;
   }
   .gallery-thumb .play-btn{
-    position:relative;
+    position:absolute;
     z-index:3;
   }
-  .gallery-info{
-    padding:14px 16px 18px;
-  }
-  .gallery-tag{
-    display:inline-block;
-    font-size:0.7rem;
-    text-transform:uppercase;
-    letter-spacing:0.06em;
-    color:var(--green-dark);
-    background:rgba(133,155,138,0.18);
-    padding:3px 9px;
-    border-radius:20px;
-    margin-bottom:8px;
-  }
-  .gallery-info h3{
-    font-size:1rem;
+  .gallery-niche-badge{
+    position:absolute;
+    top:10px;
+    left:10px;
+    z-index:3;
+    background:rgba(255,255,255,0.92);
     color:var(--ink);
+    font-size:0.62rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    padding:5px 11px;
+    border-radius:20px;
+  }
+  .gallery-overlay-text{
+    position:absolute;
+    left:12px;
+    right:12px;
+    bottom:12px;
+    z-index:3;
+    color:#fff;
+    text-align:left;
+  }
+  .gallery-overlay-text h3{
+    font-size:1rem;
+    font-weight:700;
+    color:#fff;
+    line-height:1.2;
+  }
+  .gallery-overlay-text span{
+    display:block;
+    font-size:0.68rem;
+    color:rgba(255,255,255,0.85);
+    margin-top:2px;
   }
   .gallery-link{
     display:block;
@@ -1765,12 +1788,16 @@
         thumb.appendChild(fallback);
       }
 
-      item.appendChild(thumb);
+      // Badge do nicho, no canto superior esquerdo
+      var badge = el("span", "gallery-niche-badge", nicheByKey[g.niche] || g.niche);
+      thumb.appendChild(badge);
 
-      var info = el("div", "gallery-info");
-      info.appendChild(el("span", "gallery-tag", nicheByKey[g.niche] || g.niche));
-      info.appendChild(el("h3", null, g.title));
-      item.appendChild(info);
+      // Nome da marca sobre o vídeo, no rodapé
+      var overlayText = el("div", "gallery-overlay-text");
+      overlayText.appendChild(el("h3", null, g.title));
+      thumb.appendChild(overlayText);
+
+      item.appendChild(thumb);
 
       if(g.link){
         var link = el("button", "gallery-link");
