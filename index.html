@@ -819,40 +819,72 @@
   }
 
   /* ===================== SERVIÇOS ===================== */
-  .services-grid{
+  .servicos-grid{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:22px;
+    grid-template-columns:0.85fr 1.15fr;
+    gap:clamp(30px,5vw,60px);
+    align-items:start;
   }
   @media (max-width:900px){
-    .services-grid{ grid-template-columns:repeat(2,1fr); }
+    .servicos-grid{ grid-template-columns:1fr; }
+  }
+  .servicos-icon{
+    font-size:2.2rem;
+    margin-bottom:16px;
+  }
+  .servicos-title{
+    font-size:clamp(1.7rem,3.2vw,2.3rem);
+    line-height:1.2;
+    margin-bottom:18px;
+  }
+  .servicos-title-highlight{
+    background:var(--green-dark);
+    color:#fff;
+    padding:2px 12px;
+    border-radius:6px;
+    display:inline-block;
+  }
+  .servicos-desc{
+    font-size:1.02rem;
+    color:var(--ink-soft);
+    line-height:1.6;
+    margin-bottom:28px;
+    max-width:46ch;
+  }
+  .services-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:32px 20px;
   }
   @media (max-width:600px){
     .services-grid{ grid-template-columns:1fr; }
   }
   .service-card{
+    position:relative;
     background:#fff;
-    border-radius:12px;
-    padding:24px 20px;
+    border-radius:14px;
+    padding:34px 20px 22px;
     border:1px solid rgba(0,0,0,0.12);
     box-shadow:0 10px 20px -16px rgba(0,0,0,0.35);
   }
-  .service-num{
-    font-family:var(--ff-head);
-    font-weight:800;
-    font-size:1.6rem;
-    color:var(--pink);
-    margin-bottom:10px;
-  }
-  .service-card h3{
-    font-size:1.08rem;
-    margin-bottom:8px;
-    color:var(--ink);
+  .service-badge{
+    position:absolute;
+    top:-16px;
+    left:18px;
+    background:var(--green-dark);
+    color:#fff;
+    font-size:0.68rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    padding:9px 15px;
+    border-radius:30px;
+    max-width:calc(100% - 36px);
   }
   .service-card p{
-    font-size:0.9rem;
+    font-size:0.92rem;
     color:var(--ink-soft);
-    line-height:1.55;
+    line-height:1.6;
   }
 
   /* ===================== NÚMEROS / DEPOIMENTOS ===================== */
@@ -1312,10 +1344,15 @@
 
   <!-- ===================== 5. COMO EU TE AJUDO ===================== -->
   <section class="sheet border-pink" id="servicos" aria-label="Serviços">
-    <p class="sheet-eyebrow">serviços</p>
-    <h2 class="section-title">Como eu te ajudo</h2>
-    <p class="section-sub">Formatos de conteúdo que costumo entregar para marcas parceiras.</p>
-    <div class="services-grid" id="servicesGrid"></div>
+    <div class="servicos-grid">
+      <div class="servicos-intro reveal">
+        <p class="servicos-icon" aria-hidden="true">💼</p>
+        <h2 class="servicos-title">O que podemos <span class="servicos-title-highlight">criar</span> juntos?</h2>
+        <p class="servicos-desc">Cada formato tem um objetivo: vender, escalar ou construir marca. Me conta o seu que a gente monta o combo perfeito pra sua marca.</p>
+        <a class="btn btn-primary" href="#contato">Bora criar juntos →</a>
+      </div>
+      <div class="services-grid" id="servicesGrid"></div>
+    </div>
   </section>
 
   <!-- ===================== 6. NÚMEROS E DEPOIMENTOS ===================== -->
@@ -1592,14 +1629,14 @@
     { niche: "bem-estar", title: "FTW", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/v3h95MUj5go" }
   ];
 
-  // Seis serviços (seção 5).
+  // Seis serviços (seção 5). Edite o "desc" de cada um à vontade.
   var services = [
-    { title: "Vídeo UGC", desc: "Vídeo autêntico estilo rede social, roteirizado e gravado especialmente para a sua marca." },
-    { title: "Corte para anúncio", desc: "Edição otimizada para performance, pronta para rodar como anúncio no Meta Ads ou TikTok Ads." },
-    { title: "Fotos do produto", desc: "Still fotográfico do seu produto em cenários que combinam com a identidade da marca." },
-    { title: "Unboxing", desc: "Abertura de caixa em vídeo, mostrando a primeira impressão real do produto." },
-    { title: "Publicação no meu perfil", desc: "Post no meu Instagram apresentando a sua marca para a minha audiência." },
-    { title: "Pacote mensal", desc: "Conteúdo recorrente todo mês, com roteiro e entrega combinados em um só pacote." }
+    { title: "Criativos para tráfego ou conteúdo orgânico", desc: "Vídeos pensados pra performar tanto em anúncios pagos quanto no orgânico das redes." },
+    { title: "Fotos", desc: "Still fotográfico do seu produto, capturando os detalhes que fazem diferença na hora da compra." },
+    { title: "Publipost", desc: "Publicação no meu perfil apresentando a sua marca pra minha audiência, com a minha cara." },
+    { title: "UGC para e-commerce", desc: "Vídeos autênticos de produto pra sua loja vender todo dia, com a naturalidade de quem realmente usa." },
+    { title: "TikTok Shop", desc: "Conteúdo pensado pra converter dentro do TikTok Shop, dos criativos à vitrine." },
+    { title: "UGC para grupos de WhatsApp", desc: "Vídeos no formato certo pra grupos e listas de transmissão, gerando conexão direta com o público." }
   ];
 
   // Quatro métricas com contador animado (seção 6).
@@ -1927,10 +1964,9 @@
   // Serviços
   (function renderServices(){
     var wrap = document.getElementById("servicesGrid");
-    services.forEach(function(s, i){
+    services.forEach(function(s){
       var card = el("div", "service-card reveal");
-      card.appendChild(el("p", "service-num", String(i + 1).padStart(2, "0")));
-      card.appendChild(el("h3", null, s.title));
+      card.appendChild(el("span", "service-badge", s.title));
       card.appendChild(el("p", null, s.desc));
       wrap.appendChild(card);
     });
