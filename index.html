@@ -1706,13 +1706,11 @@
     var nicheByKey = {};
     niches.forEach(function(n){ nicheByKey[n.key] = n.label; });
 
-    var allTabs = [{ key: "todos", label: "Todos" }].concat(niches);
-
-    allTabs.forEach(function(n, idx){
+    niches.forEach(function(n){
       var btn = el("button", "filter-tab", n.label);
       btn.type = "button";
       btn.dataset.filter = n.key;
-      btn.setAttribute("aria-pressed", idx === 0 ? "true" : "false");
+      btn.setAttribute("aria-pressed", "false");
       btn.addEventListener("click", function(){
         Array.prototype.forEach.call(filterWrap.children, function(b){
           b.setAttribute("aria-pressed", "false");
