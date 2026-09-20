@@ -585,56 +585,90 @@
 
 <!-- Modal: Importar planilha de leads -->
 <div class="modal" id="importModal">
-  <div class="modal-content" style="max-width: 560px;">
+  <div class="modal-content" style="max-width: 640px;">
     <div class="modal-header">
       <h2>Importar planilha de leads</h2>
       <button class="modal-close" onclick="closeImportModal()">×</button>
     </div>
 
-    <p style="font-size: 13px; color: var(--detail); line-height: 1.6; margin-bottom: 16px;">
-      Suba sua planilha (.csv ou .xlsx) com os leads de marcas que você já prospectou.
-      O sistema vai identificar as colunas automaticamente e adicionar tudo na aba Marcas.
-    </p>
+    <!-- Passo 1: upload -->
+    <div id="importStepUpload">
+      <p style="font-size: 13px; color: var(--detail); line-height: 1.6; margin-bottom: 16px;">
+        Suba sua planilha (.csv, .xlsx ou .xls) com os leads de marcas que você já prospectou.
+        O sistema vai identificar as colunas automaticamente e adicionar tudo na aba Marcas.
+      </p>
 
-    <label id="importDropzone" for="importFileInput" style="
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      border: 2px dashed var(--green);
-      border-radius: 8px;
-      padding: 32px 16px;
-      text-align: center;
-      cursor: pointer;
-      background: var(--paper);
-      transition: border-color 0.15s ease, background 0.15s ease;
-    ">
-      <span style="font-size: 24px;">↑</span>
-      <span style="font-size: 13px; font-weight: 600; color: var(--ink);">Clique para escolher o arquivo</span>
-      <span style="font-size: 12px; color: var(--detail);">ou arraste aqui — .csv, .xlsx ou .xls</span>
-      <input type="file" id="importFileInput" accept=".csv,.xlsx,.xls" style="display: none;" onchange="handleImportFileSelected(event)">
-    </label>
+      <label id="importDropzone" for="importFileInput" style="
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 2px dashed var(--green);
+        border-radius: 8px;
+        padding: 32px 16px;
+        text-align: center;
+        cursor: pointer;
+        background: var(--paper);
+        transition: border-color 0.15s ease, background 0.15s ease;
+      ">
+        <span style="font-size: 24px;">↑</span>
+        <span style="font-size: 13px; font-weight: 600; color: var(--ink);">Clique para escolher o arquivo</span>
+        <span style="font-size: 12px; color: var(--detail);">ou arraste aqui — .csv, .xlsx ou .xls</span>
+        <input type="file" id="importFileInput" accept=".csv,.xlsx,.xls" style="display: none;" onchange="handleImportFileSelected(event)">
+      </label>
 
-    <div id="importFileInfo" style="display: none; margin-top: 12px; padding: 10px 12px; background: var(--paper); border-radius: 6px; font-size: 13px;">
-      <strong id="importFileName"></strong>
-      <span id="importFileMeta" style="color: var(--detail);"></span>
+      <div id="importErrorBox" style="display: none; margin-top: 12px; padding: 10px 12px; background: #fbe9e9; color: #a33; border-radius: 6px; font-size: 13px;"></div>
+
+      <div style="margin-top: 16px; padding: 12px; background: var(--paper); border-radius: 6px; font-size: 12px; color: var(--detail); line-height: 1.6;">
+        <strong style="color: var(--ink);">Colunas reconhecidas:</strong> nome da empresa, Instagram, e-mail, WhatsApp/telefone, seguidores, link e observações.
+        Depois de escolher o arquivo, você vai poder conferir os dados antes de confirmar a importação.
+      </div>
+
+      <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px;">
+        <button class="btn btn-secondary" onclick="closeImportModal()">Cancelar</button>
+      </div>
     </div>
 
-    <div style="margin-top: 16px; padding: 12px; background: var(--paper); border-radius: 6px; font-size: 12px; color: var(--detail); line-height: 1.6;">
-      <strong style="color: var(--ink);">Colunas reconhecidas:</strong> nome da empresa, Instagram, e-mail, WhatsApp/telefone, seguidores e observações.
-      Depois de escolher o arquivo, você vai poder conferir os dados antes de confirmar a importação.
+    <!-- Passo 2: preview -->
+    <div id="importStepPreview" style="display: none;">
+      <p id="importPreviewSummary" style="font-size: 13px; color: var(--detail); line-height: 1.6; margin-bottom: 12px;"></p>
+
+      <div style="max-height: 340px; overflow: auto; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px;">
+        <table style="font-size: 12px;">
+          <thead>
+            <tr>
+              <th>Marca</th>
+              <th>Instagram</th>
+              <th>E-mail</th>
+              <th>Observações</th>
+            </tr>
+          </thead>
+          <tbody id="importPreviewBody"></tbody>
+        </table>
+      </div>
+
+      <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px;">
+        <button class="btn btn-secondary" onclick="backToImportUpload()">Voltar</button>
+        <button class="btn btn-primary" id="importConfirmBtn" onclick="confirmImportLeads()">Importar leads</button>
+      </div>
     </div>
 
-    <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px;">
-      <button class="btn btn-secondary" onclick="closeImportModal()">Cancelar</button>
-      <button class="btn btn-primary" id="importConfirmBtn" disabled onclick="alert('Importação ainda não implementada — só a tela por enquanto :)')">Importar leads</button>
+    <!-- Passo 3: resultado -->
+    <div id="importStepDone" style="display: none;">
+      <div id="importDoneMessage" style="font-size: 13px; line-height: 1.6; margin-bottom: 16px;"></div>
+      <div style="display: flex; gap: 8px; justify-content: flex-end;">
+        <button class="btn btn-primary" onclick="closeImportModal()">Fechar</button>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- Supabase via CDN -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.0"></script>
+
+<!-- SheetJS: leitura de .csv/.xlsx/.xls no navegador -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <!-- Configuração do banco -->
 <script src="../js/banco.js"></script>
@@ -976,24 +1010,203 @@
   }
   function downloadCSV() { alert('Baixando CSV...'); }
 
+  let importParsedLeads = [];
+
   function openImportModal() {
     document.getElementById('importFileInput').value = '';
-    document.getElementById('importFileInfo').style.display = 'none';
-    document.getElementById('importConfirmBtn').disabled = true;
+    document.getElementById('importErrorBox').style.display = 'none';
+    showImportStep('upload');
     document.getElementById('importModal').classList.add('show');
   }
   function closeImportModal() {
     document.getElementById('importModal').classList.remove('show');
+    importParsedLeads = [];
   }
+  function backToImportUpload() {
+    document.getElementById('importFileInput').value = '';
+    showImportStep('upload');
+  }
+  function showImportStep(step) {
+    document.getElementById('importStepUpload').style.display = step === 'upload' ? 'block' : 'none';
+    document.getElementById('importStepPreview').style.display = step === 'preview' ? 'block' : 'none';
+    document.getElementById('importStepDone').style.display = step === 'done' ? 'block' : 'none';
+  }
+  function showImportError(msg) {
+    const box = document.getElementById('importErrorBox');
+    box.textContent = msg;
+    box.style.display = 'block';
+  }
+
+  // Normaliza um texto de cabeçalho para comparação (sem acento, minúsculo)
+  function normalizeHeader(str) {
+    return String(str || '')
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .toLowerCase().trim();
+  }
+
+  // Tenta achar, entre os cabeçalhos da planilha, qual coluna corresponde a cada campo
+  function detectColumnMap(headers) {
+    const normalized = headers.map(normalizeHeader);
+    function findCol(keywords) {
+      for (let i = 0; i < normalized.length; i++) {
+        if (keywords.some(k => normalized[i].includes(k))) return headers[i];
+      }
+      return null;
+    }
+    return {
+      nome: findCol(['nome da empresa', 'empresa', 'marca', 'nome']),
+      instagram: findCol(['instagram']),
+      email: findCol(['mail']),
+      whatsapp: findCol(['whatsapp', 'telefone', 'contato', 'fone']),
+      seguidores: findCol(['seguidor']),
+      link: findCol(['link', 'produto', 'site']),
+      observacoes: findCol(['observa', 'obs'])
+    };
+  }
+
+  // Extrai o @handle de um link do Instagram, ou devolve o texto como veio
+  function extractInstagramHandle(value) {
+    if (!value) return '';
+    const str = String(value).trim();
+    const match = str.match(/instagram\.com\/([^/?#]+)/i);
+    if (match) return match[1].replace(/^@/, '');
+    return str.replace(/^@/, '');
+  }
+
   function handleImportFileSelected(event) {
     const file = event.target.files[0];
     if (!file) return;
-    const sizeKb = (file.size / 1024).toFixed(1);
-    document.getElementById('importFileName').textContent = file.name;
-    document.getElementById('importFileMeta').textContent = ` · ${sizeKb} KB`;
-    document.getElementById('importFileInfo').style.display = 'block';
-    document.getElementById('importConfirmBtn').disabled = false;
+    document.getElementById('importErrorBox').style.display = 'none';
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const firstSheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[firstSheetName];
+        const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+
+        if (!rows.length) {
+          showImportError('Não encontrei nenhuma linha de dados nessa planilha.');
+          return;
+        }
+
+        const headers = Object.keys(rows[0]);
+        const colMap = detectColumnMap(headers);
+
+        if (!colMap.nome) {
+          showImportError('Não consegui identificar a coluna com o nome da empresa/marca. Confira o cabeçalho da planilha.');
+          return;
+        }
+
+        importParsedLeads = rows.map(row => {
+          const nome = String(row[colMap.nome] || '').trim();
+          const instagram = colMap.instagram ? extractInstagramHandle(row[colMap.instagram]) : '';
+          const email = colMap.email ? String(row[colMap.email] || '').trim() : '';
+          const emailNormalizado = normalizeHeader(email);
+          const emailInvalido = ['nao encontrado', 'n/a', 'na', '-', ''].includes(emailNormalizado) || !email.includes('@');
+          const emailLimpo = emailInvalido ? '' : email;
+
+          const obsParts = [];
+          if (colMap.seguidores && row[colMap.seguidores]) obsParts.push(`Seguidores: ${row[colMap.seguidores]}`);
+          if (colMap.whatsapp && row[colMap.whatsapp]) obsParts.push(`Contato: ${row[colMap.whatsapp]}`);
+          if (colMap.link && row[colMap.link]) obsParts.push(`Link: ${row[colMap.link]}`);
+          if (colMap.observacoes && row[colMap.observacoes]) obsParts.push(String(row[colMap.observacoes]));
+
+          return {
+            nome: nome,
+            instagram: instagram,
+            email: emailLimpo,
+            situacao: 'Lead',
+            obs: obsParts.join(' · ')
+          };
+        }).filter(lead => lead.nome);
+
+        if (!importParsedLeads.length) {
+          showImportError('Nenhuma linha válida encontrada (verifique se a coluna de nome está preenchida).');
+          return;
+        }
+
+        renderImportPreview(file.name);
+      } catch (err) {
+        console.error(err);
+        showImportError('Não consegui ler esse arquivo. Confira se é um .csv, .xlsx ou .xls válido.');
+      }
+    };
+    reader.onerror = function() {
+      showImportError('Erro ao ler o arquivo. Tente novamente.');
+    };
+    reader.readAsArrayBuffer(file);
   }
+
+  function renderImportPreview(fileName) {
+    document.getElementById('importPreviewSummary').textContent =
+      `${importParsedLeads.length} lead(s) encontrados em "${fileName}". Confira abaixo antes de importar:`;
+
+    const tbody = document.getElementById('importPreviewBody');
+    tbody.innerHTML = importParsedLeads.map(l => `
+      <tr>
+        <td>${l.nome}</td>
+        <td>${l.instagram || '-'}</td>
+        <td>${l.email || '-'}</td>
+        <td style="max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${(l.obs || '').replace(/"/g, '&quot;')}">${l.obs || '-'}</td>
+      </tr>
+    `).join('');
+
+    showImportStep('preview');
+  }
+
+  async function confirmImportLeads() {
+    if (!importParsedLeads.length) return;
+    const btn = document.getElementById('importConfirmBtn');
+    btn.disabled = true;
+    btn.textContent = 'Importando...';
+
+    try {
+      const { data, error } = await supabase.from('marcas').insert(importParsedLeads).select();
+      if (error) throw error;
+
+      document.getElementById('importDoneMessage').innerHTML =
+        `✓ ${data.length} lead(s) importado(s) com sucesso para a aba Marcas.`;
+      showImportStep('done');
+      loadMarcas();
+    } catch (err) {
+      console.error(err);
+      document.getElementById('importDoneMessage').innerHTML =
+        `Erro ao importar: ${err.message}. Nada foi salvo — pode voltar e tentar de novo.`;
+      showImportStep('done');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Importar leads';
+    }
+  }
+
+  // Drag & drop no dropzone
+  (function setupImportDropzone(){
+    const zone = document.getElementById('importDropzone');
+    if (!zone) return;
+    ['dragenter', 'dragover'].forEach(evt => {
+      zone.addEventListener(evt, e => {
+        e.preventDefault();
+        zone.style.borderColor = 'var(--pink)';
+        zone.style.background = 'var(--paper-warm)';
+      });
+    });
+    ['dragleave', 'drop'].forEach(evt => {
+      zone.addEventListener(evt, e => {
+        e.preventDefault();
+        zone.style.borderColor = 'var(--green)';
+        zone.style.background = 'var(--paper)';
+      });
+    });
+    zone.addEventListener('drop', e => {
+      const file = e.dataTransfer.files[0];
+      if (!file) return;
+      document.getElementById('importFileInput').files = e.dataTransfer.files;
+      handleImportFileSelected({ target: { files: [file] } });
+    });
+  })();
 
   // ========================================================================
   // ABA 3: CALENDÁRIO
