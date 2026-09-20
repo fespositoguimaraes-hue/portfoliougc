@@ -645,9 +645,27 @@
   }
 
   .gallery{
-    display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(230px,1fr));
-    gap:22px;
+    display:flex;
+    gap:16px;
+    overflow-x:auto;
+    scroll-snap-type:x proximity;
+    padding-bottom:16px;
+    -webkit-overflow-scrolling:touch;
+    cursor:grab;
+    scrollbar-width:thin;
+    scrollbar-color:var(--pink) transparent;
+  }
+  .gallery:active{ cursor:grabbing; }
+  .gallery::-webkit-scrollbar{ height:6px; }
+  .gallery::-webkit-scrollbar-track{ background:rgba(0,0,0,0.06); border-radius:10px; }
+  .gallery::-webkit-scrollbar-thumb{ background:var(--pink); border-radius:10px; }
+  .gallery > *{
+    flex:0 0 auto;
+    width:190px;
+    scroll-snap-align:start;
+  }
+  @media (max-width:600px){
+    .gallery > *{ width:150px; }
   }
   .gallery-item{
     background:#fff;
@@ -1873,6 +1891,31 @@
       wrap.appendChild(a);
     });
     document.getElementById("footerYear").textContent = new Date().getFullYear();
+  })();
+
+  /* =====================================================================
+     ARRASTAR GALERIA COM O MOUSE (carrossel horizontal)
+  ===================================================================== */
+  (function galleryDragScroll(){
+    var galleryEl = document.getElementById("galleryGrid");
+    if(!galleryEl) return;
+    var isDown = false;
+    var startX, scrollLeft;
+
+    galleryEl.addEventListener("mousedown", function(e){
+      isDown = true;
+      startX = e.pageX - galleryEl.offsetLeft;
+      scrollLeft = galleryEl.scrollLeft;
+    });
+    galleryEl.addEventListener("mouseleave", function(){ isDown = false; });
+    galleryEl.addEventListener("mouseup", function(){ isDown = false; });
+    galleryEl.addEventListener("mousemove", function(e){
+      if(!isDown) return;
+      e.preventDefault();
+      var x = e.pageX - galleryEl.offsetLeft;
+      var walk = (x - startX) * 1.5;
+      galleryEl.scrollLeft = scrollLeft - walk;
+    });
   })();
 
   /* =====================================================================
