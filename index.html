@@ -7,6 +7,9 @@
 <meta name="description" content="Portfólio de UGC Creator de Fernannda Esposito Guimarães: vídeos, fotos e conteúdo para marcas de beleza, moda, casa, fitness e mais.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://www.youtube.com">
+<link rel="preconnect" href="https://i.ytimg.com">
+<link rel="preconnect" href="https://www.google.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Outfit:wght@400;500;600&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8' fill='%23dd8893'/></svg>">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.0"></script>
@@ -1876,6 +1879,7 @@
             hoverTimer = setTimeout(function(){
               if(thumb.querySelector(".gallery-hover-frame")) return;
               var preview = document.createElement("iframe");
+              preview.loading = "eager";
               preview.className = "gallery-hover-frame";
               preview.src = "https://www.youtube.com/embed/" + ytId +
                 "?autoplay=1&mute=1&controls=0&loop=1&playlist=" + ytId +
@@ -1884,7 +1888,7 @@
               preview.setAttribute("tabindex", "-1");
               thumb.appendChild(preview);
               thumb.classList.add("is-previewing");
-            }, 250);
+            }, 40);
           });
           link.addEventListener("mouseleave", function(){
             clearTimeout(hoverTimer);
