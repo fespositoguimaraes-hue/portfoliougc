@@ -820,41 +820,48 @@
 
   /* ===================== SERVIÇOS ===================== */
   .servicos-grid{
-    display:grid;
-    grid-template-columns:0.85fr 1.15fr;
-    gap:clamp(30px,5vw,60px);
-    align-items:start;
+    display:flex;
+    gap:clamp(30px,5vw,48px);
+    align-items:flex-start;
   }
   @media (max-width:900px){
-    .servicos-grid{ grid-template-columns:1fr; }
+    .servicos-grid{ flex-direction:column; }
   }
-  .servicos-icon{
-    font-size:2.2rem;
-    margin-bottom:16px;
+  .servicos-intro{
+    width:320px;
+    flex-shrink:0;
+  }
+  @media (max-width:900px){
+    .servicos-intro{ width:auto; }
   }
   .servicos-title{
-    font-size:clamp(1.7rem,3.2vw,2.3rem);
+    font-size:clamp(1.5rem,3vw,1.9rem);
     line-height:1.2;
-    margin-bottom:18px;
+    margin-bottom:16px;
   }
   .servicos-title-highlight{
     background:var(--green-dark);
     color:#fff;
-    padding:2px 12px;
+    padding:2px 10px;
     border-radius:6px;
     display:inline-block;
   }
   .servicos-desc{
-    font-size:1.02rem;
+    font-size:0.95rem;
     color:var(--ink-soft);
     line-height:1.6;
-    margin-bottom:28px;
-    max-width:46ch;
+    margin-bottom:24px;
+    max-width:32ch;
   }
   .services-grid{
+    flex-grow:1;
     display:grid;
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(3,1fr);
     gap:14px;
+    align-content:start;
+  }
+  @media (max-width:900px){
+    .services-grid{ grid-template-columns:repeat(2,1fr); }
   }
   @media (max-width:600px){
     .services-grid{ grid-template-columns:1fr; }
@@ -862,28 +869,24 @@
   .service-card{
     background:#fff;
     border-radius:12px;
-    padding:18px;
+    padding:16px;
     border:1px solid rgba(0,0,0,0.12);
     box-shadow:0 8px 16px -14px rgba(0,0,0,0.35);
-    min-height:195px;
-    display:flex;
-    flex-direction:column;
-    justify-content:flex-start;
   }
   .service-badge{
     display:inline-block;
     background:var(--green-dark);
     color:#fff;
-    font-size:0.62rem;
+    font-size:0.6rem;
     font-weight:700;
     text-transform:uppercase;
     letter-spacing:0.03em;
-    padding:7px 12px;
-    border-radius:16px;
+    padding:6px 10px;
+    border-radius:14px;
     margin-bottom:10px;
   }
   .service-card p{
-    font-size:0.85rem;
+    font-size:0.8rem;
     color:var(--ink-soft);
     line-height:1.5;
   }
@@ -1347,7 +1350,6 @@
   <section class="sheet border-pink" id="servicos" aria-label="Serviços">
     <div class="servicos-grid">
       <div class="servicos-intro reveal">
-        <p class="servicos-icon" aria-hidden="true">💼</p>
         <h2 class="servicos-title">O que podemos <span class="servicos-title-highlight">criar</span> juntos?</h2>
         <p class="servicos-desc">Cada formato tem um objetivo: vender, escalar ou construir marca. Me conta o seu que a gente monta o combo perfeito pra sua marca.</p>
         <a class="btn btn-primary" href="#contato">Bora criar juntos →</a>
@@ -1632,7 +1634,7 @@
 
   // Seis serviços (seção 5). Edite o "desc" de cada um à vontade.
   var services = [
-    { title: "Criativos para tráfego ou conteúdo orgânico", desc: "Vídeos pensados pra performar tanto em anúncios pagos quanto no orgânico das redes." },
+    { title: "Criativo p/ rede social", desc: "Vídeos pensados pra performar tanto em anúncios pagos quanto no orgânico das redes." },
     { title: "Fotos", desc: "Still fotográfico do seu produto, capturando os detalhes que fazem diferença na hora da compra." },
     { title: "Publipost", desc: "Publicação no meu perfil apresentando a sua marca pra minha audiência, com a minha cara." },
     { title: "UGC para e-commerce", desc: "Vídeos autênticos de produto pra sua loja vender todo dia, com a naturalidade de quem realmente usa." },
