@@ -619,6 +619,41 @@
   }
 
   /* ===================== TRABALHOS / FILTROS ===================== */
+  .section-header-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:20px;
+    flex-wrap:wrap;
+  }
+  .gallery-nav{
+    display:flex;
+    gap:10px;
+    flex-shrink:0;
+  }
+  .gallery-nav-btn{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    border:1.5px solid rgba(0,0,0,0.15);
+    background:#fff;
+    color:var(--ink-soft);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.3rem;
+    line-height:1;
+    transition:border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  }
+  .gallery-nav-btn:hover:not(:disabled){
+    border-color:var(--pink);
+    color:var(--pink-dark);
+    background:rgba(221,136,147,0.08);
+  }
+  .gallery-nav-btn:disabled{
+    opacity:0.35;
+    cursor:default;
+  }
   .filters{
     display:flex;
     flex-wrap:wrap;
@@ -1260,9 +1295,17 @@
 
   <!-- ===================== 4. TRABALHOS POR NICHO ===================== -->
   <section class="sheet" id="trabalhos" aria-label="Trabalhos por nicho">
-    <p class="sheet-eyebrow">galeria</p>
-    <h2 class="section-title">Trabalhos por nicho</h2>
-    <p class="section-sub">Clique em um nicho para ver só os trabalhos daquela categoria.</p>
+    <div class="section-header-row">
+      <div>
+        <p class="sheet-eyebrow">galeria</p>
+        <h2 class="section-title">Trabalhos por nicho</h2>
+        <p class="section-sub">Clique em um nicho para ver só os trabalhos daquela categoria.</p>
+      </div>
+      <div class="gallery-nav">
+        <button type="button" class="gallery-nav-btn" id="galleryPrev" aria-label="Ver vídeos anteriores">‹</button>
+        <button type="button" class="gallery-nav-btn" id="galleryNext" aria-label="Ver próximos vídeos">›</button>
+      </div>
+    </div>
     <div class="filters" id="filterTabs" role="group" aria-label="Filtrar trabalhos por nicho"></div>
     <div class="gallery" id="galleryGrid"></div>
   </section>
@@ -1974,6 +2017,39 @@
       var walk = (x - startX) * 1.5;
       galleryEl.scrollLeft = scrollLeft - walk;
     });
+  })();
+
+  /* =====================================================================
+     SETAS DE NAVEGAÇÃO DA GALERIA
+  ===================================================================== */
+  (function galleryArrowNav(){
+    var galleryEl = document.getElementById("galleryGrid");
+    var prevBtn = document.getElementById("galleryPrev");
+    var nextBtn = document.getElementById("galleryNext");
+    if(!galleryEl || !prevBtn || !nextBtn) return;
+
+    function scrollStep(){
+      var card = galleryEl.querySelector(":scope > *");
+      var cardWidth = card ? card.getBoundingClientRect().width : 200;
+      return (cardWidth + 16) * 2; // avança 2 cards por clique
+    }
+
+    prevBtn.addEventListener("click", function(){
+      galleryEl.scrollBy({ left: -scrollStep(), behavior: "smooth" });
+    });
+    nextBtn.addEventListener("click", function(){
+      galleryEl.scrollBy({ left: scrollStep(), behavior: "smooth" });
+    });
+
+    function updateButtons(){
+      var maxScroll = galleryEl.scrollWidth - galleryEl.clientWidth;
+      prevBtn.disabled = galleryEl.scrollLeft <= 4;
+      nextBtn.disabled = galleryEl.scrollLeft >= maxScroll - 4;
+    }
+
+    galleryEl.addEventListener("scroll", updateButtons);
+    window.addEventListener("resize", updateButtons);
+    setTimeout(updateButtons, 300);
   })();
 
   /* =====================================================================
