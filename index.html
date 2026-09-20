@@ -622,12 +622,12 @@
   }
 
   /* ===================== TRABALHOS / FILTROS ===================== */
-  .section-header-row{
+  .filters-row{
     display:flex;
     justify-content:space-between;
-    align-items:flex-start;
-    gap:20px;
-    flex-wrap:wrap;
+    align-items:center;
+    gap:16px;
+    margin-bottom:32px;
   }
   .gallery-nav{
     display:flex;
@@ -661,7 +661,6 @@
     display:flex;
     flex-wrap:wrap;
     gap:10px;
-    margin-bottom:32px;
   }
   .filter-tab{
     position:relative;
@@ -1298,18 +1297,16 @@
 
   <!-- ===================== 4. TRABALHOS POR NICHO ===================== -->
   <section class="sheet" id="trabalhos" aria-label="Trabalhos por nicho">
-    <div class="section-header-row">
-      <div>
-        <p class="sheet-eyebrow">galeria</p>
-        <h2 class="section-title">Trabalhos por nicho</h2>
-        <p class="section-sub">Clique em um nicho para ver só os trabalhos daquela categoria.</p>
-      </div>
+    <p class="sheet-eyebrow">galeria</p>
+    <h2 class="section-title">Trabalhos por nicho</h2>
+    <p class="section-sub">Clique em um nicho para ver só os trabalhos daquela categoria.</p>
+    <div class="filters-row">
+      <div class="filters" id="filterTabs" role="group" aria-label="Filtrar trabalhos por nicho"></div>
       <div class="gallery-nav">
         <button type="button" class="gallery-nav-btn" id="galleryPrev" aria-label="Ver vídeos anteriores">‹</button>
         <button type="button" class="gallery-nav-btn" id="galleryNext" aria-label="Ver próximos vídeos">›</button>
       </div>
     </div>
-    <div class="filters" id="filterTabs" role="group" aria-label="Filtrar trabalhos por nicho"></div>
     <div class="gallery" id="galleryGrid"></div>
   </section>
 
