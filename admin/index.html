@@ -1013,6 +1013,18 @@
 
   let marcasCache = [];
 
+  const NICHO_LABELS = {
+    'beleza': 'Beleza',
+    'bem-estar': 'Bem-estar & Fit',
+    'moda': 'Moda',
+    'comida': 'Comida',
+    'casa': 'Casa e Decoração',
+    'fitness': 'Fitness',
+    'pet': 'Pet',
+    'viagem': 'Viagem',
+    'tech': 'Tech'
+  };
+
   async function loadMarcas() {
     const content = document.querySelector('.content');
 
@@ -1023,7 +1035,7 @@
         .order('criado_em', { ascending: false });
 
       if (error) throw error;
-      marcasCache = marcas || [];
+      marcasCache = (marcas || []).sort((a, b) => (b.favorita ? 1 : 0) - (a.favorita ? 1 : 0));
 
       let html = '<div style="margin-bottom: 12px; display: flex; gap: 8px; flex-wrap: wrap;">';
       html += '<button class="btn btn-primary" onclick="openMarcaModal()">+ Adicionar</button>';
@@ -1031,14 +1043,16 @@
       html += '<button class="btn btn-secondary" onclick="downloadCSV()">↓ Baixar CSV</button>';
       html += '</div>';
 
-      if (!marcas || marcas.length === 0) {
+      if (!marcasCache.length) {
         html += '<div class="empty-state">Nenhuma marca ainda. Adicione uma ou ela será criada quando alguém preencher o formulário do seu portfólio.</div>';
       } else {
         html += `
           <table>
             <thead>
               <tr>
+                <th style="width: 36px;"></th>
                 <th>Marca</th>
+                <th>Nicho</th>
                 <th>Instagram</th>
                 <th>E-mail</th>
                 <th>Situação</th>
@@ -1047,11 +1061,16 @@
             </thead>
             <tbody>
         `;
-        marcas.forEach(m => {
+        marcasCache.forEach(m => {
           const badgeClass = `badge-${m.situacao.toLowerCase()}`;
+          const nichoLabel = NICHO_LABELS[m.nicho] || '-';
           html += `
             <tr>
+              <td>
+                <button class="btn-favorito" onclick="toggleFavorita(${m.id})" aria-label="${m.favorita ? 'Desfavoritar' : 'Favoritar'} ${m.nome}" style="background:none; border:none; cursor:pointer; font-size:16px; color:${m.favorita ? '#f5a623' : 'var(--detail)'};">${m.favorita ? '★' : '☆'}</button>
+              </td>
               <td>${m.nome}</td>
+              <td>${nichoLabel}</td>
               <td><a href="https://instagram.com/${m.instagram}" target="_blank" style="color: var(--green);">${m.instagram || '-'}</a></td>
               <td>${m.email || '-'}</td>
               <td><span class="badge ${badgeClass}">${m.situacao}</span></td>
@@ -1069,6 +1088,20 @@
     } catch (err) {
       content.innerHTML = `<div class="error-message">Erro ao carregar marcas: ${err.message}</div>`;
       console.error(err);
+    }
+  }
+
+  async function toggleFavorita(id) {
+    const marca = marcasCache.find(m => m.id === id);
+    if (!marca) return;
+    const novoValor = !marca.favorita;
+    try {
+      const { error } = await supabase.from('marcas').update({ favorita: novoValor }).eq('id', id);
+      if (error) throw error;
+      loadMarcas();
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao favoritar: ' + err.message);
     }
   }
 
