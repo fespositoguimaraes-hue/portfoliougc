@@ -481,7 +481,8 @@
   .services-ticker{
     background:var(--green-dark);
     overflow:hidden;
-    padding:18px 0;
+    padding:16px 0;
+    margin:32px calc(-1 * clamp(20px, 5vw, 56px)) 0;
   }
   .services-ticker-track{
     display:flex;
@@ -1331,15 +1332,15 @@
       </div>
     </div>
 
+    <div class="services-ticker" aria-hidden="true">
+      <div class="services-ticker-track" id="servicesTickerTrack"></div>
+    </div>
+
     <div class="brands-strip reveal">
       <p class="brands-strip-label">Marcas que já confiaram no meu trabalho</p>
       <div class="marquee" id="brandsMarquee"></div>
     </div>
   </section>
-
-  <div class="services-ticker" aria-hidden="true">
-    <div class="services-ticker-track" id="servicesTickerTrack"></div>
-  </div>
 
   <!-- ===================== 2. SOBRE MIM ===================== -->
   <section class="sheet border-pink" id="sobre" aria-label="Sobre mim">
