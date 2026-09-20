@@ -583,6 +583,74 @@
   </div>
 </div>
 
+<!-- Modal: Adicionar/Editar marca -->
+<div class="modal" id="marcaModal">
+  <div class="modal-content" style="max-width: 560px;">
+    <div class="modal-header">
+      <h2 id="marcaModalTitle">Editar marca</h2>
+      <button class="modal-close" onclick="closeMarcaModal()">×</button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+      <div class="form-group">
+        <label for="marcaNome">Marca</label>
+        <input type="text" id="marcaNome" placeholder="Nome da marca">
+      </div>
+      <div class="form-group">
+        <label for="marcaNicho">Nicho</label>
+        <select id="marcaNicho">
+          <option value="">sem nicho</option>
+          <option value="beleza">Beleza</option>
+          <option value="bem-estar">Bem-estar &amp; Fit</option>
+          <option value="moda">Moda</option>
+          <option value="comida">Comida</option>
+          <option value="casa">Casa e Decoração</option>
+          <option value="fitness">Fitness</option>
+          <option value="pet">Pet</option>
+          <option value="viagem">Viagem</option>
+          <option value="tech">Tech</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="marcaInstagram">Instagram</label>
+        <input type="text" id="marcaInstagram" placeholder="usuario">
+      </div>
+      <div class="form-group">
+        <label for="marcaTelefone">Telefone</label>
+        <input type="tel" id="marcaTelefone" placeholder="(11) 99999-9999">
+      </div>
+      <div class="form-group" style="grid-column: 1 / -1;">
+        <label for="marcaEmail">E-mail</label>
+        <input type="email" id="marcaEmail" placeholder="contato@marca.com">
+      </div>
+      <div class="form-group">
+        <label for="marcaSituacao">Situação</label>
+        <select id="marcaSituacao">
+          <option value="Lead">Lead</option>
+          <option value="Conversando">Conversando</option>
+          <option value="Cliente">Cliente</option>
+          <option value="Parada">Parada</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="marcaUltimoContato">Último contato</label>
+        <input type="date" id="marcaUltimoContato">
+      </div>
+      <div class="form-group" style="grid-column: 1 / -1;">
+        <label for="marcaObs">Observação</label>
+        <textarea id="marcaObs" rows="3"></textarea>
+      </div>
+    </div>
+
+    <div id="marcaModalError" style="display: none; margin-top: 12px; padding: 10px 12px; background: #fbe9e9; color: #a33; border-radius: 6px; font-size: 13px;"></div>
+
+    <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px;">
+      <button class="btn btn-secondary" onclick="closeMarcaModal()">Cancelar</button>
+      <button class="btn btn-primary" id="marcaSaveBtn" onclick="saveMarca()">Salvar</button>
+    </div>
+  </div>
+</div>
+
 <!-- Modal: Importar planilha de leads -->
 <div class="modal" id="importModal">
   <div class="modal-content" style="max-width: 640px;">
@@ -943,6 +1011,8 @@
   // ABA 2: MARCAS
   // ========================================================================
 
+  let marcasCache = [];
+
   async function loadMarcas() {
     const content = document.querySelector('.content');
 
@@ -953,6 +1023,7 @@
         .order('criado_em', { ascending: false });
 
       if (error) throw error;
+      marcasCache = marcas || [];
 
       let html = '<div style="margin-bottom: 12px; display: flex; gap: 8px; flex-wrap: wrap;">';
       html += '<button class="btn btn-primary" onclick="openMarcaModal()">+ Adicionar</button>';
@@ -1001,13 +1072,90 @@
     }
   }
 
-  function openMarcaModal() { alert('Adicionar marca'); }
-  function editMarca(id) { alert(`Editar marca ${id}`); }
-  function deleteMarca(id) {
-    if (confirm('Deletar esta marca?')) {
-      alert(`Deletado marca ${id}`);
+  let editingMarcaId = null;
+
+  function openMarcaModal(id) {
+    editingMarcaId = id || null;
+    const marca = editingMarcaId ? marcasCache.find(m => m.id === editingMarcaId) : null;
+
+    document.getElementById('marcaModalTitle').textContent = editingMarcaId ? 'Editar marca' : 'Adicionar marca';
+    document.getElementById('marcaModalError').style.display = 'none';
+    document.getElementById('marcaNome').value = marca?.nome || '';
+    document.getElementById('marcaNicho').value = marca?.nicho || '';
+    document.getElementById('marcaInstagram').value = marca?.instagram || '';
+    document.getElementById('marcaTelefone').value = marca?.telefone || '';
+    document.getElementById('marcaEmail').value = marca?.email || '';
+    document.getElementById('marcaSituacao').value = marca?.situacao || 'Lead';
+    document.getElementById('marcaUltimoContato').value = marca?.ultimo_contato || '';
+    document.getElementById('marcaObs').value = marca?.obs || '';
+
+    document.getElementById('marcaModal').classList.add('show');
+  }
+
+  function closeMarcaModal() {
+    document.getElementById('marcaModal').classList.remove('show');
+  }
+
+  function showMarcaError(msg) {
+    const box = document.getElementById('marcaModalError');
+    box.textContent = msg;
+    box.style.display = 'block';
+  }
+
+  async function saveMarca() {
+    const nome = document.getElementById('marcaNome').value.trim();
+    if (!nome) {
+      showMarcaError('Preencha o nome da marca.');
+      return;
+    }
+
+    const payload = {
+      nome: nome,
+      nicho: document.getElementById('marcaNicho').value || null,
+      instagram: document.getElementById('marcaInstagram').value.trim() || null,
+      telefone: document.getElementById('marcaTelefone').value.trim() || null,
+      email: document.getElementById('marcaEmail').value.trim() || null,
+      situacao: document.getElementById('marcaSituacao').value,
+      ultimo_contato: document.getElementById('marcaUltimoContato').value || null,
+      obs: document.getElementById('marcaObs').value.trim() || null
+    };
+
+    const btn = document.getElementById('marcaSaveBtn');
+    btn.disabled = true;
+    btn.textContent = 'Salvando...';
+
+    try {
+      const { error } = editingMarcaId
+        ? await supabase.from('marcas').update(payload).eq('id', editingMarcaId)
+        : await supabase.from('marcas').insert(payload);
+
+      if (error) throw error;
+
+      closeMarcaModal();
+      loadMarcas();
+    } catch (err) {
+      console.error(err);
+      showMarcaError('Erro ao salvar: ' + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Salvar';
     }
   }
+
+  function editMarca(id) { openMarcaModal(id); }
+
+  async function deleteMarca(id) {
+    if (!confirm('Deletar esta marca?')) return;
+    try {
+      const { error } = await supabase.from('marcas').delete().eq('id', id);
+      if (error) throw error;
+      loadMarcas();
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao deletar: ' + err.message);
+    }
+  }
+
   function downloadCSV() { alert('Baixando CSV...'); }
 
   let importParsedLeads = [];
