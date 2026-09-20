@@ -854,34 +854,35 @@
   .services-grid{
     display:grid;
     grid-template-columns:repeat(2,1fr);
-    gap:32px 20px;
+    gap:14px;
+    align-items:start;
   }
   @media (max-width:600px){
     .services-grid{ grid-template-columns:1fr; }
   }
   .service-card{
     background:#fff;
-    border-radius:14px;
-    padding:20px;
+    border-radius:12px;
+    padding:16px;
     border:1px solid rgba(0,0,0,0.12);
-    box-shadow:0 10px 20px -16px rgba(0,0,0,0.35);
+    box-shadow:0 8px 16px -14px rgba(0,0,0,0.35);
   }
   .service-badge{
     display:inline-block;
     background:var(--green-dark);
     color:#fff;
-    font-size:0.68rem;
+    font-size:0.62rem;
     font-weight:700;
     text-transform:uppercase;
-    letter-spacing:0.04em;
-    padding:9px 15px;
+    letter-spacing:0.03em;
+    padding:7px 12px;
     border-radius:30px;
-    margin-bottom:14px;
+    margin-bottom:10px;
   }
   .service-card p{
-    font-size:0.92rem;
+    font-size:0.85rem;
     color:var(--ink-soft);
-    line-height:1.6;
+    line-height:1.5;
   }
 
   /* ===================== NÚMEROS / DEPOIMENTOS ===================== */
