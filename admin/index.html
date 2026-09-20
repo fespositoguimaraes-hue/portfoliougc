@@ -509,6 +509,352 @@
       font-size: 13px;
       line-height: 1.6;
     }
+
+    /* ==================== PROSPECÇÃO ==================== */
+    .prosp-hero {
+      position: relative;
+      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      color: #fff;
+      border-radius: 16px;
+      padding: 28px 28px 24px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .prosp-hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .prosp-hero-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+    .prosp-hero-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 0 6px;
+    }
+    .prosp-hero-desc {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.85);
+      max-width: 46ch;
+      line-height: 1.5;
+      margin: 0;
+    }
+    .prosp-hero-stat {
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .prosp-hero-stat-value {
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .prosp-hero-stat-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 4px;
+    }
+    .prosp-hero-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    .prosp-hero-tag {
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #fff;
+      font-size: 11px;
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+
+    .prosp-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .prosp-stat-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--detail);
+      box-shadow: 0 6px 16px -14px rgba(0, 0, 0, 0.4);
+    }
+    .prosp-stat-card.c-green { border-left-color: var(--green); }
+    .prosp-stat-card.c-emerald { border-left-color: #2e9e6d; }
+    .prosp-stat-card.c-amber { border-left-color: #d99a2b; }
+    .prosp-stat-card.c-blue { border-left-color: #3b82c4; }
+    .prosp-stat-card.c-red { border-left-color: #d97373; }
+    .prosp-stat-card-value {
+      font-size: 24px;
+      font-weight: 800;
+    }
+    .prosp-stat-card.c-green .prosp-stat-card-value { color: var(--green-dark); }
+    .prosp-stat-card.c-emerald .prosp-stat-card-value { color: #2e9e6d; }
+    .prosp-stat-card.c-amber .prosp-stat-card-value { color: #d99a2b; }
+    .prosp-stat-card.c-blue .prosp-stat-card-value { color: #3b82c4; }
+    .prosp-stat-card.c-red .prosp-stat-card-value { color: #d97373; }
+    .prosp-stat-card-label {
+      font-size: 12px;
+      color: var(--ink);
+      margin-top: 2px;
+    }
+    .prosp-stat-card-context {
+      font-size: 11px;
+      color: var(--detail);
+      margin-top: 4px;
+    }
+
+    .prosp-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .prosp-layout { grid-template-columns: 1fr; }
+    }
+    .prosp-form-col { min-width: 0; }
+    .prosp-preview-col {
+      position: sticky;
+      top: 16px;
+    }
+
+    .prosp-section {
+      background: #fff;
+      border-radius: 12px;
+      padding: 18px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      margin-bottom: 16px;
+    }
+    .prosp-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      margin: 0 0 12px;
+    }
+    .prosp-hint {
+      font-size: 11.5px;
+      color: var(--detail);
+      margin: -6px 0 12px;
+      line-height: 1.5;
+    }
+
+    .prosp-toggle-group {
+      display: flex;
+      gap: 6px;
+      background: var(--paper);
+      border-radius: 8px;
+      padding: 4px;
+      margin-bottom: 14px;
+      width: fit-content;
+    }
+    .prosp-toggle-btn {
+      border: none;
+      background: transparent;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .prosp-toggle-btn.active {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .prosp-recipient-count {
+      font-size: 12.5px;
+      color: var(--ink);
+      background: var(--paper);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-top: 10px;
+    }
+    .prosp-recipient-count strong { color: var(--green-dark); }
+
+    textarea.prosp-body {
+      width: 100%;
+      min-height: 220px;
+      resize: vertical;
+    }
+    textarea.prosp-html {
+      font-family: 'SF Mono', Menlo, monospace;
+      font-size: 12px;
+    }
+
+    .prosp-preview-stage {
+      background: #33342f;
+      border-radius: 14px;
+      padding: 24px 16px;
+      display: flex;
+      justify-content: center;
+    }
+    .prosp-preview-window {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 20px 40px -16px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      max-width: 400px;
+      overflow: hidden;
+    }
+    .prosp-preview-header {
+      padding: 16px 18px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    .prosp-preview-avatar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .prosp-preview-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--green);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+    .prosp-preview-subject {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 0;
+    }
+    .prosp-preview-from-name {
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .prosp-preview-from-email {
+      font-size: 11px;
+      color: var(--detail);
+    }
+    .prosp-preview-body {
+      padding: 18px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #333;
+      max-height: 360px;
+      overflow-y: auto;
+    }
+    .prosp-preview-footer-note {
+      text-align: center;
+      font-size: 11px;
+      color: var(--detail);
+      margin-top: 10px;
+    }
+
+    .prosp-fullscreen-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 300;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .prosp-fullscreen-modal.show { display: flex; }
+    .prosp-fullscreen-content {
+      background: #fff;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    .prosp-fullscreen-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(0, 0, 0, 0.06);
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .prosp-queue-card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      padding: 18px;
+      margin-bottom: 12px;
+    }
+    .prosp-queue-name {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    .prosp-queue-email {
+      font-size: 12px;
+      color: var(--detail);
+      margin-bottom: 12px;
+    }
+
+    .prosp-progress-track {
+      height: 8px;
+      border-radius: 4px;
+      background: var(--paper);
+      overflow: hidden;
+      margin: 12px 0;
+    }
+    .prosp-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--green);
+      transition: width 0.2s ease;
+    }
+
+    .prosp-warning-box {
+      background: #fff3e0;
+      border: 1px solid #f0c987;
+      color: #8a5a10;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .prosp-error-box {
+      background: #fbe9e9;
+      border: 1px solid #e6a3a3;
+      color: #a33;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .prosp-success-box {
+      background: #e8f5e9;
+      border: 1px solid #a5d6a7;
+      color: #2e7d32;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
   </style>
 </head>
 <body>
@@ -531,6 +877,13 @@
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 8 0 4 4 0 0 0-8 0"/>
       </svg>
       Marcas
+    </button>
+    <button class="nav-item" data-tab="prospeccao">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2z"/>
+        <path d="m22 6-10 7L2 6"/>
+      </svg>
+      Prospecção
     </button>
   </div>
 
@@ -732,6 +1085,30 @@
   </div>
 </div>
 
+<!-- Modal: Confirmar disparo de e-mails -->
+<div class="modal" id="prospConfirmModal">
+  <div class="modal-content" style="max-width: 460px;">
+    <div class="modal-header">
+      <h2>Confirmar disparo</h2>
+      <button class="modal-close" onclick="closeProspConfirm()">×</button>
+    </div>
+    <p id="prospConfirmText" style="font-size: 13px; line-height: 1.6;"></p>
+    <p style="font-size: 12px; color: var(--detail); margin-top: -6px;">Essa ação não pode ser desfeita.</p>
+    <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px;">
+      <button class="btn btn-secondary" onclick="closeProspConfirm()">Cancelar</button>
+      <button class="btn btn-primary" onclick="confirmarDisparo()">Sim, disparar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Prévia em tela cheia -->
+<div class="prosp-fullscreen-modal" id="prospFullscreenModal">
+  <div class="prosp-fullscreen-content">
+    <button class="prosp-fullscreen-close" onclick="closeProspFullscreen()">×</button>
+    <div id="prospFullscreenBody"></div>
+  </div>
+</div>
+
 <!-- Supabase via CDN -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.0"></script>
 
@@ -799,6 +1176,7 @@
     const titles = {
       portfolio: 'Portfólio',
       marcas: 'Marcas',
+      prospeccao: 'Prospecção',
       calendario: 'Calendário',
       campanhas: 'Campanhas',
       checklist: 'Checklist'
@@ -814,6 +1192,7 @@
     // Carregar conteúdo da aba
     if (tab === 'portfolio') loadPortfolio();
     else if (tab === 'marcas') loadMarcas();
+    else if (tab === 'prospeccao') loadProspeccao();
     else if (tab === 'calendario') loadCalendario();
     else if (tab === 'campanhas') loadCampanhas();
     else if (tab === 'checklist') loadChecklist();
@@ -1451,6 +1830,601 @@
       handleImportFileSelected({ target: { files: [file] } });
     });
   })();
+
+  // ========================================================================
+  // ABA: PROSPECÇÃO
+  // ========================================================================
+
+  const MEU_EMAIL_PROSP = 'fespositoguimaraes@gmail.com';
+  const MEU_NOME_PROSP = 'Fernanda Esposito';
+
+  let prospState = {
+    modoEnvio: 'resend',
+    modoCompose: 'texto',
+    marcas: [],
+    envios: [],
+    optouts: [],
+    filaRascunho: [],
+    filaIndice: 0
+  };
+
+  async function loadProspeccao() {
+    const content = document.querySelector('.content');
+    try {
+      let marcas = marcasCache && marcasCache.length ? marcasCache : null;
+      if (!marcas) {
+        const { data, error } = await supabase.from('marcas').select('*');
+        if (error) throw error;
+        marcas = data || [];
+        marcasCache = marcas;
+      }
+      prospState.marcas = marcas;
+
+      let envios = [];
+      let enviosErro = null;
+      try {
+        const { data, error } = await supabase.from('email_envios').select('*').order('criado_em', { ascending: false });
+        if (error) throw error;
+        envios = data || [];
+      } catch (err) { enviosErro = err; }
+      prospState.envios = envios;
+
+      let optouts = [];
+      let optoutErro = null;
+      try {
+        const { data, error } = await supabase.from('email_optout').select('*');
+        if (error) throw error;
+        optouts = data || [];
+      } catch (err) { optoutErro = err; }
+      prospState.optouts = optouts;
+
+      content.innerHTML = renderProspeccaoHtml(enviosErro, optoutErro);
+
+      const comEmail = prospState.marcas.filter(m => m.email && m.email.trim());
+      if (!comEmail.length) return; // tela de aviso já cobre esse caso, sem formulário
+
+      initProspListeners();
+      toggleProspComposeMode('texto');
+      toggleProspModoEnvio('resend');
+      updateProspRecipientCount();
+      updateProspPreview();
+      renderProspHistorico();
+    } catch (err) {
+      content.innerHTML = `<div class="error-message">Erro ao carregar prospecção: ${err.message}</div>`;
+      console.error(err);
+    }
+  }
+
+  function getSituacoesProsp() {
+    const set = new Set();
+    prospState.marcas.forEach(m => { if (m.situacao) set.add(m.situacao); });
+    return Array.from(set);
+  }
+
+  function renderProspeccaoHtml(enviosErro, optoutErro) {
+    const marcas = prospState.marcas;
+    const comEmail = marcas.filter(m => m.email && m.email.trim());
+    const totalEnviados = enviosErro ? '-' : prospState.envios.filter(e => e.status === 'ok').length;
+    const falhas = enviosErro ? '-' : prospState.envios.filter(e => e.status === 'erro').length;
+    const jaReceberam = comEmail.filter(m => m.prospeccao_enviada_em).length;
+    const aEnviar = comEmail.filter(m => !m.prospeccao_enviada_em).length;
+    const descadastrados = optoutErro ? '-' : prospState.optouts.length;
+
+    let html = `
+      <div class="prosp-hero">
+        <div class="prosp-hero-top">
+          <div>
+            <div class="prosp-hero-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 6-10 7L2 6"></path>
+              </svg>
+            </div>
+            <h2 class="prosp-hero-title">Prospecção</h2>
+            <p class="prosp-hero-desc">Manda seu e-mail de apresentação pra várias marcas de uma vez, chamando cada uma pelo nome.</p>
+          </div>
+          <div class="prosp-hero-stat">
+            <div class="prosp-hero-stat-value">${totalEnviados}</div>
+            <div class="prosp-hero-stat-label">enviados até agora</div>
+          </div>
+        </div>
+        <div class="prosp-hero-tags">
+          <span class="prosp-hero-tag">teste antes sempre</span>
+          <span class="prosp-hero-tag">a chave vive no Supabase</span>
+          <span class="prosp-hero-tag">quem responde SAIR sai da lista</span>
+        </div>
+      </div>
+
+      <div class="prosp-stats-grid">
+        <div class="prosp-stat-card c-green"><div class="prosp-stat-card-value">${comEmail.length}</div><div class="prosp-stat-card-label">marcas com e-mail</div></div>
+        <div class="prosp-stat-card c-blue"><div class="prosp-stat-card-value">${aEnviar}</div><div class="prosp-stat-card-label">a enviar</div><div class="prosp-stat-card-context">nunca receberam</div></div>
+        <div class="prosp-stat-card c-emerald"><div class="prosp-stat-card-value">${jaReceberam}</div><div class="prosp-stat-card-label">já receberam</div></div>
+        <div class="prosp-stat-card c-amber"><div class="prosp-stat-card-value">${falhas}</div><div class="prosp-stat-card-label">falhas</div></div>
+        <div class="prosp-stat-card c-red"><div class="prosp-stat-card-value">${descadastrados}</div><div class="prosp-stat-card-label">descadastrados</div></div>
+      </div>
+    `;
+
+    if (!comEmail.length) {
+      html += `
+        <div class="prosp-section" style="text-align:center; padding:32px;">
+          <p style="font-size:13px; color: var(--ink); margin-bottom:14px;">Sua base ainda está sem e-mail. Cadastre uma marca ou importe sua planilha primeiro.</p>
+          <button class="btn btn-primary" onclick="loadTab('marcas')">Ir para Marcas</button>
+        </div>
+      `;
+      return html;
+    }
+
+    const selecionadasCount = comEmail.filter(m => m.selecionada).length;
+    const situacoes = getSituacoesProsp();
+    let opcoesFiltro = `<option value="selecionadas">Só as marcas selecionadas (${selecionadasCount})</option>`;
+    opcoesFiltro += `<option value="teste">Só pra mim (teste)</option>`;
+    opcoesFiltro += `<option value="todas">Todas as marcas com e-mail (${comEmail.length})</option>`;
+    situacoes.forEach(s => {
+      const count = comEmail.filter(m => m.situacao === s).length;
+      opcoesFiltro += `<option value="situacao:${s}">Só ${s} (${count})</option>`;
+    });
+
+    html += `
+      <div class="prosp-layout">
+        <div class="prosp-form-col">
+
+          <div class="prosp-section">
+            <p class="prosp-section-title">Modo de envio</p>
+            <div class="prosp-toggle-group">
+              <button type="button" class="prosp-toggle-btn active" data-modo-envio="resend" onclick="toggleProspModoEnvio('resend')">Enviar pelo Resend</button>
+              <button type="button" class="prosp-toggle-btn" data-modo-envio="rascunho" onclick="toggleProspModoEnvio('rascunho')">Rascunho (Gmail)</button>
+            </div>
+            <p class="prosp-hint" id="prospModoEnvioHint"></p>
+          </div>
+
+          <div class="prosp-section">
+            <p class="prosp-section-title">Pra quem vai</p>
+            <p class="prosp-hint">Os e-mails vêm da sua aba Marcas.</p>
+            <select id="prospFiltro">${opcoesFiltro}</select>
+            <label style="display:flex; align-items:center; gap:6px; font-size:12px; font-weight:400; margin-top:10px;">
+              <input type="checkbox" id="prospPularEnviados" checked style="width:auto;">
+              Pular quem já recebeu este mesmo assunto
+            </label>
+            <div class="prosp-recipient-count" id="prospRecipientCount"></div>
+          </div>
+
+          <div class="prosp-section">
+            <p class="prosp-section-title">Escrever o e-mail</p>
+            <div class="prosp-toggle-group">
+              <button type="button" class="prosp-toggle-btn active" data-modo-compose="texto" onclick="toggleProspComposeMode('texto')">Texto fácil</button>
+              <button type="button" class="prosp-toggle-btn" data-modo-compose="html" onclick="toggleProspComposeMode('html')">HTML</button>
+            </div>
+            <div class="form-group">
+              <label>Assunto</label>
+              <input type="text" id="prospAssunto" placeholder="Ex: Adoraria criar conteúdo pra {{marca}}">
+            </div>
+            <div id="prospComposeTexto">
+              <div class="form-group">
+                <label>Texto do e-mail</label>
+                <textarea class="prosp-body" id="prospTexto" placeholder="Oi {{nome}}! Sou a Fernanda, UGC creator..."></textarea>
+              </div>
+            </div>
+            <div id="prospComposeHtml" style="display:none;">
+              <button type="button" class="btn btn-sm btn-secondary" style="margin-bottom:10px;" onclick="comecarDoModeloProsp()">Começar do modelo pronto</button>
+              <div class="form-group">
+                <textarea class="prosp-body prosp-html" id="prospHtml" placeholder="<div>...</div>"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Texto do botão (opcional)</label>
+              <input type="text" id="prospBotaoTexto" placeholder="Ex: Vamos conversar">
+            </div>
+            <div class="form-group">
+              <label>Link do botão (opcional)</label>
+              <input type="text" id="prospBotaoLink" placeholder="https://wa.me/...">
+            </div>
+          </div>
+
+          <div class="prosp-section" id="prospSendSection">
+            <p class="prosp-section-title">Enviar</p>
+            <div id="prospSendMessages"></div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button type="button" class="btn btn-secondary" onclick="enviarTesteProsp()">Enviar teste pra mim</button>
+              <button type="button" class="btn btn-primary" id="prospDispararBtn" onclick="prepararDisparoProsp()">Disparar</button>
+            </div>
+            <div class="prosp-progress-track" id="prospProgressTrack" style="display:none;">
+              <div class="prosp-progress-bar" id="prospProgressBar"></div>
+            </div>
+            <div id="prospProgressLabel" style="font-size:12px; color:var(--detail); margin-top:4px;"></div>
+            <div id="prospResumoFinal"></div>
+          </div>
+
+          <div id="prospRascunhoSection" style="display:none;"></div>
+
+          <div class="prosp-section">
+            <p class="prosp-section-title">Histórico de envios</p>
+            <input type="text" id="prospHistoricoBusca" placeholder="Buscar por e-mail..." oninput="renderProspHistorico()" style="margin-bottom:10px;">
+            <div id="prospHistoricoTabela"></div>
+          </div>
+
+        </div>
+
+        <div class="prosp-preview-col">
+          <div class="prosp-section" style="padding-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <p class="prosp-section-title" style="margin:0;">Prévia</p>
+              <button type="button" class="btn btn-sm btn-secondary" onclick="openProspFullscreen()">Ver em tela cheia</button>
+            </div>
+            <div class="prosp-preview-stage">
+              <div class="prosp-preview-window">
+                <div class="prosp-preview-header">
+                  <p class="prosp-preview-subject" id="prospPreviewSubject"></p>
+                  <div class="prosp-preview-avatar-row">
+                    <div class="prosp-preview-avatar">${MEU_NOME_PROSP.charAt(0)}</div>
+                    <div>
+                      <div class="prosp-preview-from-name">${MEU_NOME_PROSP}</div>
+                      <div class="prosp-preview-from-email">${MEU_EMAIL_PROSP} · para você</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="prosp-preview-body" id="prospPreviewBody"></div>
+              </div>
+            </div>
+            <p class="prosp-preview-footer-note">Lembra de mandar o teste pra você mesma e abrir no celular antes de disparar.</p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    return html;
+  }
+
+  function initProspListeners() {
+    ['prospAssunto', 'prospTexto', 'prospHtml', 'prospBotaoTexto', 'prospBotaoLink'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', updateProspPreview);
+    });
+    const filtroEl = document.getElementById('prospFiltro');
+    if (filtroEl) filtroEl.addEventListener('change', () => {
+      updateProspRecipientCount();
+      if (prospState.modoEnvio === 'rascunho') prepararFilaRascunho();
+    });
+  }
+
+  function getDestinatariosProsp() {
+    const filtroEl = document.getElementById('prospFiltro');
+    const filtro = filtroEl ? filtroEl.value : 'todas';
+    const comEmail = prospState.marcas.filter(m => m.email && m.email.trim());
+    if (filtro === 'selecionadas') return comEmail.filter(m => m.selecionada);
+    if (filtro === 'teste') return [{ id: 'teste', nome: 'Você', email: MEU_EMAIL_PROSP, situacao: '-' }];
+    if (filtro.startsWith('situacao:')) {
+      const sit = filtro.slice('situacao:'.length);
+      return comEmail.filter(m => m.situacao === sit);
+    }
+    return comEmail;
+  }
+
+  function updateProspRecipientCount() {
+    const el = document.getElementById('prospRecipientCount');
+    if (!el) return;
+    const filtroEl = document.getElementById('prospFiltro');
+    const filtro = filtroEl ? filtroEl.value : 'todas';
+    const lista = getDestinatariosProsp();
+    const semEmail = prospState.marcas.filter(m => !m.email || !m.email.trim()).length;
+    let texto = `<strong>${lista.length}</strong> marca${lista.length === 1 ? '' : 's'} vão receber`;
+    if (filtro === 'todas' && semEmail) texto += ` · ${semEmail} ficaram de fora por não ter e-mail`;
+    el.innerHTML = texto;
+    const dispararBtn = document.getElementById('prospDispararBtn');
+    if (dispararBtn) dispararBtn.disabled = !lista.length;
+  }
+
+  function toggleProspComposeMode(modo) {
+    prospState.modoCompose = modo;
+    document.querySelectorAll('[data-modo-compose]').forEach(b => b.classList.toggle('active', b.dataset.modoCompose === modo));
+    const textoEl = document.getElementById('prospComposeTexto');
+    const htmlEl = document.getElementById('prospComposeHtml');
+    if (textoEl) textoEl.style.display = modo === 'texto' ? 'block' : 'none';
+    if (htmlEl) htmlEl.style.display = modo === 'html' ? 'block' : 'none';
+    updateProspPreview();
+  }
+
+  function toggleProspModoEnvio(modo) {
+    prospState.modoEnvio = modo;
+    document.querySelectorAll('[data-modo-envio]').forEach(b => b.classList.toggle('active', b.dataset.modoEnvio === modo));
+    const hint = document.getElementById('prospModoEnvioHint');
+    if (hint) {
+      hint.textContent = modo === 'resend'
+        ? 'Manda de verdade pelo Resend. Sem domínio verificado, só chega pro seu próprio e-mail.'
+        : 'Monta o e-mail de cada marca e abre no Gmail pra você clicar em enviar. Funciona mesmo sem configurar o Resend.';
+    }
+    const sendSection = document.getElementById('prospSendSection');
+    const rascunhoSection = document.getElementById('prospRascunhoSection');
+    if (sendSection) sendSection.style.display = modo === 'resend' ? 'block' : 'none';
+    if (rascunhoSection) rascunhoSection.style.display = modo === 'rascunho' ? 'block' : 'none';
+    if (modo === 'rascunho') prepararFilaRascunho();
+  }
+
+  function preencherModeloProsp(txt, nome, marca) {
+    const primeiroNome = (nome || '').split(' ')[0];
+    return (txt || '').replaceAll('{{nome}}', primeiroNome).replaceAll('{{marca}}', marca || '');
+  }
+
+  function autoLinkifyProsp(texto) {
+    const urlRegex = /(https?:\/\/[^\s<]+)/g;
+    return texto.replace(urlRegex, url => `<a href="${url}" style="color:#5a695e;">${url}</a>`);
+  }
+
+  function gerarTemplateEmailProsp(textoPlano, botaoTexto, botaoLink) {
+    const linhas = (textoPlano || '').split('\n').map(l => autoLinkifyProsp(l)).join('<br>');
+    const botaoHtml = (botaoTexto && botaoLink) ? `
+      <div style="text-align:center; margin:24px 0;">
+        <a href="${botaoLink}" style="background:#5a695e; color:#fff; padding:12px 24px; border-radius:8px; text-decoration:none; font-weight:600; display:inline-block;">${botaoTexto}</a>
+      </div>` : '';
+    return `<div style="max-width:560px; margin:0 auto; background:#ffffff; color:#222222; font-family:-apple-system,BlinkMacSystemFont,sans-serif; padding:24px; line-height:1.6; font-size:14px;">
+      <div>${linhas}</div>
+      ${botaoHtml}
+      <p style="margin-top:32px; padding-top:16px; border-top:1px solid #eeeeee; font-size:11px; color:#999999;">Se não quiser mais receber e-mails, responda esta mensagem com o assunto SAIR.</p>
+    </div>`;
+  }
+
+  // Mantém {{nome}} e {{marca}} intactos: quem substitui por destinatário é a função no Supabase
+  function montarCorpoEmailTemplateProsp() {
+    if (prospState.modoCompose === 'html') {
+      return document.getElementById('prospHtml').value || '';
+    }
+    const textoBruto = document.getElementById('prospTexto').value || '';
+    const botaoTexto = document.getElementById('prospBotaoTexto').value.trim();
+    const botaoLink = document.getElementById('prospBotaoLink').value.trim();
+    return gerarTemplateEmailProsp(textoBruto, botaoTexto, botaoLink);
+  }
+
+  function comecarDoModeloProsp() {
+    const textoBruto = document.getElementById('prospTexto').value || 'Oi {{nome}}! Sou a Fernanda, UGC creator...';
+    const botaoTexto = document.getElementById('prospBotaoTexto').value.trim();
+    const botaoLink = document.getElementById('prospBotaoLink').value.trim();
+    document.getElementById('prospHtml').value = gerarTemplateEmailProsp(textoBruto, botaoTexto, botaoLink);
+    updateProspPreview();
+  }
+
+  function updateProspPreview() {
+    const assuntoEl = document.getElementById('prospAssunto');
+    const subjectEl = document.getElementById('prospPreviewSubject');
+    const bodyEl = document.getElementById('prospPreviewBody');
+    if (!subjectEl || !bodyEl) return;
+    const assunto = preencherModeloProsp(assuntoEl ? assuntoEl.value : '', 'Maria', 'Marca Exemplo');
+    subjectEl.textContent = assunto || '(sem assunto)';
+    bodyEl.innerHTML = preencherModeloProsp(montarCorpoEmailTemplateProsp(), 'Maria', 'Marca Exemplo');
+  }
+
+  function openProspFullscreen() {
+    document.getElementById('prospFullscreenBody').innerHTML = document.getElementById('prospPreviewBody').innerHTML;
+    document.getElementById('prospFullscreenModal').classList.add('show');
+  }
+  function closeProspFullscreen() {
+    document.getElementById('prospFullscreenModal').classList.remove('show');
+  }
+
+  async function chamarCarteiroProsp(destinatarios, assunto, corpoHtml, pularJaEnviados) {
+    const { data, error } = await supabase.functions.invoke('enviar-emails', {
+      body: { destinatarios, assunto, corpoHtml, pularJaEnviados }
+    });
+    if (error) throw new Error(error.message || 'Erro ao chamar a função de envio.');
+    if (data && data.erro) throw new Error(data.erro);
+    return data;
+  }
+
+  async function enviarTesteProsp() {
+    const assunto = document.getElementById('prospAssunto').value.trim();
+    if (!assunto) { alert('Preencha o assunto antes de testar.'); return; }
+    const corpoHtml = montarCorpoEmailTemplateProsp();
+    const box = document.getElementById('prospSendMessages');
+    box.innerHTML = '<p class="prosp-hint">Enviando teste...</p>';
+    try {
+      const resultado = await chamarCarteiroProsp(
+        [{ email: MEU_EMAIL_PROSP, nome: 'Você', marca: 'Sua Marca de Teste' }],
+        '[TESTE] ' + assunto,
+        corpoHtml,
+        false
+      );
+      if (resultado.cotaEsgotada) {
+        box.innerHTML = '<div class="prosp-warning-box">A cota diária do Resend acabou. Tenta de novo amanhã.</div>';
+      } else if (resultado.enviados > 0) {
+        box.innerHTML = '<div class="prosp-success-box">Teste enviado! Confere na sua caixa de entrada (e no celular também).</div>';
+      } else {
+        box.innerHTML = `<div class="prosp-error-box">Não consegui enviar o teste. ${(resultado.erro || 'Confira a chave do Resend no Supabase.')}</div>`;
+      }
+    } catch (err) {
+      console.error(err);
+      box.innerHTML = `<div class="prosp-error-box">Erro: ${err.message}</div>`;
+    }
+  }
+
+  function prepararDisparoProsp() {
+    const assunto = document.getElementById('prospAssunto').value.trim();
+    if (!assunto) { alert('Preencha o assunto.'); return; }
+    const corpoValido = prospState.modoCompose === 'texto'
+      ? document.getElementById('prospTexto').value.trim()
+      : document.getElementById('prospHtml').value.trim();
+    if (!corpoValido) { alert('Preencha o texto do e-mail.'); return; }
+
+    if (prospState.modoCompose === 'html' && !document.getElementById('prospHtml').value.includes('SAIR')) {
+      if (!confirm('Não encontrei a palavra SAIR no seu HTML (o aviso de descadastro). Quer disparar assim mesmo?')) return;
+    }
+
+    const lista = getDestinatariosProsp();
+    if (!lista.length) { alert('Nenhum destinatário nessa seleção.'); return; }
+
+    const filtroSelect = document.getElementById('prospFiltro');
+    const nomeFiltro = filtroSelect.options[filtroSelect.selectedIndex].text;
+    document.getElementById('prospConfirmText').textContent =
+      `Vai para ${lista.length} marca${lista.length === 1 ? '' : 's'}, da lista "${nomeFiltro}".`;
+    document.getElementById('prospConfirmModal').classList.add('show');
+  }
+  function closeProspConfirm() {
+    document.getElementById('prospConfirmModal').classList.remove('show');
+  }
+
+  async function confirmarDisparo() {
+    closeProspConfirm();
+    const lista = getDestinatariosProsp();
+    const assunto = document.getElementById('prospAssunto').value.trim();
+    const corpoHtml = montarCorpoEmailTemplateProsp();
+    const pularJaEnviados = document.getElementById('prospPularEnviados').checked;
+    const destinatarios = lista.map(m => ({ email: m.email, nome: m.nome, marca: m.nome }));
+
+    const track = document.getElementById('prospProgressTrack');
+    const bar = document.getElementById('prospProgressBar');
+    const label = document.getElementById('prospProgressLabel');
+    const resumoEl = document.getElementById('prospResumoFinal');
+    const dispararBtn = document.getElementById('prospDispararBtn');
+
+    track.style.display = 'block';
+    bar.style.width = '0%';
+    resumoEl.innerHTML = '';
+    dispararBtn.disabled = true;
+
+    let totalEnviados = 0, totalFalharam = 0, totalPulados = 0, cotaEsgotada = false;
+    const lotes = [];
+    for (let i = 0; i < destinatarios.length; i += 100) lotes.push(destinatarios.slice(i, i + 100));
+
+    for (let i = 0; i < lotes.length; i++) {
+      label.textContent = `Enviando lote ${i + 1} de ${lotes.length}...`;
+      try {
+        const resultado = await chamarCarteiroProsp(lotes[i], assunto, corpoHtml, pularJaEnviados);
+        totalEnviados += resultado.enviados || 0;
+        totalFalharam += resultado.falharam || 0;
+        totalPulados += resultado.pulados || 0;
+        if (resultado.cotaEsgotada) { cotaEsgotada = true; break; }
+      } catch (err) {
+        console.error(err);
+        totalFalharam += lotes[i].length;
+      }
+      bar.style.width = Math.round(((i + 1) / lotes.length) * 100) + '%';
+    }
+
+    label.textContent = '';
+    dispararBtn.disabled = false;
+
+    if (cotaEsgotada) {
+      const faltam = destinatarios.length - totalEnviados - totalFalharam - totalPulados;
+      resumoEl.innerHTML = `<div class="prosp-warning-box">
+        A cota diária do Resend acabou no meio do envio.<br>
+        Enviados: ${totalEnviados} · Faltam: ${faltam}<br>
+        Volta amanhã, cola o mesmo assunto e o mesmo texto, e deixa marcada a caixinha "pular quem já recebeu" que ele manda só pros que faltaram.
+      </div>`;
+    } else {
+      resumoEl.innerHTML = `<div class="prosp-success-box">Enviados: ${totalEnviados} · Falhas: ${totalFalharam} · Pulados: ${totalPulados}</div>`;
+    }
+
+    loadProspeccao();
+  }
+
+  // ---------------- Modo rascunho (sem Resend) ----------------
+
+  function prepararFilaRascunho() {
+    prospState.filaRascunho = getDestinatariosProsp();
+    prospState.filaIndice = 0;
+    renderFilaRascunho();
+  }
+
+  function stripHtmlProsp(html) {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    return div.textContent || '';
+  }
+
+  function renderFilaRascunho() {
+    const container = document.getElementById('prospRascunhoSection');
+    if (!container) return;
+    const fila = prospState.filaRascunho;
+    const idx = prospState.filaIndice;
+
+    if (!fila.length) {
+      container.innerHTML = '<div class="prosp-section"><p class="prosp-hint">Nenhum destinatário nessa seleção.</p></div>';
+      return;
+    }
+    if (idx >= fila.length) {
+      container.innerHTML = '<div class="prosp-section"><div class="prosp-success-box">Fila concluída! Todas as marcas dessa lista já foram marcadas.</div></div>';
+      return;
+    }
+
+    const m = fila[idx];
+    const assunto = preencherModeloProsp(document.getElementById('prospAssunto').value || '', m.nome, m.nome);
+    const corpoBruto = prospState.modoCompose === 'texto'
+      ? preencherModeloProsp(document.getElementById('prospTexto').value || '', m.nome, m.nome)
+      : stripHtmlProsp(preencherModeloProsp(document.getElementById('prospHtml').value || '', m.nome, m.nome));
+
+    container.innerHTML = `
+      <div class="prosp-section">
+        <p class="prosp-section-title">Fila (${idx + 1} de ${fila.length})</p>
+        <div class="prosp-queue-card">
+          <div class="prosp-queue-name">${m.nome}</div>
+          <div class="prosp-queue-email">${m.email}</div>
+          <div class="form-group"><label>Assunto</label><input type="text" readonly value="${assunto.replace(/"/g, '&quot;')}" id="prospFilaAssunto"></div>
+          <div class="form-group"><label>Texto</label><textarea class="prosp-body" readonly id="prospFilaTexto">${corpoBruto}</textarea></div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-sm btn-secondary" onclick="copiarTextoFilaRascunho()">Copiar texto</button>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="abrirGmailFilaRascunho()">Abrir no Gmail</button>
+            <button type="button" class="btn btn-sm btn-primary" onclick="marcarFilaComoEnviada()">Marcar como enviada</button>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="pularFilaRascunho()">Pular</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function copiarTextoFilaRascunho() {
+    const texto = document.getElementById('prospFilaTexto').value;
+    navigator.clipboard.writeText(texto).then(() => alert('Texto copiado!'));
+  }
+
+  function abrirGmailFilaRascunho() {
+    const m = prospState.filaRascunho[prospState.filaIndice];
+    const assunto = document.getElementById('prospFilaAssunto').value;
+    const corpo = document.getElementById('prospFilaTexto').value;
+    const url = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(m.email)}&su=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
+    window.open(url, '_blank');
+  }
+
+  async function marcarFilaComoEnviada() {
+    const m = prospState.filaRascunho[prospState.filaIndice];
+    try {
+      await supabase.from('marcas').update({ prospeccao_enviada_em: new Date().toISOString() }).eq('id', m.id);
+      await supabase.from('email_envios').insert({
+        email: m.email,
+        assunto: document.getElementById('prospFilaAssunto').value,
+        status: 'ok',
+        erro: null,
+        resend_id: null
+      });
+      m.prospeccao_enviada_em = new Date().toISOString();
+    } catch (err) {
+      console.error(err);
+    }
+    prospState.filaIndice++;
+    renderFilaRascunho();
+  }
+
+  function pularFilaRascunho() {
+    prospState.filaIndice++;
+    renderFilaRascunho();
+  }
+
+  // ---------------- Histórico ----------------
+
+  function renderProspHistorico() {
+    const wrap = document.getElementById('prospHistoricoTabela');
+    if (!wrap) return;
+    const buscaEl = document.getElementById('prospHistoricoBusca');
+    const busca = (buscaEl ? buscaEl.value : '').toLowerCase();
+    const lista = prospState.envios.filter(e => e.email.toLowerCase().includes(busca));
+    if (!lista.length) {
+      wrap.innerHTML = '<p class="prosp-hint">Nenhum envio registrado ainda.</p>';
+      return;
+    }
+    let html = '<table><thead><tr><th>E-mail</th><th>Assunto</th><th>Quando</th><th>Status</th></tr></thead><tbody>';
+    lista.slice(0, 200).forEach(e => {
+      const data = new Date(e.criado_em).toLocaleString('pt-BR');
+      const badgeClass = e.status === 'ok' ? 'badge-cliente' : 'badge-parada';
+      html += `<tr><td>${e.email}</td><td>${e.assunto}</td><td>${data}</td><td><span class="badge ${badgeClass}" title="${(e.erro || '').replace(/"/g, '&quot;')}">${e.status}</span></td></tr>`;
+    });
+    html += '</tbody></table>';
+    wrap.innerHTML = html;
+  }
 
   // ========================================================================
   // ABA 3: CALENDÁRIO
