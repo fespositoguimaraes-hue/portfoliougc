@@ -477,6 +477,44 @@
     white-space:nowrap;
   }
 
+  /* ===================== FAIXA DE SERVIÇOS (TICKER) ===================== */
+  .services-ticker{
+    background:var(--green-dark);
+    overflow:hidden;
+    padding:18px 0;
+  }
+  .services-ticker-track{
+    display:flex;
+    width:max-content;
+    animation: servicesTicker 24s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .services-ticker-track{ animation:none; overflow-x:auto; }
+  }
+  @keyframes servicesTicker{
+    from{ transform:translateX(0); }
+    to{ transform:translateX(-50%); }
+  }
+  .services-ticker-item{
+    display:flex;
+    align-items:center;
+    gap:28px;
+    padding:0 28px;
+    white-space:nowrap;
+  }
+  .services-ticker-item .ticker-label{
+    font-family:var(--ff-head);
+    font-weight:800;
+    font-size:1.05rem;
+    letter-spacing:0.02em;
+    color:#fff;
+    text-transform:uppercase;
+  }
+  .services-ticker-item .ticker-dot{
+    color:var(--pink);
+    font-size:0.8rem;
+  }
+
   /* ===================== SOBRE ===================== */
   .sobre-grid{
     display:grid;
@@ -1299,6 +1337,10 @@
     </div>
   </section>
 
+  <div class="services-ticker" aria-hidden="true">
+    <div class="services-ticker-track" id="servicesTickerTrack"></div>
+  </div>
+
   <!-- ===================== 2. SOBRE MIM ===================== -->
   <section class="sheet border-pink" id="sobre" aria-label="Sobre mim">
     <div class="sobre-grid">
@@ -1575,6 +1617,11 @@
     "Marca 08", "Marca 09", "Marca 10", "Marca 11", "Marca 12"
   ];
 
+  // Faixa animada com os títulos dos serviços (rolagem contínua).
+  var tickerServices = [
+    "Fotos", "Criativos para rede social", "TikTok Shop", "Publipost", "Roteiros que vendem"
+  ];
+
   // Conteúdos de destaque (seção 3). Três vídeos em formato 9:16.
   // "link": cole aqui a URL do vídeo (reels, tiktok, youtube etc).
   // "cover": troque o bloco de degradê por uma <img> real com a capa vertical do vídeo.
@@ -1739,6 +1786,18 @@
     var list = brands.concat(brands);
     list.forEach(function(b){
       wrap.appendChild(el("span", null, b));
+    });
+  })();
+
+  // Faixa de serviços (duplicada para o efeito de rolagem contínua)
+  (function renderServicesTicker(){
+    var wrap = document.getElementById("servicesTickerTrack");
+    var list = tickerServices.concat(tickerServices);
+    list.forEach(function(s){
+      var item = el("div", "services-ticker-item");
+      item.appendChild(el("span", "ticker-label", s));
+      item.appendChild(el("span", "ticker-dot", "◆"));
+      wrap.appendChild(item);
     });
   })();
 
