@@ -288,11 +288,13 @@
 
   /* ===================== HERO / CAPA ===================== */
   .hero-sheet{
-    padding-top: clamp(76px, 9vw, 104px);
+    padding-top: clamp(48px, 5vw, 64px);
+    padding-bottom: clamp(12px, 2vw, 18px);
+    margin-bottom: 8px;
   }
   .hero-grid{
     display:grid;
-    grid-template-columns: 1.15fr 0.85fr;
+    grid-template-columns: 1.3fr 0.7fr;
     gap: clamp(24px,4vw,56px);
     align-items:center;
   }
@@ -329,7 +331,7 @@
     display:flex;
     flex-wrap:wrap;
     gap:14px;
-    margin-top:28px;
+    margin-top:20px;
   }
   .btn{
     display:inline-flex;
@@ -359,7 +361,7 @@
   .hero-socials{
     display:flex;
     gap:10px;
-    margin-top:20px;
+    margin-top:14px;
     flex-wrap:wrap;
   }
   .hero-socials a{
@@ -383,7 +385,7 @@
   .hero-stats{
     display:flex;
     gap:clamp(18px,4vw,40px);
-    margin-top:40px;
+    margin-top:18px;
     flex-wrap:wrap;
   }
   .hero-stat-num{
@@ -452,8 +454,8 @@
   }
 
   .brands-strip{
-    margin-top:56px;
-    padding-top:28px;
+    margin-top:16px;
+    padding-top:12px;
     border-top:2px dashed rgba(0,0,0,0.25);
     overflow:hidden;
   }
@@ -462,7 +464,7 @@
     letter-spacing:0.08em;
     text-transform:uppercase;
     color:var(--ink-soft);
-    margin-bottom:14px;
+    margin-bottom:10px;
   }
   .marquee{
     display:flex;
@@ -490,8 +492,8 @@
   .services-ticker{
     background:var(--green-dark);
     overflow:hidden;
-    padding:16px 0;
-    margin:32px calc(-1 * clamp(20px, 5vw, 56px)) 0;
+    padding:10px 0;
+    margin:14px calc(-1 * clamp(20px, 5vw, 56px)) 0;
   }
   .services-ticker-track{
     display:flex;
@@ -1344,11 +1346,6 @@
     <div class="services-ticker" aria-hidden="true">
       <div class="services-ticker-track" id="servicesTickerTrack"></div>
     </div>
-
-    <div class="brands-strip reveal">
-      <p class="brands-strip-label">Marcas que já confiaram no meu trabalho</p>
-      <div class="marquee" id="brandsMarquee"></div>
-    </div>
   </section>
 
   <!-- ===================== 2. SOBRE MIM ===================== -->
@@ -1373,6 +1370,11 @@
         </ul>
         <p class="signature">Fernanda Esposito</p>
       </div>
+    </div>
+
+    <div class="brands-strip reveal">
+      <p class="brands-strip-label">Marcas que já confiaram no meu trabalho</p>
+      <div class="marquee" id="brandsMarquee"></div>
     </div>
   </section>
 
