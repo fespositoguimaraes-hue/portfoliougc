@@ -852,20 +852,23 @@
     max-width:46ch;
   }
   .services-grid{
-    column-count:2;
-    column-gap:14px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
   }
   @media (max-width:600px){
-    .services-grid{ column-count:1; }
+    .services-grid{ grid-template-columns:1fr; }
   }
   .service-card{
     background:#fff;
     border-radius:12px;
-    padding:16px;
+    padding:18px;
     border:1px solid rgba(0,0,0,0.12);
     box-shadow:0 8px 16px -14px rgba(0,0,0,0.35);
-    break-inside:avoid;
-    margin-bottom:14px;
+    min-height:195px;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
   }
   .service-badge{
     display:inline-block;
