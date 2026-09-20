@@ -871,7 +871,11 @@
 
   /* ===================== SERVIÇOS (scroll horizontal) ===================== */
   .servicos-header{
-    padding-right:0;
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:24px;
+    flex-wrap:wrap;
     margin-bottom:20px;
   }
   .servicos-title{
@@ -883,12 +887,24 @@
     font-style:italic;
     color:var(--green-dark);
   }
+  .servicos-header-right{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:10px;
+    max-width:280px;
+  }
   .servicos-desc{
-    font-size:1.05rem;
+    font-size:0.85rem;
     color:var(--ink-soft);
     line-height:1.5;
-    margin:10px 0 0;
-    max-width:46ch;
+    margin:0;
+    text-align:right;
+  }
+  @media (max-width:700px){
+    .servicos-header{ align-items:flex-start; }
+    .servicos-header-right{ align-items:flex-start; max-width:none; }
+    .servicos-desc{ text-align:left; }
   }
   .services-scroll{
     display:flex;
@@ -972,10 +988,9 @@
     overflow:hidden;
   }
   .services-progress-bar{
-    width:30%;
+    width:0%;
     height:100%;
     background:var(--pink);
-    border-radius:3px;
     transition:width 0.1s linear;
   }
 
@@ -1441,9 +1456,17 @@
   <!-- ===================== 5. COMO EU TE AJUDO ===================== -->
   <section class="sheet border-pink" id="servicos" aria-label="Serviços">
     <div class="servicos-header reveal">
-      <p class="sheet-eyebrow">como podemos trabalhar juntos</p>
-      <h2 class="servicos-title"><span id="servicesCount">7</span> formas de <span class="servicos-title-highlight">colaborar.</span></h2>
-      <p class="servicos-desc">Arrasta pro lado pra ver tudo, cada serviço abre direto no meu WhatsApp!</p>
+      <div class="servicos-header-left">
+        <p class="sheet-eyebrow">como podemos trabalhar juntos</p>
+        <h2 class="servicos-title"><span id="servicesCount">7</span> formas de <span class="servicos-title-highlight">colaborar.</span></h2>
+      </div>
+      <div class="servicos-header-right">
+        <div class="gallery-nav">
+          <button type="button" class="gallery-nav-btn" id="servicesPrev" aria-label="Ver serviços anteriores">‹</button>
+          <button type="button" class="gallery-nav-btn" id="servicesNext" aria-label="Ver próximos serviços">›</button>
+        </div>
+        <p class="servicos-desc">Arrasta pro lado pra ver tudo, cada serviço abre direto no meu WhatsApp!</p>
+      </div>
     </div>
     <div class="services-scroll reveal" id="servicesGrid"></div>
     <div class="services-progress-track">
@@ -2119,15 +2142,45 @@
 
     function updateProgress(){
       var maxScroll = wrap.scrollWidth - wrap.clientWidth;
-      var pct = maxScroll > 0 ? (wrap.scrollLeft / maxScroll) * 100 : 0;
-      var barWidth = Math.max(15, (wrap.clientWidth / wrap.scrollWidth) * 100);
-      progressBar.style.width = barWidth + "%";
-      progressBar.style.transform = "translateX(" + (pct * (100 - barWidth) / 100) + "%)";
+      var pct = maxScroll > 0 ? (wrap.scrollLeft / maxScroll) * 100 : 100;
+      progressBar.style.width = pct + "%";
     }
-    progressBar.style.position = "relative";
     wrap.addEventListener("scroll", updateProgress);
     window.addEventListener("resize", updateProgress);
     updateProgress();
+  })();
+
+  /* =====================================================================
+     SETAS DE NAVEGAÇÃO DOS SERVIÇOS
+  ===================================================================== */
+  (function servicesArrowNav(){
+    var wrap = document.getElementById("servicesGrid");
+    var prevBtn = document.getElementById("servicesPrev");
+    var nextBtn = document.getElementById("servicesNext");
+    if(!wrap || !prevBtn || !nextBtn) return;
+
+    function scrollStep(){
+      var card = wrap.querySelector(":scope > *");
+      var cardWidth = card ? card.getBoundingClientRect().width : 230;
+      return (cardWidth + 16) * 2;
+    }
+
+    prevBtn.addEventListener("click", function(){
+      wrap.scrollBy({ left: -scrollStep(), behavior: "smooth" });
+    });
+    nextBtn.addEventListener("click", function(){
+      wrap.scrollBy({ left: scrollStep(), behavior: "smooth" });
+    });
+
+    function updateButtons(){
+      var maxScroll = wrap.scrollWidth - wrap.clientWidth;
+      prevBtn.disabled = wrap.scrollLeft <= 4;
+      nextBtn.disabled = maxScroll <= 4 || wrap.scrollLeft >= maxScroll - 4;
+    }
+
+    wrap.addEventListener("scroll", updateButtons);
+    window.addEventListener("resize", updateButtons);
+    setTimeout(updateButtons, 300);
   })();
 
   // Métricas animadas
