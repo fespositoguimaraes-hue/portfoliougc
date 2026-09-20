@@ -1046,10 +1046,19 @@
       if (!marcasCache.length) {
         html += '<div class="empty-state">Nenhuma marca ainda. Adicione uma ou ela será criada quando alguém preencher o formulário do seu portfólio.</div>';
       } else {
+        const totalSel = marcasCache.filter(m => m.selecionada).length;
+        html += `
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px; font-size: 13px; color: var(--detail); flex-wrap: wrap;">
+            <span id="marcasSelectionCount"><strong style="color: var(--ink);">${totalSel}</strong> marca${totalSel === 1 ? '' : 's'} selecionada${totalSel === 1 ? '' : 's'}</span>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="selectAllMarcas()">Selecionar todas</button>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="clearMarcasSelection()">Limpar seleção</button>
+          </div>
+        `;
         html += `
           <table>
             <thead>
               <tr>
+                <th style="width: 30px;"></th>
                 <th style="width: 36px;"></th>
                 <th>Marca</th>
                 <th>Nicho</th>
@@ -1064,8 +1073,12 @@
         marcasCache.forEach(m => {
           const badgeClass = `badge-${m.situacao.toLowerCase()}`;
           const nichoLabel = NICHO_LABELS[m.nicho] || '-';
+          const semEmail = !m.email;
           html += `
             <tr>
+              <td>
+                <input type="checkbox" class="marca-select-checkbox" data-id="${m.id}" ${m.selecionada ? 'checked' : ''} ${semEmail ? 'disabled title="Sem e-mail cadastrado"' : ''} onchange="toggleSelecionada(${m.id}, this.checked)">
+              </td>
               <td>
                 <button class="btn-favorito" onclick="toggleFavorita(${m.id})" aria-label="${m.favorita ? 'Desfavoritar' : 'Favoritar'} ${m.nome}" style="background:none; border:none; cursor:pointer; font-size:16px; color:${m.favorita ? '#f5a623' : 'var(--detail)'};">${m.favorita ? '★' : '☆'}</button>
               </td>
@@ -1088,6 +1101,56 @@
     } catch (err) {
       content.innerHTML = `<div class="error-message">Erro ao carregar marcas: ${err.message}</div>`;
       console.error(err);
+    }
+  }
+
+  function updateSelectionCount() {
+    const el = document.getElementById('marcasSelectionCount');
+    if (!el) return;
+    const total = marcasCache.filter(m => m.selecionada).length;
+    el.innerHTML = `<strong style="color: var(--ink);">${total}</strong> marca${total === 1 ? '' : 's'} selecionada${total === 1 ? '' : 's'}`;
+  }
+
+  async function toggleSelecionada(id, checked) {
+    const marca = marcasCache.find(m => m.id === id);
+    if (marca) marca.selecionada = checked;
+    updateSelectionCount();
+    try {
+      const { error } = await supabase.from('marcas').update({ selecionada: checked }).eq('id', id);
+      if (error) throw error;
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao salvar seleção: ' + err.message);
+    }
+  }
+
+  async function selectAllMarcas() {
+    const comEmail = marcasCache.filter(m => m.email);
+    if (!comEmail.length) return;
+    comEmail.forEach(m => { m.selecionada = true; });
+    document.querySelectorAll('.marca-select-checkbox:not(:disabled)').forEach(cb => { cb.checked = true; });
+    updateSelectionCount();
+    try {
+      const { error } = await supabase.from('marcas').update({ selecionada: true }).in('id', comEmail.map(m => m.id));
+      if (error) throw error;
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao selecionar todas: ' + err.message);
+    }
+  }
+
+  async function clearMarcasSelection() {
+    const selecionadas = marcasCache.filter(m => m.selecionada);
+    marcasCache.forEach(m => { m.selecionada = false; });
+    document.querySelectorAll('.marca-select-checkbox').forEach(cb => { cb.checked = false; });
+    updateSelectionCount();
+    if (!selecionadas.length) return;
+    try {
+      const { error } = await supabase.from('marcas').update({ selecionada: false }).in('id', selecionadas.map(m => m.id));
+      if (error) throw error;
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao limpar seleção: ' + err.message);
     }
   }
 
