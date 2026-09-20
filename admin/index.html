@@ -583,6 +583,56 @@
   </div>
 </div>
 
+<!-- Modal: Importar planilha de leads -->
+<div class="modal" id="importModal">
+  <div class="modal-content" style="max-width: 560px;">
+    <div class="modal-header">
+      <h2>Importar planilha de leads</h2>
+      <button class="modal-close" onclick="closeImportModal()">×</button>
+    </div>
+
+    <p style="font-size: 13px; color: var(--detail); line-height: 1.6; margin-bottom: 16px;">
+      Suba sua planilha (.csv ou .xlsx) com os leads de marcas que você já prospectou.
+      O sistema vai identificar as colunas automaticamente e adicionar tudo na aba Marcas.
+    </p>
+
+    <label id="importDropzone" for="importFileInput" style="
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 2px dashed var(--green);
+      border-radius: 8px;
+      padding: 32px 16px;
+      text-align: center;
+      cursor: pointer;
+      background: var(--paper);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    ">
+      <span style="font-size: 24px;">↑</span>
+      <span style="font-size: 13px; font-weight: 600; color: var(--ink);">Clique para escolher o arquivo</span>
+      <span style="font-size: 12px; color: var(--detail);">ou arraste aqui — .csv, .xlsx ou .xls</span>
+      <input type="file" id="importFileInput" accept=".csv,.xlsx,.xls" style="display: none;" onchange="handleImportFileSelected(event)">
+    </label>
+
+    <div id="importFileInfo" style="display: none; margin-top: 12px; padding: 10px 12px; background: var(--paper); border-radius: 6px; font-size: 13px;">
+      <strong id="importFileName"></strong>
+      <span id="importFileMeta" style="color: var(--detail);"></span>
+    </div>
+
+    <div style="margin-top: 16px; padding: 12px; background: var(--paper); border-radius: 6px; font-size: 12px; color: var(--detail); line-height: 1.6;">
+      <strong style="color: var(--ink);">Colunas reconhecidas:</strong> nome da empresa, Instagram, e-mail, WhatsApp/telefone, seguidores e observações.
+      Depois de escolher o arquivo, você vai poder conferir os dados antes de confirmar a importação.
+    </div>
+
+    <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px;">
+      <button class="btn btn-secondary" onclick="closeImportModal()">Cancelar</button>
+      <button class="btn btn-primary" id="importConfirmBtn" disabled onclick="alert('Importação ainda não implementada — só a tela por enquanto :)')">Importar leads</button>
+    </div>
+  </div>
+</div>
+
 <!-- Supabase via CDN -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.0"></script>
 
@@ -870,8 +920,9 @@
 
       if (error) throw error;
 
-      let html = '<div style="margin-bottom: 12px; display: flex; gap: 8px;">';
+      let html = '<div style="margin-bottom: 12px; display: flex; gap: 8px; flex-wrap: wrap;">';
       html += '<button class="btn btn-primary" onclick="openMarcaModal()">+ Adicionar</button>';
+      html += '<button class="btn btn-secondary" onclick="openImportModal()">↑ Importar planilha</button>';
       html += '<button class="btn btn-secondary" onclick="downloadCSV()">↓ Baixar CSV</button>';
       html += '</div>';
 
@@ -924,6 +975,25 @@
     }
   }
   function downloadCSV() { alert('Baixando CSV...'); }
+
+  function openImportModal() {
+    document.getElementById('importFileInput').value = '';
+    document.getElementById('importFileInfo').style.display = 'none';
+    document.getElementById('importConfirmBtn').disabled = true;
+    document.getElementById('importModal').classList.add('show');
+  }
+  function closeImportModal() {
+    document.getElementById('importModal').classList.remove('show');
+  }
+  function handleImportFileSelected(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const sizeKb = (file.size / 1024).toFixed(1);
+    document.getElementById('importFileName').textContent = file.name;
+    document.getElementById('importFileMeta').textContent = ` · ${sizeKb} KB`;
+    document.getElementById('importFileInfo').style.display = 'block';
+    document.getElementById('importConfirmBtn').disabled = false;
+  }
 
   // ========================================================================
   // ABA 3: CALENDÁRIO
