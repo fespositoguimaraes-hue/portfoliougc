@@ -869,77 +869,114 @@
     border-radius:12px;
   }
 
-  /* ===================== SERVIÇOS ===================== */
-  .servicos-grid{
-    display:flex;
-    gap:clamp(30px,5vw,48px);
-    align-items:flex-start;
-  }
-  @media (max-width:900px){
-    .servicos-grid{ flex-direction:column; }
-  }
-  .servicos-intro{
-    width:320px;
-    flex-shrink:0;
-  }
-  @media (max-width:900px){
-    .servicos-intro{ width:auto; }
+  /* ===================== SERVIÇOS (scroll horizontal) ===================== */
+  .servicos-header{
+    padding-right:0;
+    margin-bottom:20px;
   }
   .servicos-title{
-    font-size:clamp(1.5rem,3vw,1.9rem);
+    font-size:clamp(1.6rem,3vw,2.1rem);
     line-height:1.2;
-    margin-bottom:16px;
+    margin:10px 0 0;
   }
   .servicos-title-highlight{
-    background:var(--green-dark);
-    color:#fff;
-    padding:2px 10px;
-    border-radius:6px;
-    display:inline-block;
+    font-style:italic;
+    color:var(--green-dark);
   }
   .servicos-desc{
-    font-size:0.95rem;
+    font-size:1.05rem;
     color:var(--ink-soft);
-    line-height:1.6;
-    margin-bottom:24px;
-    max-width:32ch;
+    line-height:1.5;
+    margin:10px 0 0;
+    max-width:46ch;
   }
-  .services-grid{
-    flex-grow:1;
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:14px;
-    align-content:start;
+  .services-scroll{
+    display:flex;
+    gap:16px;
+    overflow-x:auto;
+    padding:4px 4px 16px;
+    scroll-snap-type:x proximity;
   }
-  @media (max-width:900px){
-    .services-grid{ grid-template-columns:repeat(2,1fr); }
-  }
-  @media (max-width:600px){
-    .services-grid{ grid-template-columns:1fr; }
-  }
+  .services-scroll::-webkit-scrollbar{ height:8px; }
+  .services-scroll::-webkit-scrollbar-thumb{ background:var(--pink); border-radius:4px; }
+  .services-scroll::-webkit-scrollbar-track{ background:rgba(0,0,0,0.06); border-radius:4px; }
   .service-card{
     background:#fff;
-    border-radius:12px;
-    padding:16px;
-    border:1px solid rgba(0,0,0,0.12);
-    box-shadow:0 8px 16px -14px rgba(0,0,0,0.35);
-  }
-  .service-badge{
-    display:inline-block;
-    background:var(--green-dark);
-    color:#fff;
-    font-size:0.6rem;
-    font-weight:700;
-    text-transform:uppercase;
-    letter-spacing:0.03em;
-    padding:6px 10px;
     border-radius:14px;
-    margin-bottom:10px;
+    padding:18px;
+    border:1px solid rgba(0,0,0,0.12);
+    box-shadow:0 10px 20px -16px rgba(0,0,0,0.4);
+    min-width:230px;
+    max-width:230px;
+    flex-shrink:0;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    scroll-snap-align:start;
+  }
+  .service-card-top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+  }
+  .service-icon{
+    width:40px;
+    height:40px;
+    border-radius:10px;
+    background:var(--green-dark);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+  }
+  .service-num{
+    background:var(--pink);
+    color:var(--ink);
+    font-family:var(--ff-head);
+    font-weight:700;
+    font-size:0.68rem;
+    padding:4px 8px;
+    border-radius:6px;
+  }
+  .service-card h3{
+    font-family:var(--ff-head);
+    font-weight:700;
+    font-size:1rem;
+    margin:0;
   }
   .service-card p{
     font-size:0.8rem;
     color:var(--ink-soft);
     line-height:1.5;
+    flex-grow:1;
+    margin:0;
+  }
+  .service-cta{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    background:var(--green-dark);
+    border-radius:999px;
+    padding:10px;
+    font-size:0.75rem;
+    font-weight:600;
+    color:#fff;
+    text-decoration:none;
+  }
+  .service-cta:hover{ background:var(--green); }
+  .services-progress-track{
+    height:6px;
+    border-radius:3px;
+    background:rgba(0,0,0,0.08);
+    overflow:hidden;
+  }
+  .services-progress-bar{
+    width:30%;
+    height:100%;
+    background:var(--pink);
+    border-radius:3px;
+    transition:width 0.1s linear;
   }
 
   /* ===================== NÚMEROS / DEPOIMENTOS ===================== */
@@ -1403,13 +1440,14 @@
 
   <!-- ===================== 5. COMO EU TE AJUDO ===================== -->
   <section class="sheet border-pink" id="servicos" aria-label="Serviços">
-    <div class="servicos-grid">
-      <div class="servicos-intro reveal">
-        <h2 class="servicos-title">O que podemos <span class="servicos-title-highlight">criar</span> juntos?</h2>
-        <p class="servicos-desc">Cada formato tem um objetivo: vender, escalar ou construir marca. Me conta o seu que a gente monta o combo perfeito pra sua marca.</p>
-        <a class="btn btn-primary" href="#contato">Bora criar juntos →</a>
-      </div>
-      <div class="services-grid" id="servicesGrid"></div>
+    <div class="servicos-header reveal">
+      <p class="sheet-eyebrow">como podemos trabalhar juntos</p>
+      <h2 class="servicos-title"><span id="servicesCount">7</span> formas de <span class="servicos-title-highlight">colaborar.</span></h2>
+      <p class="servicos-desc">Arrasta pro lado pra ver tudo, cada serviço abre direto no meu WhatsApp!</p>
+    </div>
+    <div class="services-scroll reveal" id="servicesGrid"></div>
+    <div class="services-progress-track">
+      <div class="services-progress-bar" id="servicesProgressBar"></div>
     </div>
   </section>
 
@@ -1692,14 +1730,15 @@
     { niche: "bem-estar", title: "FTW", format: "vídeo UGC 9:16", link: "https://youtube.com/shorts/v3h95MUj5go" }
   ];
 
-  // Seis serviços (seção 5). Edite o "desc" de cada um à vontade.
+  // Sete serviços (seção 5, cards em scroll horizontal). Edite o "desc" de cada um à vontade.
   var services = [
-    { title: "Criativo p/ rede social", desc: "Vídeos pensados pra performar tanto em anúncios pagos quanto no orgânico das redes." },
-    { title: "Fotos", desc: "Still fotográfico do seu produto, capturando os detalhes que fazem diferença na hora da compra." },
-    { title: "Publipost", desc: "Publicação no meu perfil apresentando a sua marca pra minha audiência, com a minha cara." },
-    { title: "UGC para e-commerce", desc: "Vídeos autênticos de produto pra sua loja vender todo dia, com a naturalidade de quem realmente usa." },
-    { title: "TikTok Shop", desc: "Conteúdo pensado pra converter dentro do TikTok Shop, dos criativos à vitrine." },
-    { title: "UGC para grupos de WhatsApp", desc: "Vídeos no formato certo pra grupos e listas de transmissão, gerando conexão direta com o público." }
+    { title: "Criativo para rede social", desc: "Vídeos pensados pra performar tanto em anúncios pagos quanto no orgânico no perfil das marcas.", icon: "play" },
+    { title: "Videomaker", desc: "Produção audiovisual completa: captação, direção e edição, pronta pra publicar.", icon: "video" },
+    { title: "Fotos", desc: "Still fotográfico do seu produto, capturando os detalhes que fazem diferença na hora da compra.", icon: "camera" },
+    { title: "Publipost", desc: "Publicação no meu perfil apresentando a sua marca pra minha audiência, com a minha cara.", icon: "mega" },
+    { title: "UGC para e-commerce", desc: "Vídeos autênticos de produto pra sua loja vender todo dia, com a naturalidade de quem realmente usa.", icon: "bag" },
+    { title: "TikTok Shop", desc: "Conteúdo pensado pra converter dentro do TikTok Shop, dos criativos à vitrine.", icon: "tiktok" },
+    { title: "UGC para grupos de WhatsApp", desc: "Vídeos no formato certo pra grupos e listas de transmissão, gerando conexão direta com o público.", icon: "chat" }
   ];
 
   // Quatro métricas com contador animado (seção 6).
@@ -2039,12 +2078,56 @@
   // Serviços
   (function renderServices(){
     var wrap = document.getElementById("servicesGrid");
-    services.forEach(function(s){
+    var progressBar = document.getElementById("servicesProgressBar");
+    document.getElementById("servicesCount").textContent = services.length;
+
+    var iconPaths = {
+      play: '<polygon points="5 3 19 12 5 21 5 3"></polygon>',
+      video: '<path d="M23 7l-7 5 7 5V7z"></path><rect x="1" y="5" width="15" height="14" rx="2"></rect>',
+      camera: '<rect x="2" y="6" width="20" height="14" rx="2"></rect><circle cx="12" cy="13" r="4"></circle>',
+      mega: '<path d="M3 11l18-8-8 18-2-8-8-2z"></path>',
+      bag: '<path d="M6 2l1.5 5h9L18 2"></path><path d="M3.5 7h17l-1.2 12.5a2 2 0 0 1-2 1.5H6.7a2 2 0 0 1-2-1.5L3.5 7z"></path>',
+      tiktok: '<path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>',
+      chat: '<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>'
+    };
+    var whatsIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.07L2 22l5.06-1.33C8.5 21.5 10.2 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.6 0-3.1-.45-4.38-1.23l-.31-.19-3.01.79.8-2.94-.2-.3A7.94 7.94 0 0 1 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8zm4.4-5.9c-.24-.12-1.43-.7-1.65-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.44-1.34-1.68-.14-.24-.02-.37.1-.49.1-.1.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.2-.46-.4-.4-.54-.4-.14 0-.3-.02-.46-.02-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.7 2.6 4.12 3.64.58.25 1.03.4 1.38.51.58.18 1.11.16 1.53.1.47-.07 1.43-.58 1.63-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28z"></path></svg>';
+
+    services.forEach(function(s, i){
       var card = el("div", "service-card reveal");
-      card.appendChild(el("span", "service-badge", s.title));
+
+      var top = el("div", "service-card-top");
+      var iconSvg = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (iconPaths[s.icon] || iconPaths.play) + '</svg>';
+      top.appendChild(el("div", "service-icon", iconSvg));
+      var num = (i + 1 < 10 ? "0" : "") + (i + 1);
+      top.appendChild(el("span", "service-num", num));
+      card.appendChild(top);
+
+      card.appendChild(el("h3", null, s.title));
       card.appendChild(el("p", null, s.desc));
+
+      var waMsg = encodeURIComponent("Oi, Fernanda! Quero saber mais sobre o serviço de " + s.title + ".");
+      var cta = document.createElement("a");
+      cta.className = "service-cta";
+      cta.href = "https://wa.me/" + contactInfo.whatsapp + "?text=" + waMsg;
+      cta.target = "_blank";
+      cta.rel = "noopener";
+      cta.innerHTML = whatsIcon + "solicitar orçamento";
+      card.appendChild(cta);
+
       wrap.appendChild(card);
     });
+
+    function updateProgress(){
+      var maxScroll = wrap.scrollWidth - wrap.clientWidth;
+      var pct = maxScroll > 0 ? (wrap.scrollLeft / maxScroll) * 100 : 0;
+      var barWidth = Math.max(15, (wrap.clientWidth / wrap.scrollWidth) * 100);
+      progressBar.style.width = barWidth + "%";
+      progressBar.style.transform = "translateX(" + (pct * (100 - barWidth) / 100) + "%)";
+    }
+    progressBar.style.position = "relative";
+    wrap.addEventListener("scroll", updateProgress);
+    window.addEventListener("resize", updateProgress);
+    updateProgress();
   })();
 
   // Métricas animadas
