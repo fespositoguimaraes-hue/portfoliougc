@@ -2457,6 +2457,13 @@
             obs: mensagem,
             situacao: 'Lead'
           });
+
+          // Avisa a Fernanda por e-mail. Não trava o formulário se isso falhar.
+          sb.functions.invoke('notificar-lead', {
+            body: { nome: nome, email: email, mensagem: mensagem }
+          }).catch(function(err){
+            console.log('Erro ao enviar aviso por e-mail:', err);
+          });
         }
       } catch(err) {
         console.log('Erro ao salvar no banco:', err);
