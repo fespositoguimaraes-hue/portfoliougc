@@ -1443,6 +1443,7 @@
                 <th>Nicho</th>
                 <th>Instagram</th>
                 <th>E-mail</th>
+                <th>Mensagem</th>
                 <th>Situação</th>
                 <th style="width: 80px;">Ações</th>
               </tr>
@@ -1465,6 +1466,7 @@
               <td>${nichoLabel}</td>
               <td><a href="https://instagram.com/${m.instagram}" target="_blank" style="color: var(--green);">${m.instagram || '-'}</a></td>
               <td>${m.email || '-'}</td>
+              <td style="max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${(m.obs || '').replace(/"/g, '&quot;')}">${m.obs || '-'}</td>
               <td><span class="badge ${badgeClass}">${m.situacao}</span></td>
               <td>
                 <button class="btn btn-sm btn-secondary" onclick="editMarca(${m.id})">✎</button>
