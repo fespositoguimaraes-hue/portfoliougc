@@ -399,6 +399,15 @@
     color:var(--ink-soft);
     max-width:14ch;
   }
+  .sobre-stats{
+    justify-content:space-around;
+    text-align:center;
+    margin:0 0 40px;
+    padding-bottom:32px;
+    border-bottom:2px dashed rgba(0,0,0,0.2);
+  }
+  .sobre-stats .hero-stat-num{ font-size:clamp(2rem,5vw,3.2rem); }
+  .sobre-stats .hero-stat-label{ font-size:0.95rem; max-width:none; }
 
   .photo-frame{
     position:relative;
@@ -1385,7 +1394,6 @@
           <a class="btn btn-outline" href="#trabalhos">Ver os trabalhos</a>
         </div>
         <nav class="hero-socials" id="heroSocials" aria-label="Minhas redes sociais"></nav>
-        <div class="hero-stats" id="heroStats"></div>
       </div>
       <div class="hero-photo reveal">
         <div class="photo-frame">
@@ -1402,6 +1410,7 @@
 
   <!-- ===================== 2. SOBRE MIM ===================== -->
   <section class="sheet border-pink" id="sobre" aria-label="Sobre mim">
+    <div class="hero-stats sobre-stats" id="heroStats"></div>
     <div class="sobre-grid">
       <div class="sobre-photo reveal" role="img" aria-label="Foto de Fernannda, formato vertical 4:5. Substitua este bloco por uma imagem real.">
         foto pessoal<br>formato 4:5
