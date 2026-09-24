@@ -421,7 +421,7 @@
   #sobre{ padding-top:clamp(16px,2.2vw,26px); }
   .sobre-stats{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(4,1fr);
     gap:0;
     text-align:left;
     margin:0 0 24px;
@@ -433,8 +433,12 @@
     border-left:1px solid rgba(0,0,0,0.15);
   }
   .sobre-stats .hero-stat:first-child{ border-left:none; padding-left:0; }
-  .sobre-stats .hero-stat-num{ font-size:clamp(1.7rem,3.6vw,2.6rem); line-height:1.1; }
-  .sobre-stats .hero-stat-label{ font-size:0.85rem; max-width:none; letter-spacing:0.02em; }
+  .sobre-stats .hero-stat-num{ font-size:clamp(1.7rem,3.6vw,2.6rem); line-height:1.1; color:var(--green-dark); letter-spacing:-0.02em; }
+  .sobre-stats .hero-stat-label{ font-size:0.72rem; max-width:none; letter-spacing:0.14em; text-transform:uppercase; margin-top:6px; }
+  @media (max-width:640px){
+    .sobre-stats{ grid-template-columns:repeat(2,1fr); row-gap:18px; }
+    .sobre-stats .hero-stat:nth-child(3){ border-left:none; padding-left:0; }
+  }
 
   .photo-frame{
     position:relative;
@@ -1694,9 +1698,10 @@
   // Três números da primeira dobra (capa). "value" é o número final.
   // EDITE: troque os valores 0 pelos seus números reais antes de publicar.
   var heroStats = [
-    { value: 0, suffix: "+", label: "vídeos entregues" },
-    { value: 0, suffix: "+", label: "marcas atendidas" },
-    { value: 0, suffix: "M+", label: "views somadas" }
+    { text: "200+", label: "vídeos entregues" },
+    { text: "150+", label: "marcas atendidas" },
+    { text: "10M+", label: "views somadas" },
+    { text: "1 ano", label: "de experiência" }
   ];
 
   // Marcas que já trabalharam com você. As três primeiras são reais;
@@ -1892,7 +1897,7 @@
     var wrap = document.getElementById("heroStats");
     heroStats.forEach(function(s){
       var item = el("div", "hero-stat");
-      item.appendChild(el("p", "hero-stat-num", s.value.toLocaleString("pt-BR") + s.suffix));
+      item.appendChild(el("p", "hero-stat-num", s.text));
       item.appendChild(el("p", "hero-stat-label", s.label));
       wrap.appendChild(item);
     });
