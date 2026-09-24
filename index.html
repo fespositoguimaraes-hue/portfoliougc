@@ -570,12 +570,13 @@
   /* ===================== SOBRE ===================== */
   .sobre-grid{
     display:grid;
-    grid-template-columns:0.8fr 1.2fr;
+    grid-template-columns:minmax(0,340px) 1fr;
     gap:clamp(24px,4vw,56px);
     align-items:center;
   }
   @media (max-width:820px){
     .sobre-grid{ grid-template-columns:1fr; }
+    .sobre-photo{ max-width:340px; margin:0 auto; }
   }
   .sobre-photo{
     aspect-ratio:4/5;
