@@ -589,7 +589,12 @@
     text-align:center;
     padding:16px;
     box-shadow:0 16px 30px -18px rgba(0,0,0,0.4);
+    overflow:hidden;
+    padding:0;
   }
+  .sobre-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .sobre-nome{ font-style:italic; color:var(--green-dark); }
+  .sobre-text strong{ font-weight:700; }
   .sobre-text p{
     font-size:1.05rem;
     line-height:1.7;
@@ -1444,23 +1449,18 @@
   <section class="sheet border-pink" id="sobre" aria-label="Sobre mim">
     <div class="hero-stats sobre-stats" id="heroStats"></div>
     <div class="sobre-grid">
-      <div class="sobre-photo reveal" role="img" aria-label="Foto de Fernannda, formato vertical 4:5. Substitua este bloco por uma imagem real.">
-        foto pessoal<br>formato 4:5
+      <div class="sobre-photo reveal">
+        <img src="fernanda-sobre.jpg" alt="Fernanda Esposito Guimarães: 30 anos, publicitária e creator, viajante, mãe de pet" loading="lazy">
       </div>
       <div class="sobre-text reveal">
         <p class="sheet-eyebrow">sobre mim</p>
-        <h2 class="section-title">Quem cria com você</h2>
+        <h2 class="section-title">Oie, eu sou a <span class="sobre-nome">Fernanda</span></h2>
         <p>
-          Oi, eu sou a Fernanda! Sou publicitária, formada pela ESPM, 29 anos, com 9 anos de experiência
-          no marketing de empresas multinacionais. Fiz uma transição de carreira, saindo do CLT para creator.
-          Criei uma comunidade nas minhas redes sociais de pessoas que se inspiram na minha história de vida e
-          no meu trabalho. Uno criatividade e estratégia para criar conteúdos autênticos e envolventes para marcas.
+          Sou <strong>publicitária</strong>, formada pela <strong>ESPM</strong>, tenho <strong>30 anos</strong> e <strong>9 anos de experiência</strong>
+          no marketing de <strong>empresas multinacionais</strong>. Fiz uma <strong>transição de carreira</strong>, saindo do CLT para <strong>creator</strong>.
+          Criei uma <strong>comunidade</strong> nas minhas redes sociais de pessoas que se inspiram na minha história de vida e
+          no meu trabalho. Uno <strong>criatividade e estratégia</strong> para criar <strong>conteúdos autênticos e envolventes</strong> para marcas.
         </p>
-        <ul class="promises">
-          <li><span class="promise-check" aria-hidden="true">✓</span> Roteiro aprovado antes de gravar</li>
-          <li><span class="promise-check" aria-hidden="true">✓</span> Uma rodada de ajuste inclusa</li>
-          <li><span class="promise-check" aria-hidden="true">✓</span> Entrega em até 7 dias úteis</li>
-        </ul>
         <p class="signature">Fernanda Esposito</p>
       </div>
     </div>
