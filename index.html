@@ -518,9 +518,9 @@
   .marquee{
     display:flex;
     width:max-content;
-    gap:48px;
-    animation: marquee 28s linear infinite;
+    animation: marquee 170s linear infinite;
   }
+  .brands-strip:hover .marquee{ animation-play-state:paused; }
   @media (prefers-reduced-motion: reduce){
     .marquee{ animation:none; overflow-x:auto; }
   }
@@ -535,6 +535,7 @@
     color:var(--green);
     opacity:0.75;
     white-space:nowrap;
+    margin-right:48px;
   }
 
   /* ===================== FAIXA DE SERVIÇOS (TICKER) ===================== */
@@ -1740,9 +1741,15 @@
   // Marcas que já trabalharam com você. As três primeiras são reais;
   // as demais são placeholders para você editar ("Marca 04" em diante).
   var brands = [
-    "Avon", "Eucerin", "Imecap",
-    "Marca 04", "Marca 05", "Marca 06", "Marca 07",
-    "Marca 08", "Marca 09", "Marca 10", "Marca 11", "Marca 12"
+    "Avon", "Eucerin", "Bioderma", "Jägermeister", "Bauducco", "Leapmotor",
+    "Nappô", "Wix", "Canva", "Meta AI", "Montana Grill", "Villa Di Roma",
+    "Pousada Aimê Maresias", "Etat Pur", "Sweet Aromas", "Skelt", "Sere Skin", "Taiff",
+    "Ginocanesten", "Dose Day", "Personal Chefs", "Secret", "Lovepie", "FTW",
+    "Feelin", "Chico Rei", "Ajo Brand", "Sem Etiqueta", "Fyhe", "Clementine Café",
+    "Blend Cacao", "The Coffees", "Jaboo", "Don Cream", "Wine", "Alergoshop",
+    "Hoomy", "Diego Grandi Foto e Arte", "Madel Home", "Let's Eat It", "Vinagreen", "Coala",
+    "639hertz", "Pierre", "Quem Disse, Berenice?", "Ella", "Luzze", "Orbis",
+    "Passageiro de Primeira", "Casarão Villa Império", "Melhor Seguro"
   ];
 
   // Faixa animada com os títulos dos serviços (rolagem contínua).
