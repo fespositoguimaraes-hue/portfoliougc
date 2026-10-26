@@ -605,7 +605,6 @@
     0%,100%{ transform:translateY(0) rotate(-1deg); }
     50%{ transform:translateY(-12px) rotate(1deg); }
   }
-  .sobre-text .sobre-tagline{ margin-top:22px; margin-bottom:0; font-size:clamp(1.2rem, 2.4vw, 1.6rem); line-height:1.5; color:var(--green-dark); }
   .sobre-nome{ font-style:italic; color:var(--green-dark); }
   .sobre-text strong{ font-weight:700; color:var(--pink-dark); }
   .sobre-text p{
@@ -1041,6 +1040,7 @@
   }
   .service-cta:hover{ background:var(--green); }
   .services-progress-track{
+    display:none;
     height:6px;
     border-radius:3px;
     background:rgba(0,0,0,0.08);
@@ -1472,7 +1472,6 @@
           Criei uma <strong>comunidade</strong> nas minhas redes sociais de pessoas que se inspiram na minha história de vida e
           no meu trabalho. Uno <strong>criatividade e estratégia</strong> para criar <strong>conteúdos autênticos e envolventes</strong> para marcas.
         </p>
-        <p class="hero-tagline sobre-tagline" id="sobreTagline"></p>
       </div>
     </div>
 
@@ -1747,7 +1746,7 @@
 
   // Faixa animada com os títulos dos serviços (rolagem contínua).
   var tickerServices = [
-    "Fotos", "Criativos para rede social", "TikTok Shop", "Publipost", "Roteiros que vendem"
+    "UGC", "Fotos", "Criativos para rede social", "TikTok Shop", "Publipost", "Roteiros que vendem", "Qualidade profissional"
   ];
 
   // Conteúdos de destaque (seção 3). Três vídeos em formato 9:16.
@@ -1918,7 +1917,6 @@
 
   // Tagline da capa
   document.getElementById("heroTagline").innerHTML = TAGLINE.replace(" | VIDEOMAKER | ", " |<br>VIDEOMAKER | ");
-  document.getElementById("sobreTagline").innerHTML = TAGLINE.replace(" | VIDEOMAKER | ", " |<br>VIDEOMAKER | ");
   document.getElementById("heroDescription").textContent = HERO_DESCRIPTION;
 
   // Stats da capa
