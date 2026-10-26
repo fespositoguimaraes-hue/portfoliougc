@@ -686,6 +686,7 @@
     padding:14px;
     font-size:0.9rem;
   }
+  .destaque-cover img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
   .play-btn{
     position:absolute;
     inset:0;
@@ -1066,7 +1067,7 @@
     margin:40px 0 16px;
     transform:rotate(-1deg);
   }
-  .subsection-heading:first-of-type{ margin-top:0; }
+
 
   .metrics-grid{
     display:grid;
@@ -1539,9 +1540,6 @@
 
     <div class="metrics-grid" id="metricsGrid"></div>
 
-    <h3 class="subsection-heading">Resultados de campanha</h3>
-    <div class="campaigns-grid" id="campaignsGrid"></div>
-
     <h3 class="subsection-heading">O que dizem sobre mim</h3>
     <div class="testimonials-grid" id="testimonialsGrid"></div>
   </section>
@@ -1738,25 +1736,25 @@
   // "cover": troque o bloco de degradê por uma <img> real com a capa vertical do vídeo.
   var destaques = [
     {
-      title: "Reel em destaque",
+      title: "Leapmotor",
       context: "Vídeo publicado no Instagram, formato reels.",
-      metricValue: "+5,6M",
+      metricValue: "+8,5M",
       metricLabel: "views no Reels",
-      link: "https://www.instagram.com/reel/DayXBsxCQg6/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA=="
+      link: "https://youtube.com/shorts/sFjJ7IlG6r0"
     },
     {
-      title: "Título do conteúdo 02",
-      context: "Troque por uma frase curta contando o contexto desse vídeo.",
-      metricValue: "+000",
-      metricLabel: "SEU NÚMERO (ex: visualizações)",
-      link: "#"
+      title: "Nappô",
+      context: "Conteúdo lifestyle e com alta qualidade.",
+      metricValue: "+10 mil",
+      metricLabel: "views orgânicos no perfil da marca",
+      link: "https://youtube.com/shorts/R42Pr2u4D5k"
     },
     {
-      title: "Título do conteúdo 03",
-      context: "Troque por uma frase curta contando o contexto desse vídeo.",
-      metricValue: "+000",
-      metricLabel: "SEU NÚMERO (ex: visualizações)",
-      link: "#"
+      title: "Casarão Villa Império",
+      context: "Conteúdo de experiência.",
+      metricValue: "+440 mil",
+      metricLabel: "views orgânicos no perfil da marca",
+      link: "https://youtube.com/shorts/iQC6o-RbCFo"
     }
   ];
 
@@ -1862,17 +1860,11 @@
   ];
 
   // Três resultados de campanha (seção 6).
-  var campaigns = [
-    { result: "+00%", title: "Resultado de campanha 01", desc: "Descreva aqui o resultado real dessa campanha." },
-    { result: "+00%", title: "Resultado de campanha 02", desc: "Descreva aqui o resultado real dessa campanha." },
-    { result: "+00%", title: "Resultado de campanha 03", desc: "Descreva aqui o resultado real dessa campanha." }
-  ];
-
   // Quatro depoimentos (seção 6).
   var testimonials = [
-    { quote: "A Fernanda entregou conteúdos de UGC com muita qualidade, atenção aos detalhes e excelente interpretação do briefing. Seu cuidado com a iluminação, enquadramento e naturalidade na fala fizeram total diferença no resultado final. Demonstrou profissionalismo em toda a comunicação e conseguiu traduzir a proposta da marca de forma leve, autêntica e conectada com o público. Recomendo fortemente para outras campanhas e projetos!", name: "Diária Pousada Aimê Maresias", company: "★ 5" },
-    { quote: "Amamos trabalhar nesse projeto! O conteúdo entregue foi criativo, autêntico e feito com muito cuidado. Cada detalhe fez a diferença para a campanha e trouxe um resultado incrível. Uma experiência que com certeza queremos repetir em novas colaborações.", name: "Jägermeister", company: "Maio · ★ 5" },
-    { quote: "A participação da Fernanda na campanha foi ótima. Ela cumpriu com os prazos e entregou o material dentro do briefing. O resultado correspondeu ao que pedimos.", name: "Bioderma", company: "Outubro · ★ 5" },
+    { quote: "A Fernanda entregou conteúdos de UGC com muita qualidade, atenção aos detalhes e excelente interpretação do briefing. Seu cuidado com a iluminação, enquadramento e naturalidade na fala fizeram total diferença no resultado final. Demonstrou profissionalismo em toda a comunicação e conseguiu traduzir a proposta da marca de forma leve, autêntica e conectada com o público. Recomendo fortemente para outras campanhas e projetos!", name: "Diária Pousada Aimê Maresias", company: "" },
+    { quote: "Amamos trabalhar nesse projeto! O conteúdo entregue foi criativo, autêntico e feito com muito cuidado. Cada detalhe fez a diferença para a campanha e trouxe um resultado incrível. Uma experiência que com certeza queremos repetir em novas colaborações.", name: "Jägermeister", company: "" },
+    { quote: "A participação da Fernanda na campanha foi ótima. Ela cumpriu com os prazos e entregou o material dentro do briefing. O resultado correspondeu ao que pedimos.", name: "Bioderma", company: "" },
     { quote: "Guria, vc arrasou!!! Seu vídeo ficou MUITO bom, parabéns 🧡🧡🧡 Você entregou simplesmente além do esperado. Foi excepcional no que fez. Espero, de coração, que possamos trabalhar juntos novamente — ficou realmente incrível.", name: "Bauducco", company: "" }
   ];
 
@@ -1987,11 +1979,20 @@
       }
 
       var cover = el("div", "destaque-cover");
-      var coverContent = '<div class="destaque-metric"><strong>' + d.metricValue + '</strong><span>' + d.metricLabel + '</span></div><span>capa vertical 9:16</span>';
+      var ytId = hasLink ? extractYouTubeIdForThumb(d.link) : null;
+      var coverContent = '<div class="destaque-metric"><strong>' + d.metricValue + '</strong><span>' + d.metricLabel + '</span></div>' + (ytId ? '' : '<span>capa vertical 9:16</span>');
+      if(ytId){
+        var coverImg = el("img");
+        coverImg.src = "https://img.youtube.com/vi/" + ytId + "/maxresdefault.jpg";
+        coverImg.alt = "Capa: " + d.title;
+        coverImg.loading = "lazy";
+        coverImg.onerror = function(){ this.src = "https://img.youtube.com/vi/" + ytId + "/hqdefault.jpg"; };
+        cover.appendChild(coverImg);
+      }
       if(hasLink){
         coverContent = '<div class="play-btn" aria-hidden="true"></div>' + coverContent;
       }
-      cover.innerHTML = coverContent;
+      cover.insertAdjacentHTML("beforeend", coverContent);
       card.appendChild(cover);
 
       var body = el("div", "destaque-body");
@@ -2283,18 +2284,6 @@
       value.textContent = "0" + m.suffix;
       card.appendChild(value);
       card.appendChild(el("p", "metric-label", m.label));
-      wrap.appendChild(card);
-    });
-  })();
-
-  // Resultados de campanha
-  (function renderCampaigns(){
-    var wrap = document.getElementById("campaignsGrid");
-    campaigns.forEach(function(c){
-      var card = el("div", "campaign-card reveal");
-      card.appendChild(el("p", "campaign-result", c.result));
-      card.appendChild(el("h3", null, c.title));
-      card.appendChild(el("p", null, c.desc));
       wrap.appendChild(card);
     });
   })();
