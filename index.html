@@ -1070,11 +1070,12 @@
 
   .metrics-grid{
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(3,1fr);
     gap:18px;
   }
   @media (max-width:760px){
     .metrics-grid{ grid-template-columns:repeat(2,1fr); }
+    .metrics-grid .metric-card:last-child{ grid-column:1 / -1; }
   }
   .metric-card{
     text-align:center;
@@ -1716,7 +1717,7 @@
     { text: "200+", label: "vídeos entregues" },
     { text: "150+", label: "marcas atendidas" },
     { text: "10M+", label: "views somadas" },
-    { text: "1+ ano", label: "de experiência" }
+    { text: "2+ anos", label: "de experiência" }
   ];
 
   // Marcas que já trabalharam com você. As três primeiras são reais;
@@ -1853,12 +1854,11 @@
   ];
 
   // Quatro métricas com contador animado (seção 6).
-  // EDITE: troque os valores 0 pelos seus números reais antes de publicar.
+  // Números reais preenchidos.
   var metrics = [
-    { target: 0, suffix: "+", label: "vídeos entregues" },
-    { target: 0, suffix: "+", label: "marcas atendidas" },
-    { target: 0, suffix: "M+", label: "views somadas" },
-    { target: 0, suffix: "%", label: "roteiros aprovados de primeira" }
+    { target: 200, suffix: "+", label: "vídeos entregues" },
+    { target: 150, suffix: "+", label: "marcas atendidas" },
+    { target: 10, suffix: "M+", label: "views somadas" }
   ];
 
   // Três resultados de campanha (seção 6).
@@ -1870,10 +1870,10 @@
 
   // Quatro depoimentos (seção 6).
   var testimonials = [
-    { quote: "Escreva aqui o depoimento real desse cliente sobre o seu trabalho.", name: "Cliente 01", company: "Empresa 01" },
-    { quote: "Escreva aqui o depoimento real desse cliente sobre o seu trabalho.", name: "Cliente 02", company: "Empresa 02" },
-    { quote: "Escreva aqui o depoimento real desse cliente sobre o seu trabalho.", name: "Cliente 03", company: "Empresa 03" },
-    { quote: "Escreva aqui o depoimento real desse cliente sobre o seu trabalho.", name: "Cliente 04", company: "Empresa 04" }
+    { quote: "A Fernanda entregou conteúdos de UGC com muita qualidade, atenção aos detalhes e excelente interpretação do briefing. Seu cuidado com a iluminação, enquadramento e naturalidade na fala fizeram total diferença no resultado final. Demonstrou profissionalismo em toda a comunicação e conseguiu traduzir a proposta da marca de forma leve, autêntica e conectada com o público. Recomendo fortemente para outras campanhas e projetos!", name: "Diária Pousada Aimê Maresias", company: "★ 5" },
+    { quote: "Amamos trabalhar nesse projeto! O conteúdo entregue foi criativo, autêntico e feito com muito cuidado. Cada detalhe fez a diferença para a campanha e trouxe um resultado incrível. Uma experiência que com certeza queremos repetir em novas colaborações.", name: "Jägermeister", company: "Maio · ★ 5" },
+    { quote: "A participação da Fernanda na campanha foi ótima. Ela cumpriu com os prazos e entregou o material dentro do briefing. O resultado correspondeu ao que pedimos.", name: "Bioderma", company: "Outubro · ★ 5" },
+    { quote: "Guria, vc arrasou!!! Seu vídeo ficou MUITO bom, parabéns 🧡🧡🧡 Você entregou simplesmente além do esperado. Foi excepcional no que fez. Espero, de coração, que possamos trabalhar juntos novamente — ficou realmente incrível.", name: "Bauducco", company: "" }
   ];
 
   // Dados de contato.
