@@ -908,6 +908,13 @@
       </svg>
       Checklist
     </button>
+    <button class="nav-item" data-tab="roteiros">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 20h9"/>
+        <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>
+      </svg>
+      Roteiros
+    </button>
   </div>
 
   <div class="sidebar-footer">
@@ -933,6 +940,69 @@
 
   <div class="content">
     <!-- Será preenchido por JavaScript -->
+  </div>
+</div>
+
+<!-- Modal: Adicionar/Editar roteiro -->
+<div class="modal" id="roteiroModal">
+  <div class="modal-content" style="max-width: 720px;">
+    <div class="modal-header">
+      <h2 id="roteiroModalTitle">Novo roteiro</h2>
+      <button class="modal-close" onclick="closeRoteiroModal()">×</button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+      <div class="form-group" style="grid-column: 1 / -1;">
+        <label for="roteiroTitulo">Título</label>
+        <input type="text" id="roteiroTitulo" placeholder="Ex: Como a yoga me ajuda na minha rotina">
+      </div>
+      <div class="form-group">
+        <label for="roteiroOrigem">Para quê?</label>
+        <select id="roteiroOrigem" onchange="toggleRoteiroMarca()">
+          <option value="Redes sociais">Redes sociais</option>
+          <option value="Jobs/Marcas">Jobs/Marcas</option>
+        </select>
+      </div>
+      <div class="form-group" id="roteiroMarcaWrap" style="display: none;">
+        <label for="roteiroMarca">Marca</label>
+        <input type="text" id="roteiroMarca" placeholder="Nome da marca">
+      </div>
+      <div class="form-group">
+        <label for="roteiroTipo">Estilo</label>
+        <input type="text" id="roteiroTipo" list="roteiroTipos" placeholder="Ex: Storytelling">
+        <datalist id="roteiroTipos">
+          <option value="Storytelling">
+          <option value="Review">
+          <option value="Tutorial">
+          <option value="Unboxing">
+          <option value="Dia a dia">
+          <option value="Antes e depois">
+        </datalist>
+      </div>
+      <div class="form-group">
+        <label for="roteiroStatus">Status</label>
+        <select id="roteiroStatus">
+          <option value="Rascunho">Rascunho</option>
+          <option value="Em andamento">Em andamento</option>
+          <option value="Finalizado">Finalizado</option>
+        </select>
+      </div>
+      <div class="form-group" style="grid-column: 1 / -1;">
+        <label for="roteiroTexto">Roteiro</label>
+        <textarea id="roteiroTexto" rows="14" placeholder="Cole ou escreva o roteiro aqui"></textarea>
+      </div>
+      <div class="form-group" style="grid-column: 1 / -1;">
+        <label for="roteiroObs">Observações</label>
+        <textarea id="roteiroObs" rows="2" placeholder="Feedback da marca, links, ideias de cena..."></textarea>
+      </div>
+    </div>
+
+    <div id="roteiroModalError" style="display: none; margin-top: 12px; padding: 10px 12px; background: #fbe9e9; color: #a33; border-radius: 6px; font-size: 13px;"></div>
+
+    <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px;">
+      <button class="btn btn-secondary" onclick="closeRoteiroModal()">Cancelar</button>
+      <button class="btn btn-primary" id="roteiroSaveBtn" onclick="saveRoteiro()">Salvar</button>
+    </div>
   </div>
 </div>
 
@@ -1179,7 +1249,8 @@
       prospeccao: 'Prospecção',
       calendario: 'Calendário',
       campanhas: 'Campanhas',
-      checklist: 'Checklist'
+      checklist: 'Checklist',
+      roteiros: 'Roteiros'
     };
 
     document.getElementById('pageTitle').textContent = titles[tab];
@@ -1196,6 +1267,7 @@
     else if (tab === 'calendario') loadCalendario();
     else if (tab === 'campanhas') loadCampanhas();
     else if (tab === 'checklist') loadChecklist();
+    else if (tab === 'roteiros') loadRoteiros();
   }
 
   // ========================================================================
@@ -2540,6 +2612,210 @@
     }
 
     content.innerHTML = '<div class="empty-state">Seção de Checklist em desenvolvimento</div>';
+  }
+
+  // ========================================================================
+  // ABA 6: ROTEIROS
+  // ========================================================================
+
+  let roteirosCache = [];
+  let editingRoteiroId = null;
+  let roteiroFiltro = 'todos';
+
+  const ICON_EDIT = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>';
+  const ICON_TRASH = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M10 11v6M14 11v6"/></svg>';
+  const ICON_COPY = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+
+  function escRot(v) {
+    return String(v == null ? '' : v)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  async function loadRoteiros() {
+    const content = document.querySelector('.content');
+
+    try {
+      const { data, error } = await supabase
+        .from('roteiros')
+        .select('*')
+        .order('atualizado_em', { ascending: false });
+
+      if (error) throw error;
+      roteirosCache = data || [];
+      roteiroFiltro = 'todos';
+
+      content.innerHTML = `
+        <p style="font-size: 14px; color: var(--detail); margin-bottom: 16px;">Crie e organize seus roteiros de UGC</p>
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 12px;">
+          <button class="btn btn-primary" onclick="openRoteiroModal()">+ Manual</button>
+        </div>
+        <input type="text" id="roteiroBusca" placeholder="Buscar roteiro por título, conteúdo ou marca..." oninput="renderRoteirosLista()" style="width: 100%; margin-bottom: 12px;">
+        <div id="roteiroFiltros" style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px;"></div>
+        <div id="roteirosLista"></div>
+      `;
+      renderRoteirosLista();
+    } catch (err) {
+      console.error(err);
+      const semTabela = err.code === '42P01' || err.code === 'PGRST205' || /roteiros/i.test(err.message || '');
+      content.innerHTML = semTabela
+        ? '<div class="error-message">A tabela de roteiros ainda não foi criada no banco. Rode o arquivo <strong>criar-roteiros.sql</strong> no SQL Editor do Supabase e recarregue esta página.</div>'
+        : `<div class="error-message">Erro ao carregar roteiros: ${escRot(err.message)}</div>`;
+    }
+  }
+
+  function setRoteiroFiltro(f) {
+    roteiroFiltro = f;
+    renderRoteirosLista();
+  }
+
+  function renderRoteirosLista() {
+    const box = document.getElementById('roteirosLista');
+    if (!box) return;
+    const q = (document.getElementById('roteiroBusca').value || '').trim().toLowerCase();
+
+    const filtros = [
+      { key: 'todos', label: 'Todos', fn: () => true },
+      { key: 'redes', label: 'Redes sociais', fn: r => r.origem === 'Redes sociais' },
+      { key: 'jobs', label: 'Jobs/Marcas', fn: r => r.origem === 'Jobs/Marcas' },
+      { key: 'abertos', label: 'Em aberto', fn: r => r.status !== 'Finalizado' },
+      { key: 'finalizados', label: 'Finalizados', fn: r => r.status === 'Finalizado' }
+    ];
+
+    document.getElementById('roteiroFiltros').innerHTML = filtros.map(f => {
+      const n = roteirosCache.filter(f.fn).length;
+      const ativo = f.key === roteiroFiltro;
+      const label = (f.key === 'redes' || f.key === 'jobs') ? f.label : `${f.label} (${n})`;
+      return `<button type="button" class="btn btn-sm ${ativo ? 'btn-primary' : 'btn-secondary'}" onclick="setRoteiroFiltro('${f.key}')">${label}</button>`;
+    }).join('');
+
+    const filtroAtual = filtros.find(f => f.key === roteiroFiltro) || filtros[0];
+    const lista = roteirosCache.filter(r => {
+      if (!filtroAtual.fn(r)) return false;
+      if (!q) return true;
+      return [r.titulo, r.marca, r.tipo, r.roteiro, r.obs].some(t => (t || '').toLowerCase().includes(q));
+    });
+
+    if (!roteirosCache.length) {
+      box.innerHTML = '<div class="empty-state">Nenhum roteiro ainda. Clique em "+ Manual" para guardar o primeiro.</div>';
+      return;
+    }
+    if (!lista.length) {
+      box.innerHTML = '<div class="empty-state">Nenhum roteiro encontrado.</div>';
+      return;
+    }
+
+    const btnIcone = 'background: none; border: none; cursor: pointer; padding: 6px; color: var(--ink);';
+    box.innerHTML = lista.map(r => {
+      const partes = [];
+      if (r.origem === 'Jobs/Marcas' && r.marca) partes.push(escRot(r.marca));
+      if (r.tipo) partes.push(escRot(r.tipo));
+      partes.push(escRot(r.status));
+      return `
+        <div style="background: white; border: 1px solid var(--detail); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+          <div style="min-width: 0; flex: 1; cursor: pointer;" onclick="openRoteiroModal(${r.id})">
+            <div style="font-weight: 600; font-size: 15px;">${escRot(r.titulo)}</div>
+            <div style="font-size: 12px; color: var(--detail); margin-top: 3px;">${partes.join(' · ')}</div>
+          </div>
+          <div style="display: flex; gap: 2px; flex-shrink: 0;">
+            <button type="button" style="${btnIcone}" title="Copiar texto" aria-label="Copiar texto" onclick="copyRoteiro(${r.id}, this)">${ICON_COPY}</button>
+            <button type="button" style="${btnIcone}" title="Editar" aria-label="Editar" onclick="openRoteiroModal(${r.id})">${ICON_EDIT}</button>
+            <button type="button" style="${btnIcone}" title="Apagar" aria-label="Apagar" onclick="deleteRoteiro(${r.id})">${ICON_TRASH}</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function toggleRoteiroMarca() {
+    const jobs = document.getElementById('roteiroOrigem').value === 'Jobs/Marcas';
+    document.getElementById('roteiroMarcaWrap').style.display = jobs ? 'block' : 'none';
+  }
+
+  function openRoteiroModal(id) {
+    editingRoteiroId = id || null;
+    const r = editingRoteiroId ? roteirosCache.find(x => x.id === editingRoteiroId) : null;
+
+    document.getElementById('roteiroModalTitle').textContent = r ? 'Editar roteiro' : 'Novo roteiro';
+    document.getElementById('roteiroModalError').style.display = 'none';
+    document.getElementById('roteiroTitulo').value = r?.titulo || '';
+    document.getElementById('roteiroOrigem').value = r?.origem || 'Redes sociais';
+    document.getElementById('roteiroMarca').value = r?.marca || '';
+    document.getElementById('roteiroTipo').value = r?.tipo || '';
+    document.getElementById('roteiroStatus').value = r?.status || 'Rascunho';
+    document.getElementById('roteiroTexto').value = r?.roteiro || '';
+    document.getElementById('roteiroObs').value = r?.obs || '';
+    toggleRoteiroMarca();
+    document.getElementById('roteiroModal').classList.add('show');
+  }
+
+  function closeRoteiroModal() {
+    document.getElementById('roteiroModal').classList.remove('show');
+  }
+
+  async function saveRoteiro() {
+    const titulo = document.getElementById('roteiroTitulo').value.trim();
+    const errBox = document.getElementById('roteiroModalError');
+    if (!titulo) {
+      errBox.textContent = 'Dê um título ao roteiro.';
+      errBox.style.display = 'block';
+      return;
+    }
+
+    const origem = document.getElementById('roteiroOrigem').value;
+    const payload = {
+      titulo: titulo,
+      origem: origem,
+      marca: origem === 'Jobs/Marcas' ? (document.getElementById('roteiroMarca').value.trim() || null) : null,
+      tipo: document.getElementById('roteiroTipo').value.trim() || null,
+      status: document.getElementById('roteiroStatus').value,
+      roteiro: document.getElementById('roteiroTexto').value,
+      obs: document.getElementById('roteiroObs').value.trim() || null,
+      atualizado_em: new Date().toISOString()
+    };
+
+    const btn = document.getElementById('roteiroSaveBtn');
+    btn.disabled = true;
+    btn.textContent = 'Salvando...';
+
+    try {
+      const { error } = editingRoteiroId
+        ? await supabase.from('roteiros').update(payload).eq('id', editingRoteiroId)
+        : await supabase.from('roteiros').insert(payload);
+      if (error) throw error;
+      closeRoteiroModal();
+      loadRoteiros();
+    } catch (err) {
+      console.error(err);
+      errBox.textContent = 'Erro ao salvar: ' + err.message;
+      errBox.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Salvar';
+    }
+  }
+
+  async function copyRoteiro(id, btn) {
+    const r = roteirosCache.find(x => x.id === id);
+    if (!r) return;
+    try {
+      await navigator.clipboard.writeText(r.roteiro || '');
+      btn.style.color = 'var(--green)';
+      setTimeout(() => { btn.style.color = 'var(--ink)'; }, 1200);
+    } catch (e) {
+      alert('Não consegui copiar. Abra o roteiro e copie o texto manualmente.');
+    }
+  }
+
+  async function deleteRoteiro(id) {
+    if (!confirm('Apagar este roteiro? Não dá para desfazer.')) return;
+    try {
+      const { error } = await supabase.from('roteiros').delete().eq('id', id);
+      if (error) throw error;
+      loadRoteiros();
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao apagar: ' + err.message);
+    }
   }
 
   // ========================================================================
