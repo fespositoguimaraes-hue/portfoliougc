@@ -1479,7 +1479,7 @@
     .hero-sheet{ padding-top:74px; padding-bottom:14px; }
   }
   /* Menu em duas linhas (janelas mais estreitas): afasta a capa do menu fixo */
-  @media (min-width:901px) and (max-width:1060px){
+  @media (min-width:901px) and (max-width:1240px){
     .hero-sheet{ padding-top:96px; }
   }
 </style>
@@ -1511,7 +1511,8 @@
     <nav id="navLinks" class="nav-links" aria-label="Navegação principal">
       <a href="#sobre">Sobre</a>
       <a href="#destaques">Destaques</a>
-      <a href="#trabalhos">Trabalhos</a>
+      <a href="#trabalhos">Trabalhos UGC</a>
+      <a href="#videomaker">Videomaker</a>
       <a href="#servicos">Serviços</a>
       <a href="#numeros">Números</a>
       <a href="#redes">Redes Sociais</a>
@@ -1579,10 +1580,10 @@
   </section>
 
   <!-- ===================== 4. TRABALHOS POR NICHO ===================== -->
-  <section class="sheet" id="trabalhos" aria-label="Trabalhos por nicho">
-    <p class="sheet-eyebrow">galeria</p>
-    <h2 class="section-title">Trabalhos por nicho</h2>
-    <p class="section-sub">Clique em um nicho para ver só os trabalhos daquela categoria.</p>
+  <section class="sheet" id="trabalhos" aria-label="Trabalhos UGC por nicho">
+    <p class="sheet-eyebrow">galeria ugc</p>
+    <h2 class="section-title">Trabalhos UGC por nicho</h2>
+    <p class="section-sub">Clique em um nicho para ver só os trabalhos UGC daquela categoria.</p>
     <div class="filters-row">
       <div class="filters" id="filterTabs" role="group" aria-label="Filtrar trabalhos por nicho"></div>
       <div class="gallery-nav">
@@ -1591,6 +1592,14 @@
       </div>
     </div>
     <div class="gallery" id="galleryGrid"></div>
+  </section>
+
+  <!-- ===================== 4b. TRABALHOS DE VIDEOMAKER ===================== -->
+  <section class="sheet" id="videomaker" aria-label="Trabalhos de videomaker">
+    <p class="sheet-eyebrow">videomaker</p>
+    <h2 class="section-title">Trabalhos de videomaker</h2>
+    <p class="section-sub">Cobertura de eventos, palestras e ações de marca em vídeo.</p>
+    <div class="gallery" id="videomakerGrid"></div>
   </section>
 
   <!-- ===================== 5. COMO EU TE AJUDO ===================== -->
@@ -2135,7 +2144,8 @@
       filterWrap.appendChild(btn);
     });
 
-    gallery.forEach(function(g){
+    // Cartão de vídeo da galeria (usado em Trabalhos por nicho e em Videomaker)
+    var criarCartaoGaleria = window.criarCartaoGaleria = function(g, badgeText){
       var item = el("div", "gallery-item reveal");
       item.dataset.niche = g.niche;
 
@@ -2170,12 +2180,14 @@
       }
 
       // Badge do nicho, no canto superior esquerdo
-      var badge = el("span", "gallery-niche-badge", nicheByKey[g.niche] || g.niche);
-      thumb.appendChild(badge);
+      if(badgeText){
+        thumb.appendChild(el("span", "gallery-niche-badge", badgeText));
+      }
 
       // Nome da marca sobre o vídeo, no rodapé
       var overlayText = el("div", "gallery-overlay-text");
       overlayText.appendChild(el("h3", null, g.title));
+      if(g.subtitle){ overlayText.appendChild(el("span", null, g.subtitle)); }
       thumb.appendChild(overlayText);
 
       item.appendChild(thumb);
@@ -2220,10 +2232,13 @@
           });
         }
 
-        galleryWrap.appendChild(link);
-      } else {
-        galleryWrap.appendChild(item);
+        return link;
       }
+      return item;
+    };
+
+    gallery.forEach(function(g){
+      galleryWrap.appendChild(criarCartaoGaleria(g, nicheByKey[g.niche] || g.niche));
     });
 
     function applyFilter(key){
@@ -2241,6 +2256,27 @@
     if(typeof window.updateGalleryNav === "function"){
       window.updateGalleryNav();
     }
+
+    renderVideomaker();
+  }
+
+  // Trabalhos de videomaker (sem nicho): só capa, marca e o tipo de trabalho
+  var videomaker = [
+    { title: "Too Faced", subtitle: "Evento TikTok Shop", link: "https://youtube.com/shorts/VHrQ4vEMJVo" },
+    { title: "Magalu", subtitle: "Evento YPX Summit", link: "https://youtube.com/shorts/mwaq104TJGY" },
+    { title: "Magalu", subtitle: "Evento Fórum E-commerce", link: "https://youtube.com/shorts/pgLtay5MIVY" },
+    { title: "MAC", subtitle: "Evento TikTok Shop", link: "https://youtube.com/shorts/aqunyuRJ4EM" },
+    { title: "Itaú", subtitle: "Palestra Finanças", link: "https://youtube.com/shorts/riXIo5qVawU" }
+  ];
+
+  function renderVideomaker(){
+    var wrap = document.getElementById("videomakerGrid");
+    if(!wrap) return;
+    wrap.innerHTML = "";
+    videomaker.forEach(function(v){
+      wrap.appendChild(window.criarCartaoGaleria(v, ""));
+    });
+    window.revelar(wrap);
   }
 
   // Serviços
@@ -2390,8 +2426,8 @@
   /* =====================================================================
      ARRASTAR GALERIA COM O MOUSE (carrossel horizontal)
   ===================================================================== */
-  (function galleryDragScroll(){
-    var galleryEl = document.getElementById("galleryGrid");
+  ["galleryGrid", "videomakerGrid"].forEach(function(gridId){
+    var galleryEl = document.getElementById(gridId);
     if(!galleryEl) return;
     var isDown = false;
     var startX, scrollLeft;
@@ -2410,7 +2446,7 @@
       var walk = (x - startX) * 1.5;
       galleryEl.scrollLeft = scrollLeft - walk;
     });
-  })();
+  });
 
   /* =====================================================================
      SETAS DE NAVEGAÇÃO DA GALERIA
