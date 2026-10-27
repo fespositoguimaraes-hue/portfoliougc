@@ -198,7 +198,7 @@
 
 <div class="login-container">
   <h1>Admin</h1>
-  <p class="subtitle">Painel de controle do portf√≥lio</p>
+  <p class="subtitle">Painel de controle do portfólio</p>
 
   <div id="errorBox" class="error-box"></div>
   <div id="successBox" class="success-message"></div>
@@ -220,7 +220,7 @@
       <input
         type="password"
         id="password"
-        placeholder="‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢"
+        placeholder="••••••••"
         required
         autocomplete="current-password"
       >
@@ -245,10 +245,10 @@
 <!-- Supabase via CDN -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.0"></script>
 
-<!-- Configura√ß√£o do banco -->
+<!-- Configuração do banco -->
 <script src="../js/banco.js"></script>
 
-<!-- L√≥gica de login -->
+<!-- Lógica de login -->
 <script>
   const email = document.getElementById('email');
   const password = document.getElementById('password');
@@ -267,7 +267,7 @@
       supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       statusText.textContent = 'Pronto';
 
-      // Se j√° tem sess√£o aberta, vai pro admin
+      // Se já tem sessão aberta, vai pro admin
       const { data: session } = await supabase.auth.getSession();
       if (session?.session) {
         window.location.href = '../admin/';
@@ -302,7 +302,7 @@
       });
 
       if (error) {
-        // Mensagem em portugu√™s pra erro de credenciais
+        // Mensagem em português pra erro de credenciais
         if (error.message.includes('Invalid login credentials')) {
           showError('E-mail ou senha incorretos');
         } else {
@@ -341,7 +341,7 @@
       if (error) {
         showError(error.message);
       } else {
-        showSuccess('E-mail de recupera√ß√£o enviado! Verifique sua caixa de entrada.');
+        showSuccess('E-mail de recuperação enviado! Verifique sua caixa de entrada.');
         setTimeout(() => successBox.classList.remove('show'), 5000);
       }
     } catch (err) {
