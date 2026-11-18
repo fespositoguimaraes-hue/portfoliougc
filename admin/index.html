@@ -2950,6 +2950,8 @@
   let campCache = [];
   let campParcelas = [];
   let campFiltro = 'todas';
+  // mês da visão de campanhas: { a, m } ou null = todos os meses
+  let campMes = { a: new Date().getFullYear(), m: new Date().getMonth() };
   let campAbertas = new Set();
   let editingCampId = null;
   const CAMP_STATUS = ['Briefing', 'Roteiro', 'Aprovação', 'Gravação', 'Edição', 'Aprovado', 'Entregue'];
@@ -3010,6 +3012,7 @@
           <p style="font-size: 14px; color: #77716b; max-width: 560px; line-height: 1.5;">Cada campanha é um job. Os pagamentos dela entram automaticamente na aba Finanças.</p>
           <button class="btn btn-primary" style="padding: 9px 14px;" onclick="openCampanhaModal()">+ Nova campanha</button>
         </div>
+        <div class="fin-periodo" id="campPeriodo"></div>
         <div class="fin-cards" id="campCards"></div>
         <div class="fin-panel">
           <div class="fin-panel-head">
@@ -3030,6 +3033,49 @@
   }
 
   function setCampFiltro(f) { campFiltro = f; renderCampanhas(); }
+
+  // mês em que o job foi fechado (sem data de fechamento, usa o cadastro)
+  function campMesDe(c) {
+    const d = c.data_fechamento || String(c.criado_em || '').slice(0, 10);
+    return d ? finParseData(d) : null;
+  }
+  function campNoMes(c) {
+    if (!campMes) return true;
+    const p = campMesDe(c);
+    return !!p && p.a === campMes.a && p.m === campMes.m;
+  }
+  function campMudaMes(delta) {
+    if (!campMes) { const h = new Date(); campMes = { a: h.getFullYear(), m: h.getMonth() }; }
+    let { a, m } = campMes;
+    m += delta;
+    if (m < 0) { m = 11; a--; }
+    if (m > 11) { m = 0; a++; }
+    campMes = { a, m };
+    renderCampanhas();
+  }
+  function setCampPeriodo() {
+    campMes = { a: Number(document.getElementById('campAnoSel').value), m: Number(document.getElementById('campMesSel').value) };
+    renderCampanhas();
+  }
+  function campTodosMeses() {
+    if (campMes) campMes = null;
+    else { const h = new Date(); campMes = { a: h.getFullYear(), m: h.getMonth() }; }
+    renderCampanhas();
+  }
+  function campPeriodoHtml() {
+    const h = new Date();
+    const sel = campMes || { a: h.getFullYear(), m: h.getMonth() };
+    const anos = new Set([h.getFullYear(), h.getFullYear() + 1, sel.a]);
+    campCache.forEach(c => { const p = campMesDe(c); if (p) anos.add(p.a); });
+    const dis = campMes ? '' : 'disabled';
+    return `<button type="button" class="fin-seta" title="Mês anterior" aria-label="Mês anterior" onclick="campMudaMes(-1)">‹</button>
+      <select id="campMesSel" onchange="setCampPeriodo()" ${dis}>${FIN_MESES.map((m, i) =>
+        `<option value="${i}" ${i === sel.m ? 'selected' : ''}>${m}</option>`).join('')}</select>
+      <select id="campAnoSel" onchange="setCampPeriodo()" ${dis}>${[...anos].sort((a, b) => b - a).map(a =>
+        `<option value="${a}" ${a === sel.a ? 'selected' : ''}>${a}</option>`).join('')}</select>
+      <button type="button" class="fin-seta" title="Próximo mês" aria-label="Próximo mês" onclick="campMudaMes(1)">›</button>
+      <button type="button" class="fin-chip ${campMes ? '' : 'active'}" onclick="campTodosMeses()">Todos os meses</button>`;
+  }
   function toggleCampAberta(id) {
     if (campAbertas.has(id)) campAbertas.delete(id); else campAbertas.add(id);
     renderCampanhas();
@@ -3039,16 +3085,27 @@
     const box = document.getElementById('campLista');
     if (!box) return;
     const resumos = campCache.map(c => ({ c, r: campResumo(c) }));
+    const doMes = resumos.filter(x => campNoMes(x.c));
+    const nomeMes = campMes ? `${FIN_MESES[campMes.m].toLowerCase()}/${campMes.a}` : '';
+    document.getElementById('campPeriodo').innerHTML = campPeriodoHtml();
 
-    const tot = k => resumos.reduce((s, x) => s + x.r[k], 0);
+    // fechado e recebido seguem o mês escolhido; a receber e atrasado somam tudo
+    const tot = (lista, k) => lista.reduce((s, x) => s + x.r[k], 0);
+    const pagasNoMes = campParcelas.filter(p => {
+      if (p.status === 'pendente') return false;
+      if (!campMes) return true;
+      const d = finParseData(p.pago_em || p.data);
+      return d.a === campMes.a && d.m === campMes.m;
+    });
+    const recebidoMes = finSoma(pagasNoMes, () => true);
     const nAtrasadas = resumos.filter(x => x.r.atrasadas.length).length;
-    const emProducao = campCache.filter(c => c.status !== 'Entregue').length;
+    const emProducao = doMes.filter(x => x.c.status !== 'Entregue').length;
     const naoBatem = resumos.filter(x => x.r.diferenca !== 0).length;
     document.getElementById('campCards').innerHTML = `
-      ${finCard('Total fechado', tot('valor'), '', `${campCache.length} ${campCache.length === 1 ? 'campanha' : 'campanhas'} · ${emProducao} em produção`)}
-      ${finCard('Recebido', tot('recebido'), 'c-green')}
-      ${finCard('A receber', tot('aReceber'), 'c-amber')}
-      ${finCard('Atrasado', tot('atrasado'), 'c-red', nAtrasadas ? `${nAtrasadas} ${nAtrasadas === 1 ? 'campanha' : 'campanhas'}` : 'nada atrasado')}
+      ${finCard(campMes ? 'Fechado no mês' : 'Total fechado', tot(doMes, 'valor'), '', `${doMes.length} ${doMes.length === 1 ? 'campanha' : 'campanhas'}${campMes ? ' em ' + nomeMes : ''} · ${emProducao} em produção`)}
+      ${finCard(campMes ? 'Recebido no mês' : 'Recebido', recebidoMes, 'c-green', campMes ? `pagamentos que caíram em ${nomeMes}` : '')}
+      ${finCard('A receber', tot(resumos, 'aReceber'), 'c-amber', 'todas as campanhas')}
+      ${finCard('Atrasado', tot(resumos, 'atrasado'), 'c-red', nAtrasadas ? `${nAtrasadas} ${nAtrasadas === 1 ? 'campanha' : 'campanhas'} · todos os meses` : 'nada atrasado')}
       ${naoBatem ? finCard('Não batem', `${naoBatem}`, 'c-red', 'campanhas com valor diferente dos pagamentos') : ''}
     `;
 
@@ -3065,17 +3122,23 @@
 
     const q = (document.getElementById('campBusca').value || '').trim().toLowerCase();
     const fn = (filtros.find(f => f[0] === campFiltro) || filtros[0])[2];
-    const lista = resumos.filter(fn).filter(x => !q || [x.c.campanha, x.c.cliente].some(t => (t || '').toLowerCase().includes(q)));
+    // "A receber", "Atrasadas" e "Não batem" mostram todos os meses, como os cards
+    const ignoraMes = ['receber', 'atrasadas', 'naobatem'].includes(campFiltro);
+    const lista = resumos.filter(x => ignoraMes || campNoMes(x.c)).filter(fn).filter(x => !q || [x.c.campanha, x.c.cliente].some(t => (t || '').toLowerCase().includes(q)));
 
     if (!campCache.length) {
       box.innerHTML = '<div class="empty-state">Nenhuma campanha ainda.<br>Clique em “+ Nova campanha” para cadastrar o primeiro job.</div>';
       return;
     }
     if (!lista.length) {
-      box.innerHTML = '<div class="empty-state">Nenhuma campanha neste filtro.</div>';
+      box.innerHTML = campMes && !ignoraMes
+        ? `<div class="empty-state">Nenhuma campanha fechada em ${nomeMes}.<br>Use as setas para ver outros meses ou clique em “Todos os meses”.</div>`
+        : '<div class="empty-state">Nenhuma campanha neste filtro.</div>';
       return;
     }
-    box.innerHTML = lista.map(({ c, r }) => campCardHtml(c, r)).join('');
+    const aviso = campMes && ignoraMes
+      ? '<p style="font-size: 12.5px; color: #77716b; margin: 0 0 10px;">Mostrando campanhas de todos os meses.</p>' : '';
+    box.innerHTML = aviso + lista.map(({ c, r }) => campCardHtml(c, r)).join('');
   }
 
   function campCardHtml(c, r) {
