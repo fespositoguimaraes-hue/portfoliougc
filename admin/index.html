@@ -510,6 +510,186 @@
       line-height: 1.6;
     }
 
+    /* ==================== FINANÇAS ==================== */
+    .fin-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .fin-seg {
+      display: inline-flex;
+      background: var(--paper-warm);
+      border-radius: 10px;
+      padding: 4px;
+      gap: 2px;
+    }
+    .fin-seg button {
+      border: none;
+      background: none;
+      padding: 7px 14px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-family: inherit;
+      color: #6b6661;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .fin-seg button.active {
+      background: white;
+      color: var(--ink);
+      font-weight: 600;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    }
+    .fin-periodo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .fin-periodo select { width: auto; background: white; }
+    .fin-seta {
+      border: 1px solid var(--detail);
+      background: white;
+      border-radius: 4px;
+      width: 32px;
+      height: 33px;
+      cursor: pointer;
+      font-size: 15px;
+      color: var(--ink);
+    }
+    .fin-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .fin-card {
+      background: white;
+      border: 1px solid var(--gray-light);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .fin-card-label { font-size: 12px; color: #77716b; margin-bottom: 4px; }
+    .fin-card-value { font-size: 21px; font-weight: 650; font-variant-numeric: tabular-nums; }
+    .fin-card-sub { font-size: 11px; color: #9a948e; margin-top: 4px; }
+    .fin-card.c-green { background: #eef4ef; border-color: #d5e3d8; }
+    .fin-card.c-green .fin-card-value { color: var(--green-dark); }
+    .fin-card.c-amber { background: #fbf3e6; border-color: #f1e0c2; }
+    .fin-card.c-amber .fin-card-value { color: #b07a1c; }
+    .fin-card.c-red { background: #fbeeef; border-color: #f0d6d9; }
+    .fin-card.c-red .fin-card-value { color: var(--pink-dark); }
+    .fin-card .neg { color: var(--pink-dark) !important; }
+    .fin-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 16px;
+      align-items: start;
+    }
+    @media (max-width: 1000px) {
+      .fin-grid { grid-template-columns: 1fr; }
+    }
+    .fin-panel {
+      background: white;
+      border: 1px solid var(--gray-light);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 16px;
+      min-width: 0;
+    }
+    .fin-panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .fin-panel-head h3 { font-size: 16px; }
+    .fin-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .fin-chip {
+      border: 1px solid var(--detail);
+      background: white;
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-family: inherit;
+      cursor: pointer;
+      color: var(--ink);
+    }
+    .fin-chip.active { background: var(--pink); border-color: var(--pink); color: white; }
+    .fin-grupo {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin: 14px 0 8px;
+      color: #9a948e;
+    }
+    .fin-grupo.pend { color: #b07a1c; }
+    .fin-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #faf8f5;
+      border-left: 3px solid var(--detail);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+    }
+    .fin-row.pend { border-left-color: #e2b25c; }
+    .fin-row.ok.in { border-left-color: var(--green); }
+    .fin-row.ok.out { border-left-color: var(--pink); }
+    .fin-row-main { flex: 1; min-width: 0; cursor: pointer; }
+    .fin-row-title { font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .fin-row-meta { display: flex; align-items: center; gap: 8px; margin-top: 5px; font-size: 12px; color: #8a847e; flex-wrap: wrap; }
+    .fin-tag {
+      font-size: 11px;
+      background: white;
+      border: 1px solid var(--gray-light);
+      border-radius: 6px;
+      padding: 1px 6px;
+      color: #6b6661;
+      font-weight: 400;
+    }
+    .fin-pill { font-size: 11px; font-weight: 600; border-radius: 10px; padding: 2px 8px; }
+    .fin-pill.pend { background: #fbecd0; color: #b07a1c; }
+    .fin-pill.ok { background: #e3eee6; color: var(--green-dark); }
+    .fin-valor { font-weight: 650; font-size: 15px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .fin-valor.in { color: #3f8a5c; }
+    .fin-valor.out { color: var(--pink-dark); }
+    .fin-acoes { display: flex; gap: 2px; flex-shrink: 0; }
+    .fin-acoes button { background: none; border: none; cursor: pointer; padding: 6px; color: var(--ink); }
+    @media (max-width: 600px) {
+      .fin-row { flex-wrap: wrap; }
+      .fin-row-main { flex-basis: 100%; }
+      .fin-valor { flex: 1; }
+    }
+    .fin-tag.nf-ok { background: #e3eee6; border-color: #d5e3d8; color: var(--green-dark); }
+    .fin-tag.nf-no { background: #fbeeef; border-color: #f0d6d9; color: var(--pink-dark); }
+    .fin-nf-linha { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; padding: 8px 0; border-bottom: 1px solid var(--gray-light); }
+    .fin-nf-linha:last-of-type { border-bottom: none; }
+    .fin-nf-linha small { color: #9a948e; margin-left: 4px; }
+    .fin-nf-barra { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--paper); margin: 4px 0 10px; }
+    .fin-cat { margin-bottom: 12px; }
+    .fin-cat-top { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; margin-bottom: 5px; }
+    .fin-cat-top small { color: #9a948e; margin-left: 4px; }
+    .fin-cat-track { background: var(--paper); border-radius: 4px; height: 8px; overflow: hidden; }
+    .fin-cat-bar { background: var(--pink); height: 100%; border-radius: 4px; }
+    .fin-legenda { display: flex; gap: 16px; font-size: 12px; color: #6b6661; flex-wrap: wrap; }
+    .fin-legenda span { display: inline-flex; align-items: center; gap: 6px; }
+    .fin-legenda i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+    .fin-chart svg { width: 100%; height: auto; display: block; }
+    .fin-chart text { font-family: inherit; }
+    .fin-tabela td, .fin-tabela th { font-variant-numeric: tabular-nums; }
+    .fin-tabela td.num, .fin-tabela th.num { text-align: right; }
+    .fin-tabela tbody tr { cursor: pointer; }
+    .fin-tabela tfoot td { font-weight: 650; background: var(--paper); border-bottom: none; }
+    .fin-scroll { overflow-x: auto; }
+
     /* ==================== PROSPECÇÃO ==================== */
     .prosp-hero {
       position: relative;
@@ -917,6 +1097,16 @@
     </button>
   </div>
 
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Dinheiro</div>
+    <button class="nav-item" data-tab="financas">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+      </svg>
+      Finanças
+    </button>
+  </div>
+
   <div class="sidebar-footer">
     <div class="user-email" id="userEmail">Carregando...</div>
     <button class="btn-logout" id="btnLogout">Sair</button>
@@ -940,6 +1130,86 @@
 
   <div class="content">
     <!-- Será preenchido por JavaScript -->
+  </div>
+</div>
+
+<!-- Modal: Adicionar/Editar lançamento financeiro -->
+<div class="modal" id="finModal">
+  <div class="modal-content" style="max-width: 560px;">
+    <div class="modal-header">
+      <h2 id="finModalTitle">Novo registro</h2>
+      <button class="modal-close" onclick="closeFinModal()">×</button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+      <div class="form-group">
+        <label for="finAmbitoInput">De quem é?</label>
+        <select id="finAmbitoInput" onchange="finAtualizaCategorias()">
+          <option value="empresa">Empresa</option>
+          <option value="pessoal">Pessoal</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="finTipoInput">Tipo</label>
+        <select id="finTipoInput" onchange="finAtualizaCategorias()">
+          <option value="entrada">Entrada (dinheiro que entra)</option>
+          <option value="saida">Saída (gasto)</option>
+        </select>
+      </div>
+      <div class="form-group" style="grid-column: 1 / -1;">
+        <label for="finDescricaoInput">Descrição</label>
+        <input type="text" id="finDescricaoInput" placeholder="Ex: Job UGC - Tostitos">
+      </div>
+      <div class="form-group">
+        <label for="finValorInput">Valor (R$)</label>
+        <input type="text" id="finValorInput" inputmode="decimal" placeholder="1.200,00">
+      </div>
+      <div class="form-group">
+        <label for="finDataInput">Data</label>
+        <input type="date" id="finDataInput">
+      </div>
+      <div class="form-group">
+        <label for="finCategoriaInput">Categoria</label>
+        <input type="text" id="finCategoriaInput" list="finCategoriasList" placeholder="Escolha ou escreva" oninput="finAtualizaEspelho()">
+        <datalist id="finCategoriasList"></datalist>
+      </div>
+      <div class="form-group">
+        <label for="finStatusInput">Situação</label>
+        <select id="finStatusInput">
+          <option value="confirmado">Confirmado (já recebi / já paguei)</option>
+          <option value="pendente">Pendente (ainda vai entrar / vou pagar)</option>
+        </select>
+      </div>
+      <div class="form-group" id="finNfWrap">
+        <label for="finNfInput">Nota fiscal</label>
+        <select id="finNfInput" onchange="finAtualizaNf()">
+          <option value="emitida">Emiti NF</option>
+          <option value="nao_emitida">Não emiti NF</option>
+          <option value="">Não informado</option>
+        </select>
+      </div>
+      <div class="form-group" id="finNfNumeroWrap">
+        <label for="finNfNumeroInput">Nº da NF (opcional)</label>
+        <input type="text" id="finNfNumeroInput" placeholder="Ex: 125">
+      </div>
+      <div class="form-group" style="grid-column: 1 / -1;">
+        <label for="finObsInput">Observações</label>
+        <textarea id="finObsInput" rows="2" placeholder="Nota fiscal, forma de pagamento, link do job..."></textarea>
+      </div>
+      <div id="finEspelhoWrap" style="grid-column: 1 / -1; display: none; padding: 10px 12px; background: var(--paper); border-radius: 6px; font-size: 13px;">
+        <label style="display: flex; gap: 8px; align-items: flex-start; font-weight: 400; margin: 0; cursor: pointer;">
+          <input type="checkbox" id="finEspelhoInput" checked style="margin-top: 2px;">
+          <span>Lançar também como <strong>entrada no Pessoal</strong> (categoria “Retirada da empresa”), para o dinheiro aparecer do outro lado.</span>
+        </label>
+      </div>
+    </div>
+
+    <div id="finModalError" style="display: none; margin-top: 12px; padding: 10px 12px; background: #fbe9e9; color: #a33; border-radius: 6px; font-size: 13px;"></div>
+
+    <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px;">
+      <button class="btn btn-secondary" onclick="closeFinModal()">Cancelar</button>
+      <button class="btn btn-primary" id="finSaveBtn" onclick="saveFin()">Salvar</button>
+    </div>
   </div>
 </div>
 
@@ -1250,7 +1520,8 @@
       calendario: 'Calendário',
       campanhas: 'Campanhas',
       checklist: 'Checklist',
-      roteiros: 'Roteiros'
+      roteiros: 'Roteiros',
+      financas: 'Finanças'
     };
 
     document.getElementById('pageTitle').textContent = titles[tab];
@@ -1268,6 +1539,7 @@
     else if (tab === 'campanhas') loadCampanhas();
     else if (tab === 'checklist') loadChecklist();
     else if (tab === 'roteiros') loadRoteiros();
+    else if (tab === 'financas') loadFinancas();
   }
 
   // ========================================================================
@@ -2812,6 +3084,594 @@
       const { error } = await supabase.from('roteiros').delete().eq('id', id);
       if (error) throw error;
       loadRoteiros();
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao apagar: ' + err.message);
+    }
+  }
+
+  // ========================================================================
+  // FINANÇAS
+  // ========================================================================
+  // Cada lançamento tem: ambito (empresa | pessoal), tipo (entrada | saida),
+  // status (confirmado | pendente). As duas "retiradas" (empresa -> pessoal)
+  // ficam fora da visão "Tudo junto", para não contar o mesmo dinheiro 2x.
+
+  let finCache = [];
+  let finAmbito = 'empresa';
+  let finVisao = 'mes';
+  let finMes = new Date().getMonth();
+  let finAno = new Date().getFullYear();
+  let finFiltro = 'todos';
+  let editingFinId = null;
+
+  const FIN_MESES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+  const FIN_MESES_CURTO = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+  const FIN_RETIRADA_EMPRESA = 'Retirada para o pessoal';
+  const FIN_RETIRADA_PESSOAL = 'Retirada da empresa';
+  const FIN_CATEGORIAS = {
+    empresa: {
+      entrada: ['Job UGC', 'Publi no perfil', 'Evento / cobertura', 'Afiliados / comissão', 'Outros'],
+      saida: ['Equipamento', 'Edição / freelancer', 'Impostos / DAS MEI', 'Contador', 'Ferramentas e assinaturas', 'Anúncios', 'Transporte de job', 'Produtos para gravação', FIN_RETIRADA_EMPRESA, 'Outros']
+    },
+    pessoal: {
+      entrada: [FIN_RETIRADA_PESSOAL, 'Salário', 'Reembolso / presente', 'Outros'],
+      saida: ['Moradia', 'Contas da casa', 'Mercado', 'Comer fora / delivery', 'Transporte', 'Saúde', 'Beleza e cuidados', 'Lazer', 'Compras', 'Assinaturas', 'Educação', 'Viagem', 'Reserva / investimento', 'Outros']
+    }
+  };
+
+  const ICON_CHECK = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><path d="M22 4 12 14l-3-3"/></svg>';
+
+  const finBRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+  function finFmt(v) { return finBRL.format(Number(v) || 0); }
+  function finCompacto(v) {
+    if (v >= 1000) return (v / 1000).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + ' mil';
+    return String(Math.round(v));
+  }
+  function finParseData(s) {
+    const [a, m, d] = String(s).split('-').map(Number);
+    return { a, m: m - 1, d };
+  }
+  function finDataBR(s) {
+    const p = finParseData(s);
+    return `${String(p.d).padStart(2, '0')}/${String(p.m + 1).padStart(2, '0')}/${p.a}`;
+  }
+  function finParseValor(s) {
+    let t = String(s || '').replace(/R\$|\s/g, '');
+    if (t.includes(',')) t = t.replace(/\./g, '').replace(',', '.');
+    const n = Number(t);
+    return isFinite(n) && t !== '' ? Math.round(n * 100) / 100 : NaN;
+  }
+  const FIN_RESUMO = 'Resumo (importado)';
+  // Conta como "job/entrada" na contagem do mês (resumos importados não contam)
+  function finConta(r) { return r.tipo === 'entrada' && r.categoria !== FIN_RESUMO; }
+  // NF só faz sentido para entradas da empresa
+  function finUsaNf(r) { return r.ambito === 'empresa' && r.tipo === 'entrada'; }
+  function finResumoNf(rows) {
+    const nfRows = rows.filter(finUsaNf);
+    const grupo = fn => ({ v: finSoma(nfRows, fn), n: nfRows.filter(fn).length });
+    return {
+      com: grupo(r => r.nf === 'emitida'),
+      sem: grupo(r => r.nf === 'nao_emitida'),
+      ni: grupo(r => r.nf !== 'emitida' && r.nf !== 'nao_emitida'),
+      total: finSoma(nfRows, () => true)
+    };
+  }
+  function finIsRetirada(r) {
+    return r.categoria === FIN_RETIRADA_EMPRESA || r.categoria === FIN_RETIRADA_PESSOAL;
+  }
+  function finDoAmbito() {
+    if (finAmbito === 'todos') return finCache.filter(r => !finIsRetirada(r));
+    return finCache.filter(r => r.ambito === finAmbito);
+  }
+  function finSoma(rows, fn) {
+    return rows.filter(fn).reduce((s, r) => s + (Number(r.valor) || 0), 0);
+  }
+
+  async function loadFinancas() {
+    const content = document.querySelector('.content');
+    try {
+      const { data, error } = await supabase
+        .from('financas')
+        .select('*')
+        .order('data', { ascending: false });
+      if (error) throw error;
+      finCache = data || [];
+
+      content.innerHTML = `
+        <div class="fin-top">
+          <div class="fin-seg" id="finAmbitoSeg"></div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <div class="fin-seg" id="finVisaoSeg"></div>
+            <button class="btn btn-primary" style="padding: 9px 14px;" onclick="openFinModal()">+ Novo registro</button>
+          </div>
+        </div>
+        <div id="finBody"></div>
+      `;
+      renderFin();
+    } catch (err) {
+      console.error(err);
+      const semTabela = err.code === '42P01' || err.code === 'PGRST205' || /financas/i.test(err.message || '');
+      content.innerHTML = semTabela
+        ? '<div class="error-message">A tabela de finanças ainda não foi criada no banco. Rode o arquivo <strong>criar-financas.sql</strong> no SQL Editor do Supabase e recarregue esta página.</div>'
+        : `<div class="error-message">Erro ao carregar finanças: ${escRot(err.message)}</div>`;
+    }
+  }
+
+  function setFinAmbito(a) { finAmbito = a; renderFin(); }
+  function setFinVisao(v) { finVisao = v; renderFin(); }
+  function setFinFiltro(f) { finFiltro = f; renderFin(); }
+  function setFinPeriodo() {
+    const m = document.getElementById('finMesSel');
+    if (m) finMes = Number(m.value);
+    finAno = Number(document.getElementById('finAnoSel').value);
+    renderFin();
+  }
+  function finMudaMes(delta) {
+    finMes += delta;
+    if (finMes < 0) { finMes = 11; finAno--; }
+    if (finMes > 11) { finMes = 0; finAno++; }
+    renderFin();
+  }
+  function finAbrirMes(i) {
+    finMes = i;
+    finVisao = 'mes';
+    renderFin();
+  }
+
+  function renderFin() {
+    const ambitos = [['empresa', 'Empresa'], ['pessoal', 'Pessoal'], ['todos', 'Tudo junto']];
+    document.getElementById('finAmbitoSeg').innerHTML = ambitos.map(([k, l]) =>
+      `<button type="button" class="${finAmbito === k ? 'active' : ''}" onclick="setFinAmbito('${k}')">${l}</button>`).join('');
+    const visoes = [['mes', 'Mês a mês'], ['ano', 'Visão do ano']];
+    document.getElementById('finVisaoSeg').innerHTML = visoes.map(([k, l]) =>
+      `<button type="button" class="${finVisao === k ? 'active' : ''}" onclick="setFinVisao('${k}')">${l}</button>`).join('');
+    if (finVisao === 'mes') renderFinMes();
+    else renderFinAno();
+  }
+
+  function finAnosDisponiveis() {
+    const anos = new Set([new Date().getFullYear(), finAno]);
+    finCache.forEach(r => anos.add(finParseData(r.data).a));
+    return [...anos].sort((a, b) => b - a);
+  }
+
+  function finSelectsPeriodo(comMes) {
+    const anos = `<select id="finAnoSel" onchange="setFinPeriodo()">${finAnosDisponiveis().map(a =>
+      `<option value="${a}" ${a === finAno ? 'selected' : ''}>${a}</option>`).join('')}</select>`;
+    if (!comMes) return anos;
+    const meses = `<select id="finMesSel" onchange="setFinPeriodo()">${FIN_MESES.map((m, i) =>
+      `<option value="${i}" ${i === finMes ? 'selected' : ''}>${m}</option>`).join('')}</select>`;
+    return `<button type="button" class="fin-seta" title="Mês anterior" aria-label="Mês anterior" onclick="finMudaMes(-1)">‹</button>
+      ${meses}${anos}
+      <button type="button" class="fin-seta" title="Próximo mês" aria-label="Próximo mês" onclick="finMudaMes(1)">›</button>`;
+  }
+
+  function finCard(label, valor, cor, sub) {
+    const negativo = valor < 0 ? ' neg' : '';
+    return `<div class="fin-card ${cor || ''}">
+      <div class="fin-card-label">${label}</div>
+      <div class="fin-card-value${negativo}">${typeof valor === 'number' ? finFmt(valor) : valor}</div>
+      ${sub ? `<div class="fin-card-sub">${sub}</div>` : ''}
+    </div>`;
+  }
+
+  // ---------------- Mês a mês ----------------
+  function renderFinMes() {
+    const body = document.getElementById('finBody');
+    const rows = finDoAmbito().filter(r => {
+      const p = finParseData(r.data);
+      return p.a === finAno && p.m === finMes;
+    });
+    const ent = r => r.tipo === 'entrada';
+    const sai = r => r.tipo === 'saida';
+    const pend = r => r.status === 'pendente';
+
+    const previsto = finSoma(rows, ent);
+    const recebido = finSoma(rows, r => ent(r) && !pend(r));
+    const aReceber = finSoma(rows, r => ent(r) && pend(r));
+    const gastos = finSoma(rows, sai);
+    const aPagar = finSoma(rows, r => sai(r) && pend(r));
+    const saldo = recebido - (gastos - aPagar);
+    const nEntradas = rows.filter(finConta).length;
+    const mostraNf = finAmbito !== 'pessoal';
+
+    const labelSaldo = finAmbito === 'empresa' ? 'Lucro líquido' : finAmbito === 'pessoal' ? 'Sobrou no mês' : 'Saldo do mês';
+    const labelRecebido = finAmbito === 'empresa' ? 'Recebido' : 'Entrou';
+    const contagem = finAmbito === 'empresa'
+      ? `${nEntradas} ${nEntradas === 1 ? 'job' : 'jobs'} no mês`
+      : `${nEntradas} ${nEntradas === 1 ? 'entrada' : 'entradas'}`;
+
+    // Gastos por categoria
+    const porCat = {};
+    rows.filter(sai).forEach(r => {
+      let c = r.categoria || 'Sem categoria';
+      if (finAmbito === 'todos') c += r.ambito === 'empresa' ? ' · Empresa' : ' · Pessoal';
+      porCat[c] = (porCat[c] || 0) + (Number(r.valor) || 0);
+    });
+    const cats = Object.entries(porCat).sort((a, b) => b[1] - a[1]);
+    const maxCat = cats.length ? cats[0][1] : 0;
+    const catHtml = cats.length
+      ? cats.map(([c, v]) => `
+          <div class="fin-cat">
+            <div class="fin-cat-top"><span>${escRot(c)}</span><span>${finFmt(v)}<small>${Math.round(v / gastos * 100)}%</small></span></div>
+            <div class="fin-cat-track"><div class="fin-cat-bar" style="width: ${(v / maxCat * 100).toFixed(1)}%"></div></div>
+          </div>`).join('')
+      : '<div class="empty-state" style="padding: 16px;">Nenhum gasto lançado neste mês.</div>';
+
+    // Lista
+    const filtros = [
+      ['todos', 'Todos', () => true],
+      ['entradas', 'Entradas', ent],
+      ['saidas', 'Saídas', sai],
+      ['pendentes', 'Pendentes', pend]
+    ];
+    if (mostraNf) filtros.push(['semnf', 'Sem NF', r => finUsaNf(r) && r.nf !== 'emitida']);
+    if (!filtros.some(f => f[0] === finFiltro)) finFiltro = 'todos';
+
+    // Notas fiscais do mês + acumulado do ano até este mês
+    let nfHtml = '';
+    if (mostraNf) {
+      const nf = finResumoNf(rows);
+      const doAnoAteAqui = finCache.filter(r => {
+        const p = finParseData(r.data);
+        return p.a === finAno && p.m <= finMes;
+      });
+      const nfAno = finResumoNf(doAnoAteAqui);
+      const pct = v => nf.total ? (v / nf.total * 100).toFixed(1) : 0;
+      const plural = (n, s) => `${n} ${n === 1 ? s : s + 's'}`;
+      nfHtml = `
+        <div class="fin-panel">
+          <div class="fin-panel-head"><h3>Notas fiscais</h3></div>
+          ${nf.total ? `
+            <div class="fin-nf-barra">
+              <div style="width: ${pct(nf.com.v)}%; background: var(--green);"></div>
+              <div style="width: ${pct(nf.sem.v)}%; background: var(--pink);"></div>
+              <div style="width: ${pct(nf.ni.v)}%; background: var(--detail);"></div>
+            </div>
+            <div class="fin-nf-linha"><span>Com NF emitida<small>${plural(nf.com.n, 'lançamento')}</small></span><strong style="color: var(--green-dark);">${finFmt(nf.com.v)}</strong></div>
+            <div class="fin-nf-linha"><span>Sem NF<small>${plural(nf.sem.n, 'lançamento')}</small></span><strong style="color: var(--pink-dark);">${finFmt(nf.sem.v)}</strong></div>
+            ${nf.ni.n ? `<div class="fin-nf-linha"><span>Não informado<small>${plural(nf.ni.n, 'lançamento')}</small></span><strong style="color: #8a847e;">${finFmt(nf.ni.v)}</strong></div>` : ''}
+          ` : '<div class="empty-state" style="padding: 12px;">Nenhuma entrada da empresa neste mês.</div>'}
+          <div style="margin-top: 12px; padding: 10px 12px; background: var(--paper); border-radius: 8px; font-size: 12px; line-height: 1.5;">
+            Emitido em NF em ${finAno} até ${FIN_MESES[finMes].toLowerCase()}:<br>
+            <strong style="font-size: 16px; color: var(--green-dark);">${finFmt(nfAno.com.v)}</strong>
+          </div>
+        </div>`;
+    }
+    const filtroFn = (filtros.find(f => f[0] === finFiltro) || filtros[0])[2];
+    const lista = rows.filter(filtroFn).sort((a, b) => String(b.data).localeCompare(String(a.data)));
+    const pendentes = lista.filter(pend);
+    const confirmados = lista.filter(r => !pend(r));
+
+    let listaHtml;
+    if (!rows.length) {
+      listaHtml = `<div class="empty-state">Nada lançado em ${FIN_MESES[finMes].toLowerCase()} de ${finAno}.<br>Clique em “+ Novo registro” para começar.</div>`;
+    } else if (!lista.length) {
+      listaHtml = '<div class="empty-state">Nenhum lançamento neste filtro.</div>';
+    } else {
+      listaHtml = '';
+      if (pendentes.length) listaHtml += `<div class="fin-grupo pend">Pendentes (${pendentes.length})</div>` + pendentes.map(finRowHtml).join('');
+      if (confirmados.length) listaHtml += `<div class="fin-grupo">Confirmados (${confirmados.length})</div>` + confirmados.map(finRowHtml).join('');
+    }
+
+    body.innerHTML = `
+      <div class="fin-periodo">${finSelectsPeriodo(true)}</div>
+      <div class="fin-cards">
+        ${finCard('Previsto', previsto, '', contagem)}
+        ${finCard(labelRecebido, recebido, 'c-green')}
+        ${finCard(finAmbito === 'empresa' ? 'A receber' : 'Ainda vai entrar', aReceber, 'c-amber')}
+        ${finCard(finAmbito === 'empresa' ? 'Despesas' : 'Gastos', gastos, 'c-red', aPagar > 0 ? `${finFmt(aPagar)} ainda a pagar` : '')}
+        ${finCard(labelSaldo, saldo, 'c-green', 'só o que já entrou e já foi pago')}
+      </div>
+      <div class="fin-grid">
+        <div class="fin-panel">
+          <div class="fin-panel-head">
+            <h3>Lançamentos</h3>
+            <div class="fin-chips">${filtros.map(([k, l]) =>
+              `<button type="button" class="fin-chip ${finFiltro === k ? 'active' : ''}" onclick="setFinFiltro('${k}')">${l}</button>`).join('')}</div>
+          </div>
+          ${listaHtml}
+        </div>
+        <div style="min-width: 0;">
+          ${nfHtml}
+          <div class="fin-panel">
+            <div class="fin-panel-head"><h3>Para onde foi o dinheiro</h3></div>
+            ${catHtml}
+            ${finAmbito === 'todos' ? '<p style="font-size: 11px; color: #9a948e; margin-top: 8px; line-height: 1.5;">Em “Tudo junto”, as retiradas da empresa para o pessoal não entram na conta, para o mesmo dinheiro não ser contado duas vezes.</p>' : ''}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function finRowHtml(r) {
+    const entrada = r.tipo === 'entrada';
+    const pend = r.status === 'pendente';
+    const pill = pend ? (entrada ? 'A receber' : 'A pagar') : (entrada ? 'Recebido' : 'Pago');
+    const tagAmbito = finAmbito === 'todos' ? `<span class="fin-tag">${r.ambito === 'empresa' ? 'Empresa' : 'Pessoal'}</span>` : '';
+    const tagCat = r.categoria ? `<span class="fin-tag">${escRot(r.categoria)}</span>` : '';
+    let tagNf = '';
+    if (finUsaNf(r) && r.nf === 'emitida') tagNf = `<span class="fin-tag nf-ok">NF${r.nf_numero ? ' ' + escRot(r.nf_numero) : ''} ✓</span>`;
+    else if (finUsaNf(r) && r.nf === 'nao_emitida') tagNf = '<span class="fin-tag nf-no">Sem NF</span>';
+    const tituloCheck = pend ? `Marcar como ${entrada ? 'recebido' : 'pago'}` : 'Voltar para pendente';
+    return `
+      <div class="fin-row ${pend ? 'pend' : 'ok'} ${entrada ? 'in' : 'out'}">
+        <div class="fin-row-main" onclick="openFinModal(${r.id})">
+          <div class="fin-row-title">${tagAmbito}${tagCat}<span>${escRot(r.descricao)}</span></div>
+          <div class="fin-row-meta"><span class="fin-pill ${pend ? 'pend' : 'ok'}">${pill}</span><span>${finDataBR(r.data)}</span>${tagNf}</div>
+        </div>
+        <div class="fin-valor ${entrada ? 'in' : 'out'}">${entrada ? '+' : '−'}${finFmt(r.valor)}</div>
+        <div class="fin-acoes">
+          <button type="button" title="${tituloCheck}" aria-label="${tituloCheck}" style="color: ${pend ? 'var(--detail)' : 'var(--green)'};" onclick="toggleFinStatus(${r.id})">${ICON_CHECK}</button>
+          <button type="button" title="Editar" aria-label="Editar" onclick="openFinModal(${r.id})">${ICON_EDIT}</button>
+          <button type="button" title="Apagar" aria-label="Apagar" style="color: var(--pink-dark);" onclick="deleteFin(${r.id})">${ICON_TRASH}</button>
+        </div>
+      </div>`;
+  }
+
+  // ---------------- Visão do ano ----------------
+  function renderFinAno() {
+    const body = document.getElementById('finBody');
+    const rows = finDoAmbito().filter(r => finParseData(r.data).a === finAno);
+    const meses = FIN_MESES_CURTO.map((nome, i) => {
+      const doMes = rows.filter(r => finParseData(r.data).m === i);
+      // "Entrou" = só o que já foi recebido (igual à plataforma); pendente fica à parte
+      const entrou = finSoma(doMes, r => r.tipo === 'entrada' && r.status !== 'pendente');
+      const saiu = finSoma(doMes, r => r.tipo === 'saida');
+      return {
+        i, nome, entrou, saiu,
+        saldo: entrou - saiu,
+        n: doMes.filter(finConta).length,
+        comNf: finResumoNf(doMes).com.v,
+        pendente: finSoma(doMes, r => r.tipo === 'entrada' && r.status === 'pendente'),
+        temDados: doMes.length > 0
+      };
+    });
+
+    const totalEntrou = meses.reduce((s, m) => s + m.entrou, 0);
+    const totalSaiu = meses.reduce((s, m) => s + m.saiu, 0);
+    const totalN = meses.reduce((s, m) => s + m.n, 0);
+    const totalNf = meses.reduce((s, m) => s + m.comNf, 0);
+    const mostraNf = finAmbito !== 'pessoal';
+    const comDados = meses.filter(m => m.temDados);
+    const media = comDados.length ? totalEntrou / comDados.length : 0;
+    const melhor = comDados.length ? comDados.reduce((a, b) => (b.entrou > a.entrou ? b : a)) : null;
+    const labelN = finAmbito === 'empresa' ? 'Jobs' : 'Entradas';
+
+    body.innerHTML = `
+      <div class="fin-periodo">${finSelectsPeriodo(false)}</div>
+      <div class="fin-cards">
+        ${finCard('Recebido no ano', totalEntrou, 'c-green', `${totalN} ${labelN.toLowerCase()}`)}
+        ${finCard('A receber', meses.reduce((s, m) => s + m.pendente, 0), 'c-amber')}
+        ${finCard('Saiu no ano', totalSaiu, 'c-red')}
+        ${finCard(finAmbito === 'empresa' ? 'Lucro do ano' : 'Saldo do ano', totalEntrou - totalSaiu, '')}
+        ${finCard('Média de entrada por mês', media, '', comDados.length ? `média de ${comDados.length} ${comDados.length === 1 ? 'mês' : 'meses'} com lançamentos` : '')}
+        ${finCard('Melhor mês', melhor ? FIN_MESES[melhor.i] : '—', 'c-amber', melhor ? finFmt(melhor.entrou) : '')}
+        ${mostraNf ? finCard('Emitido em NF no ano', totalNf, 'c-green', totalEntrou ? `${Math.round(totalNf / totalEntrou * 100)}% do que entrou` : '') : ''}
+      </div>
+      <div class="fin-panel">
+        <div class="fin-panel-head">
+          <h3>Entradas e saídas por mês</h3>
+          <div class="fin-legenda">
+            <span><i style="background: var(--green);"></i>Recebido</span>
+            <span><i style="background: var(--pink);"></i>Saiu</span>
+          </div>
+        </div>
+        <div class="fin-chart">${rows.length ? finGraficoSvg(meses) : `<div class="empty-state">Nenhum lançamento em ${finAno}.</div>`}</div>
+      </div>
+      <div class="fin-panel">
+        <div class="fin-panel-head"><h3>Resumo mês a mês</h3><span style="font-size: 12px; color: #9a948e;">Clique em um mês para ver os lançamentos</span></div>
+        <div class="fin-scroll">
+          <table class="fin-tabela">
+            <thead><tr><th>Mês</th><th class="num">${labelN}</th><th class="num">Recebido</th><th class="num">A receber</th>${mostraNf ? '<th class="num">Com NF</th>' : ''}<th class="num">Saiu</th><th class="num">Saldo</th></tr></thead>
+            <tbody>
+              ${meses.map(m => `
+                <tr onclick="finAbrirMes(${m.i})" style="${m.temDados ? '' : 'color: #b9b4ae;'}">
+                  <td>${FIN_MESES[m.i]}</td>
+                  <td class="num">${m.n}</td>
+                  <td class="num" style="color: #3f8a5c;">${finFmt(m.entrou)}</td>
+                  <td class="num" style="color: #b07a1c;">${finFmt(m.pendente)}</td>
+                  ${mostraNf ? `<td class="num">${finFmt(m.comNf)}</td>` : ''}
+                  <td class="num" style="color: var(--pink-dark);">${finFmt(m.saiu)}</td>
+                  <td class="num" style="font-weight: 600; ${m.saldo < 0 ? 'color: var(--pink-dark);' : ''}">${finFmt(m.saldo)}</td>
+                </tr>`).join('')}
+            </tbody>
+            <tfoot><tr>
+              <td>Total</td><td class="num">${totalN}</td><td class="num">${finFmt(totalEntrou)}</td><td class="num">${finFmt(meses.reduce((s, m) => s + m.pendente, 0))}</td>${mostraNf ? `<td class="num">${finFmt(totalNf)}</td>` : ''}<td class="num">${finFmt(totalSaiu)}</td><td class="num">${finFmt(totalEntrou - totalSaiu)}</td>
+            </tr></tfoot>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  function finGraficoSvg(meses) {
+    const W = 760, H = 280, padL = 58, padR = 10, padT = 14, padB = 46;
+    const maxBruto = Math.max(...meses.map(m => Math.max(m.entrou, m.saiu)), 0);
+    const max = (function (v) {
+      if (v <= 0) return 1000;
+      const p = Math.pow(10, Math.floor(Math.log10(v)));
+      const n = v / p;
+      return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10) * p;
+    })(maxBruto);
+    const ih = H - padT - padB;
+    const gw = (W - padL - padR) / 12;
+    const bw = Math.min(gw * 0.32, 22);
+    const y = v => padT + ih - (v / max) * ih;
+    const labelN = finAmbito === 'empresa' ? 'job' : 'entr.';
+
+    let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Gráfico de entradas e saídas por mês em ${finAno}">`;
+    for (let k = 0; k <= 4; k++) {
+      const v = max * k / 4;
+      const yy = y(v);
+      svg += `<line x1="${padL}" x2="${W - padR}" y1="${yy}" y2="${yy}" stroke="#ece8e3" stroke-width="1"/>`;
+      svg += `<text x="${padL - 8}" y="${yy + 4}" text-anchor="end" font-size="11" fill="#9a948e">${k === 0 ? '0' : 'R$ ' + finCompacto(v)}</text>`;
+    }
+    meses.forEach(m => {
+      const cx = padL + gw * m.i + gw / 2;
+      const hE = Math.max(0, padT + ih - y(m.entrou));
+      const hS = Math.max(0, padT + ih - y(m.saiu));
+      svg += `<g style="cursor: pointer;" onclick="finAbrirMes(${m.i})">`;
+      svg += `<rect x="${cx - gw / 2}" y="${padT}" width="${gw}" height="${ih}" fill="transparent"/>`;
+      if (hE > 0) svg += `<rect x="${cx - bw - 1}" y="${y(m.entrou)}" width="${bw}" height="${hE}" rx="3" fill="var(--green)"><title>${FIN_MESES[m.i]}: recebido ${finFmt(m.entrou)}</title></rect>`;
+      if (hS > 0) svg += `<rect x="${cx + 1}" y="${y(m.saiu)}" width="${bw}" height="${hS}" rx="3" fill="var(--pink)"><title>${FIN_MESES[m.i]}: saiu ${finFmt(m.saiu)}</title></rect>`;
+      svg += `<text x="${cx}" y="${H - padB + 18}" text-anchor="middle" font-size="12" fill="#4a4540">${m.nome}</text>`;
+      if (m.n > 0) svg += `<text x="${cx}" y="${H - padB + 34}" text-anchor="middle" font-size="10" fill="#9a948e">${m.n} ${labelN}${m.n > 1 && labelN === 'job' ? 's' : ''}</text>`;
+      svg += `</g>`;
+    });
+    svg += `<line x1="${padL}" x2="${W - padR}" y1="${padT + ih}" y2="${padT + ih}" stroke="#c4c2bd" stroke-width="1"/>`;
+    return svg + '</svg>';
+  }
+
+  // ---------------- Modal ----------------
+  function finAtualizaCategorias() {
+    const amb = document.getElementById('finAmbitoInput').value;
+    const tipo = document.getElementById('finTipoInput').value;
+    document.getElementById('finCategoriasList').innerHTML =
+      FIN_CATEGORIAS[amb][tipo].map(c => `<option value="${escRot(c)}">`).join('');
+    document.getElementById('finNfWrap').style.display = (amb === 'empresa' && tipo === 'entrada') ? 'block' : 'none';
+    finAtualizaNf();
+    finAtualizaEspelho();
+  }
+
+  function finAtualizaNf() {
+    const visivel = document.getElementById('finNfWrap').style.display !== 'none';
+    const emitida = document.getElementById('finNfInput').value === 'emitida';
+    document.getElementById('finNfNumeroWrap').style.display = visivel && emitida ? 'block' : 'none';
+  }
+
+  function finAtualizaEspelho() {
+    const mostrar = !editingFinId
+      && document.getElementById('finAmbitoInput').value === 'empresa'
+      && document.getElementById('finTipoInput').value === 'saida'
+      && document.getElementById('finCategoriaInput').value.trim() === FIN_RETIRADA_EMPRESA;
+    document.getElementById('finEspelhoWrap').style.display = mostrar ? 'block' : 'none';
+  }
+
+  function openFinModal(id) {
+    editingFinId = id || null;
+    const r = editingFinId ? finCache.find(x => x.id === editingFinId) : null;
+    const ambitoPadrao = finAmbito === 'todos' ? 'empresa' : finAmbito;
+
+    let dataPadrao;
+    const hoje = new Date();
+    if (hoje.getFullYear() === finAno && hoje.getMonth() === finMes) {
+      dataPadrao = `${finAno}-${String(finMes + 1).padStart(2, '0')}-${String(hoje.getDate()).padStart(2, '0')}`;
+    } else {
+      dataPadrao = `${finAno}-${String(finMes + 1).padStart(2, '0')}-01`;
+    }
+
+    document.getElementById('finModalTitle').textContent = r ? 'Editar registro' : 'Novo registro';
+    document.getElementById('finModalError').style.display = 'none';
+    document.getElementById('finAmbitoInput').value = r?.ambito || ambitoPadrao;
+    document.getElementById('finTipoInput').value = r?.tipo || (ambitoPadrao === 'empresa' ? 'entrada' : 'saida');
+    document.getElementById('finDescricaoInput').value = r?.descricao || '';
+    document.getElementById('finValorInput').value = r ? Number(r.valor).toFixed(2).replace('.', ',') : '';
+    document.getElementById('finDataInput').value = r?.data || dataPadrao;
+    document.getElementById('finCategoriaInput').value = r?.categoria || '';
+    document.getElementById('finStatusInput').value = r?.status || 'confirmado';
+    document.getElementById('finObsInput').value = r?.obs || '';
+    document.getElementById('finNfInput').value = r ? (r.nf || '') : 'emitida';
+    document.getElementById('finNfNumeroInput').value = r?.nf_numero || '';
+    document.getElementById('finEspelhoInput').checked = true;
+    finAtualizaCategorias();
+    document.getElementById('finModal').classList.add('show');
+    setTimeout(() => document.getElementById('finDescricaoInput').focus(), 50);
+  }
+
+  function closeFinModal() {
+    document.getElementById('finModal').classList.remove('show');
+  }
+
+  async function saveFin() {
+    const errBox = document.getElementById('finModalError');
+    const mostrarErro = msg => { errBox.textContent = msg; errBox.style.display = 'block'; };
+
+    const descricao = document.getElementById('finDescricaoInput').value.trim();
+    const valor = finParseValor(document.getElementById('finValorInput').value);
+    const data = document.getElementById('finDataInput').value;
+    if (!descricao) return mostrarErro('Escreva uma descrição.');
+    if (!(valor > 0)) return mostrarErro('Informe um valor maior que zero (ex: 1.200,00).');
+    if (!data) return mostrarErro('Escolha a data.');
+
+    const payload = {
+      ambito: document.getElementById('finAmbitoInput').value,
+      tipo: document.getElementById('finTipoInput').value,
+      descricao,
+      valor,
+      data,
+      categoria: document.getElementById('finCategoriaInput').value.trim() || null,
+      status: document.getElementById('finStatusInput').value,
+      obs: document.getElementById('finObsInput').value.trim() || null,
+      nf: null,
+      nf_numero: null,
+      atualizado_em: new Date().toISOString()
+    };
+    if (finUsaNf(payload)) {
+      payload.nf = document.getElementById('finNfInput').value || null;
+      if (payload.nf === 'emitida') payload.nf_numero = document.getElementById('finNfNumeroInput').value.trim() || null;
+    }
+
+    const btn = document.getElementById('finSaveBtn');
+    btn.disabled = true;
+    btn.textContent = 'Salvando...';
+
+    try {
+      let error;
+      if (editingFinId) {
+        ({ error } = await supabase.from('financas').update(payload).eq('id', editingFinId));
+      } else {
+        const linhas = [payload];
+        const espelho = document.getElementById('finEspelhoWrap').style.display !== 'none'
+          && document.getElementById('finEspelhoInput').checked;
+        if (espelho) {
+          linhas.push({ ...payload, ambito: 'pessoal', tipo: 'entrada', categoria: FIN_RETIRADA_PESSOAL });
+        }
+        ({ error } = await supabase.from('financas').insert(linhas));
+      }
+      if (error) throw error;
+
+      const p = finParseData(data);
+      finAno = p.a;
+      finMes = p.m;
+      closeFinModal();
+      loadFinancas();
+    } catch (err) {
+      console.error(err);
+      mostrarErro('Erro ao salvar: ' + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Salvar';
+    }
+  }
+
+  async function toggleFinStatus(id) {
+    const r = finCache.find(x => x.id === id);
+    if (!r) return;
+    const novo = r.status === 'pendente' ? 'confirmado' : 'pendente';
+    try {
+      const { error } = await supabase.from('financas')
+        .update({ status: novo, atualizado_em: new Date().toISOString() })
+        .eq('id', id);
+      if (error) throw error;
+      r.status = novo;
+      renderFin();
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao atualizar: ' + err.message);
+    }
+  }
+
+  async function deleteFin(id) {
+    const r = finCache.find(x => x.id === id);
+    if (!r) return;
+    if (!confirm(`Apagar "${r.descricao}" (${finFmt(r.valor)})? Não dá para desfazer.`)) return;
+    try {
+      const { error } = await supabase.from('financas').delete().eq('id', id);
+      if (error) throw error;
+      finCache = finCache.filter(x => x.id !== id);
+      renderFin();
     } catch (err) {
       console.error(err);
       alert('Erro ao apagar: ' + err.message);
