@@ -610,6 +610,9 @@
     }
     .fin-panel-head h3 { font-size: 16px; }
     .fin-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .camp-etapas { align-items: center; margin: -4px 0 14px; }
+    .camp-etapas .camp-etapas-label { font-size: 12px; color: #77716b; margin-right: 2px; }
+    .fin-chip .n { opacity: 0.6; margin-left: 3px; }
     .fin-chip {
       border: 1px solid var(--detail);
       background: white;
@@ -3019,6 +3022,7 @@
             <input type="text" id="campBusca" placeholder="Buscar campanha ou marca..." oninput="renderCampanhas()" style="max-width: 280px;">
             <div class="fin-chips" id="campFiltros"></div>
           </div>
+          <div class="fin-chips camp-etapas" id="campEtapas"></div>
           <div id="campLista"></div>
         </div>
       `;
@@ -3120,10 +3124,19 @@
     document.getElementById('campFiltros').innerHTML = filtros.map(([k, l]) =>
       `<button type="button" class="fin-chip ${campFiltro === k ? 'active' : ''}" onclick="setCampFiltro('${k}')">${l}</button>`).join('');
 
+    // uma pílula por etapa, com quantos jobs estão nela (todos os meses)
+    const etapas = CAMP_STATUS.map(st => ['etapa:' + st, st, x => x.c.status === st]);
+    filtros.push(...etapas);
+    document.getElementById('campEtapas').innerHTML = '<span class="camp-etapas-label">Etapa:</span>' + etapas.map(([k, l, f]) => {
+      const n = resumos.filter(f).length;
+      return `<button type="button" class="fin-chip ${campFiltro === k ? 'active' : ''}" onclick="setCampFiltro('${k}')">${l}<span class="n">${n}</span></button>`;
+    }).join('');
+
     const q = (document.getElementById('campBusca').value || '').trim().toLowerCase();
     const fn = (filtros.find(f => f[0] === campFiltro) || filtros[0])[2];
     // "A receber", "Atrasadas" e "Não batem" mostram todos os meses, como os cards
-    const ignoraMes = ['receber', 'atrasadas', 'naobatem'].includes(campFiltro);
+    // as etapas também: o que está em produção importa, seja de qual mês for
+    const ignoraMes = ['receber', 'atrasadas', 'naobatem'].includes(campFiltro) || campFiltro.startsWith('etapa:');
     const lista = resumos.filter(x => ignoraMes || campNoMes(x.c)).filter(fn).filter(x => !q || [x.c.campanha, x.c.cliente].some(t => (t || '').toLowerCase().includes(q)));
 
     if (!campCache.length) {
