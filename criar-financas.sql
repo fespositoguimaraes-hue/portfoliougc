@@ -33,6 +33,10 @@ create table if not exists financas (
 alter table financas add column if not exists nf text check (nf in ('emitida', 'nao_emitida'));
 alter table financas add column if not exists nf_numero text;
 
+-- Data em que o trabalho foi FECHADO (só entradas da empresa).
+-- A coluna "data" continua sendo a data do pagamento (previsto ou recebido).
+alter table financas add column if not exists data_fechamento date;
+
 create index if not exists financas_data_idx on financas (data);
 
 alter table financas enable row level security;

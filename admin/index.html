@@ -673,6 +673,13 @@
     .fin-nf-linha { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; padding: 8px 0; border-bottom: 1px solid var(--gray-light); }
     .fin-nf-linha:last-of-type { border-bottom: none; }
     .fin-nf-linha small { color: #9a948e; margin-left: 4px; }
+    .fin-prazos { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; margin-top: 6px; font-size: 11px; color: #8a847e; }
+    .fin-prazos button { border: 1px solid var(--detail); background: white; border-radius: 12px; padding: 2px 8px; font-size: 11px; font-family: inherit; cursor: pointer; color: var(--ink); }
+    .fin-prazos button:hover { border-color: var(--green); color: var(--green-dark); }
+    .fin-receber-linha { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; padding: 8px 0; border-bottom: 1px solid var(--gray-light); cursor: pointer; }
+    .fin-receber-linha:hover { color: var(--green-dark); }
+    .fin-receber-linha small { color: #9a948e; margin-left: 4px; }
+    .fin-receber-linha.atrasado span:first-child { color: var(--pink-dark); }
     .fin-nf-barra { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--paper); margin: 4px 0 10px; }
     .fin-cat { margin-bottom: 12px; }
     .fin-cat-top { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; margin-bottom: 5px; }
@@ -1164,9 +1171,20 @@
         <label for="finValorInput">Valor (R$)</label>
         <input type="text" id="finValorInput" inputmode="decimal" placeholder="1.200,00">
       </div>
-      <div class="form-group">
-        <label for="finDataInput">Data</label>
+      <div class="form-group" id="finFechWrap">
+        <label for="finFechInput">Fechado em</label>
+        <input type="date" id="finFechInput">
+      </div>
+      <div class="form-group" id="finDataWrap">
+        <label for="finDataInput" id="finDataLabel">Data</label>
         <input type="date" id="finDataInput">
+        <div id="finPrazos" class="fin-prazos">
+          <span>Prazo:</span>
+          <button type="button" onclick="finPrazo(0)">à vista</button>
+          <button type="button" onclick="finPrazo(30)">30 dias</button>
+          <button type="button" onclick="finPrazo(60)">60 dias</button>
+          <button type="button" onclick="finPrazo(90)">90 dias</button>
+        </div>
       </div>
       <div class="form-group">
         <label for="finCategoriaInput">Categoria</label>
@@ -3157,6 +3175,14 @@
       total: finSoma(nfRows, () => true)
     };
   }
+  // Data em que o trabalho foi fechado (só entradas da empresa que não são resumo)
+  function finFechamento(r) {
+    return finUsaNf(r) && r.categoria !== FIN_RESUMO && r.data_fechamento ? r.data_fechamento : null;
+  }
+  function finDataCurta(s) {
+    const p = finParseData(s);
+    return `${String(p.d).padStart(2, '0')}/${String(p.m + 1).padStart(2, '0')}/${String(p.a).slice(2)}`;
+  }
   function finIsRetirada(r) {
     return r.categoria === FIN_RETIRADA_EMPRESA || r.categoria === FIN_RETIRADA_PESSOAL;
   }
@@ -3211,6 +3237,13 @@
     finMes += delta;
     if (finMes < 0) { finMes = 11; finAno--; }
     if (finMes > 11) { finMes = 0; finAno++; }
+    renderFin();
+  }
+  function finIrPara(a, m) {
+    finAno = a;
+    finMes = m;
+    finVisao = 'mes';
+    finFiltro = 'pendentes';
     renderFin();
   }
   function finAbrirMes(i) {
@@ -3276,6 +3309,43 @@
     const nEntradas = rows.filter(finConta).length;
     const mostraNf = finAmbito !== 'pessoal';
 
+    // Fechados no mês (pela data de fechamento, não importa quando vai cair)
+    const fechadosMes = finDoAmbito().filter(r => {
+      const f = finFechamento(r);
+      if (!f) return false;
+      const p = finParseData(f);
+      return p.a === finAno && p.m === finMes;
+    });
+    const fechadoV = finSoma(fechadosMes, () => true);
+    const fechadoN = fechadosMes.length;
+
+    // A receber de todos os meses, agrupado pelo mês do pagamento
+    const hojeD = new Date();
+    const chaveHoje = hojeD.getFullYear() * 12 + hojeD.getMonth();
+    const pendTodos = finDoAmbito().filter(r => r.tipo === 'entrada' && r.status === 'pendente');
+    const porMesPag = {};
+    pendTodos.forEach(r => {
+      const p = finParseData(r.data);
+      const k = p.a * 12 + p.m;
+      porMesPag[k] = porMesPag[k] || { a: p.a, m: p.m, v: 0, n: 0 };
+      porMesPag[k].v += Number(r.valor) || 0;
+      porMesPag[k].n++;
+    });
+    const totalReceber = finSoma(pendTodos, () => true);
+    const receberHtml = pendTodos.length ? `
+      <div class="fin-panel">
+        <div class="fin-panel-head"><h3>A receber</h3><strong style="color: #b07a1c;">${finFmt(totalReceber)}</strong></div>
+        ${Object.keys(porMesPag).map(Number).sort((a, b) => a - b).map(k => {
+          const g = porMesPag[k];
+          const atrasado = k < chaveHoje;
+          return `<div class="fin-receber-linha ${atrasado ? 'atrasado' : ''}" onclick="finIrPara(${g.a}, ${g.m})">
+            <span>${FIN_MESES[g.m]} ${g.a}<small>${atrasado ? 'atrasado · ' : ''}${g.n} ${g.n === 1 ? 'lançamento' : 'lançamentos'}</small></span>
+            <strong>${finFmt(g.v)}</strong>
+          </div>`;
+        }).join('')}
+        <p style="font-size: 11px; color: #9a948e; margin-top: 8px; line-height: 1.5;">Pela data prevista de pagamento. Clique num mês para ver os lançamentos.</p>
+      </div>` : '';
+
     const labelSaldo = finAmbito === 'empresa' ? 'Lucro líquido' : finAmbito === 'pessoal' ? 'Sobrou no mês' : 'Saldo do mês';
     const labelRecebido = finAmbito === 'empresa' ? 'Recebido' : 'Entrou';
     const contagem = finAmbito === 'empresa'
@@ -3306,6 +3376,7 @@
       ['saidas', 'Saídas', sai],
       ['pendentes', 'Pendentes', pend]
     ];
+    if (mostraNf) filtros.push(['fechados', 'Fechados no mês', null]);
     if (mostraNf) filtros.push(['semnf', 'Sem NF', r => finUsaNf(r) && r.nf !== 'emitida']);
     if (!filtros.some(f => f[0] === finFiltro)) finFiltro = 'todos';
 
@@ -3340,12 +3411,15 @@
         </div>`;
     }
     const filtroFn = (filtros.find(f => f[0] === finFiltro) || filtros[0])[2];
-    const lista = rows.filter(filtroFn).sort((a, b) => String(b.data).localeCompare(String(a.data)));
+    const lista = (finFiltro === 'fechados' ? fechadosMes : rows.filter(filtroFn))
+      .sort((a, b) => String(b.data).localeCompare(String(a.data)));
     const pendentes = lista.filter(pend);
     const confirmados = lista.filter(r => !pend(r));
 
     let listaHtml;
-    if (!rows.length) {
+    if (finFiltro === 'fechados' && !lista.length) {
+      listaHtml = '<div class="empty-state">Nenhum trabalho com data de fechamento neste mês.<br>Ao lançar um job, preencha “Fechado em”.</div>';
+    } else if (!rows.length && finFiltro !== 'fechados') {
       listaHtml = `<div class="empty-state">Nada lançado em ${FIN_MESES[finMes].toLowerCase()} de ${finAno}.<br>Clique em “+ Novo registro” para começar.</div>`;
     } else if (!lista.length) {
       listaHtml = '<div class="empty-state">Nenhum lançamento neste filtro.</div>';
@@ -3358,6 +3432,7 @@
     body.innerHTML = `
       <div class="fin-periodo">${finSelectsPeriodo(true)}</div>
       <div class="fin-cards">
+        ${mostraNf ? finCard('Fechado no mês', fechadoV, '', `${fechadoN} ${fechadoN === 1 ? 'job fechado' : 'jobs fechados'} · recebe quando cair`) : ''}
         ${finCard('Previsto', previsto, '', contagem)}
         ${finCard(labelRecebido, recebido, 'c-green')}
         ${finCard(finAmbito === 'empresa' ? 'A receber' : 'Ainda vai entrar', aReceber, 'c-amber')}
@@ -3374,6 +3449,7 @@
           ${listaHtml}
         </div>
         <div style="min-width: 0;">
+          ${receberHtml}
           ${nfHtml}
           <div class="fin-panel">
             <div class="fin-panel-head"><h3>Para onde foi o dinheiro</h3></div>
@@ -3399,7 +3475,7 @@
       <div class="fin-row ${pend ? 'pend' : 'ok'} ${entrada ? 'in' : 'out'}">
         <div class="fin-row-main" onclick="openFinModal(${r.id})">
           <div class="fin-row-title">${tagAmbito}${tagCat}<span>${escRot(r.descricao)}</span></div>
-          <div class="fin-row-meta"><span class="fin-pill ${pend ? 'pend' : 'ok'}">${pill}</span><span>${finDataBR(r.data)}</span>${tagNf}</div>
+          <div class="fin-row-meta"><span class="fin-pill ${pend ? 'pend' : 'ok'}">${pill}</span><span>${finFechamento(r) ? `fechado ${finDataCurta(finFechamento(r))} · pgto ${finDataCurta(r.data)}` : finDataBR(r.data)}</span>${tagNf}</div>
         </div>
         <div class="fin-valor ${entrada ? 'in' : 'out'}">${entrada ? '+' : '−'}${finFmt(r.valor)}</div>
         <div class="fin-acoes">
@@ -3414,8 +3490,10 @@
   function renderFinAno() {
     const body = document.getElementById('finBody');
     const rows = finDoAmbito().filter(r => finParseData(r.data).a === finAno);
+    const fechadosAno = finDoAmbito().filter(r => finFechamento(r) && finParseData(finFechamento(r)).a === finAno);
     const meses = FIN_MESES_CURTO.map((nome, i) => {
       const doMes = rows.filter(r => finParseData(r.data).m === i);
+      const fechDoMes = fechadosAno.filter(r => finParseData(finFechamento(r)).m === i);
       // "Entrou" = só o que já foi recebido (igual à plataforma); pendente fica à parte
       const entrou = finSoma(doMes, r => r.tipo === 'entrada' && r.status !== 'pendente');
       const saiu = finSoma(doMes, r => r.tipo === 'saida');
@@ -3424,8 +3502,10 @@
         saldo: entrou - saiu,
         n: doMes.filter(finConta).length,
         comNf: finResumoNf(doMes).com.v,
+        fechado: finSoma(fechDoMes, () => true),
+        nFechado: fechDoMes.length,
         pendente: finSoma(doMes, r => r.tipo === 'entrada' && r.status === 'pendente'),
-        temDados: doMes.length > 0
+        temDados: doMes.length > 0 || fechDoMes.length > 0
       };
     });
 
@@ -3433,6 +3513,8 @@
     const totalSaiu = meses.reduce((s, m) => s + m.saiu, 0);
     const totalN = meses.reduce((s, m) => s + m.n, 0);
     const totalNf = meses.reduce((s, m) => s + m.comNf, 0);
+    const totalFechado = meses.reduce((s, m) => s + m.fechado, 0);
+    const totalNFechado = meses.reduce((s, m) => s + m.nFechado, 0);
     const mostraNf = finAmbito !== 'pessoal';
     const comDados = meses.filter(m => m.temDados);
     const media = comDados.length ? totalEntrou / comDados.length : 0;
@@ -3442,6 +3524,7 @@
     body.innerHTML = `
       <div class="fin-periodo">${finSelectsPeriodo(false)}</div>
       <div class="fin-cards">
+        ${mostraNf ? finCard('Fechado no ano', totalFechado, '', `${totalNFechado} ${totalNFechado === 1 ? 'job' : 'jobs'} com data de fechamento`) : ''}
         ${finCard('Recebido no ano', totalEntrou, 'c-green', `${totalN} ${labelN.toLowerCase()}`)}
         ${finCard('A receber', meses.reduce((s, m) => s + m.pendente, 0), 'c-amber')}
         ${finCard('Saiu no ano', totalSaiu, 'c-red')}
@@ -3454,21 +3537,23 @@
         <div class="fin-panel-head">
           <h3>Entradas e saídas por mês</h3>
           <div class="fin-legenda">
+            ${mostraNf ? '<span><i style="background: #e2b25c;"></i>Fechado</span>' : ''}
             <span><i style="background: var(--green);"></i>Recebido</span>
             <span><i style="background: var(--pink);"></i>Saiu</span>
           </div>
         </div>
-        <div class="fin-chart">${rows.length ? finGraficoSvg(meses) : `<div class="empty-state">Nenhum lançamento em ${finAno}.</div>`}</div>
+        <div class="fin-chart">${rows.length || fechadosAno.length ? finGraficoSvg(meses, mostraNf) : `<div class="empty-state">Nenhum lançamento em ${finAno}.</div>`}</div>
       </div>
       <div class="fin-panel">
         <div class="fin-panel-head"><h3>Resumo mês a mês</h3><span style="font-size: 12px; color: #9a948e;">Clique em um mês para ver os lançamentos</span></div>
         <div class="fin-scroll">
           <table class="fin-tabela">
-            <thead><tr><th>Mês</th><th class="num">${labelN}</th><th class="num">Recebido</th><th class="num">A receber</th>${mostraNf ? '<th class="num">Com NF</th>' : ''}<th class="num">Saiu</th><th class="num">Saldo</th></tr></thead>
+            <thead><tr><th>Mês</th>${mostraNf ? '<th class="num">Fechado</th>' : ''}<th class="num">${labelN}</th><th class="num">Recebido</th><th class="num">A receber</th>${mostraNf ? '<th class="num">Com NF</th>' : ''}<th class="num">Saiu</th><th class="num">Saldo</th></tr></thead>
             <tbody>
               ${meses.map(m => `
                 <tr onclick="finAbrirMes(${m.i})" style="${m.temDados ? '' : 'color: #b9b4ae;'}">
                   <td>${FIN_MESES[m.i]}</td>
+                  ${mostraNf ? `<td class="num" style="color: #b07a1c;">${m.nFechado ? finFmt(m.fechado) + ` <small style="color: #9a948e;">(${m.nFechado})</small>` : '—'}</td>` : ''}
                   <td class="num">${m.n}</td>
                   <td class="num" style="color: #3f8a5c;">${finFmt(m.entrou)}</td>
                   <td class="num" style="color: #b07a1c;">${finFmt(m.pendente)}</td>
@@ -3478,7 +3563,7 @@
                 </tr>`).join('')}
             </tbody>
             <tfoot><tr>
-              <td>Total</td><td class="num">${totalN}</td><td class="num">${finFmt(totalEntrou)}</td><td class="num">${finFmt(meses.reduce((s, m) => s + m.pendente, 0))}</td>${mostraNf ? `<td class="num">${finFmt(totalNf)}</td>` : ''}<td class="num">${finFmt(totalSaiu)}</td><td class="num">${finFmt(totalEntrou - totalSaiu)}</td>
+              <td>Total</td>${mostraNf ? `<td class="num">${finFmt(totalFechado)}</td>` : ''}<td class="num">${totalN}</td><td class="num">${finFmt(totalEntrou)}</td><td class="num">${finFmt(meses.reduce((s, m) => s + m.pendente, 0))}</td>${mostraNf ? `<td class="num">${finFmt(totalNf)}</td>` : ''}<td class="num">${finFmt(totalSaiu)}</td><td class="num">${finFmt(totalEntrou - totalSaiu)}</td>
             </tr></tfoot>
           </table>
         </div>
@@ -3486,9 +3571,9 @@
     `;
   }
 
-  function finGraficoSvg(meses) {
+  function finGraficoSvg(meses, comFechado) {
     const W = 760, H = 280, padL = 58, padR = 10, padT = 14, padB = 46;
-    const maxBruto = Math.max(...meses.map(m => Math.max(m.entrou, m.saiu)), 0);
+    const maxBruto = Math.max(...meses.map(m => Math.max(m.entrou, m.saiu, comFechado ? m.fechado : 0)), 0);
     const max = (function (v) {
       if (v <= 0) return 1000;
       const p = Math.pow(10, Math.floor(Math.log10(v)));
@@ -3497,7 +3582,8 @@
     })(maxBruto);
     const ih = H - padT - padB;
     const gw = (W - padL - padR) / 12;
-    const bw = Math.min(gw * 0.32, 22);
+    const nBarras = comFechado ? 3 : 2;
+    const bw = Math.min(gw * (comFechado ? 0.24 : 0.32), 20);
     const y = v => padT + ih - (v / max) * ih;
     const labelN = finAmbito === 'empresa' ? 'job' : 'entr.';
 
@@ -3514,8 +3600,18 @@
       const hS = Math.max(0, padT + ih - y(m.saiu));
       svg += `<g style="cursor: pointer;" onclick="finAbrirMes(${m.i})">`;
       svg += `<rect x="${cx - gw / 2}" y="${padT}" width="${gw}" height="${ih}" fill="transparent"/>`;
-      if (hE > 0) svg += `<rect x="${cx - bw - 1}" y="${y(m.entrou)}" width="${bw}" height="${hE}" rx="3" fill="var(--green)"><title>${FIN_MESES[m.i]}: recebido ${finFmt(m.entrou)}</title></rect>`;
-      if (hS > 0) svg += `<rect x="${cx + 1}" y="${y(m.saiu)}" width="${bw}" height="${hS}" rx="3" fill="var(--pink)"><title>${FIN_MESES[m.i]}: saiu ${finFmt(m.saiu)}</title></rect>`;
+      // posição de cada barra dentro do grupo do mês
+      const x0 = cx - (nBarras * bw + (nBarras - 1) * 2) / 2;
+      const xb = k => x0 + k * (bw + 2);
+      let k = 0;
+      if (comFechado) {
+        const hF = Math.max(0, padT + ih - y(m.fechado));
+        if (hF > 0) svg += `<rect x="${xb(k)}" y="${y(m.fechado)}" width="${bw}" height="${hF}" rx="3" fill="#e2b25c"><title>${FIN_MESES[m.i]}: fechado ${finFmt(m.fechado)}</title></rect>`;
+        k++;
+      }
+      if (hE > 0) svg += `<rect x="${xb(k)}" y="${y(m.entrou)}" width="${bw}" height="${hE}" rx="3" fill="var(--green)"><title>${FIN_MESES[m.i]}: recebido ${finFmt(m.entrou)}</title></rect>`;
+      k++;
+      if (hS > 0) svg += `<rect x="${xb(k)}" y="${y(m.saiu)}" width="${bw}" height="${hS}" rx="3" fill="var(--pink)"><title>${FIN_MESES[m.i]}: saiu ${finFmt(m.saiu)}</title></rect>`;
       svg += `<text x="${cx}" y="${H - padB + 18}" text-anchor="middle" font-size="12" fill="#4a4540">${m.nome}</text>`;
       if (m.n > 0) svg += `<text x="${cx}" y="${H - padB + 34}" text-anchor="middle" font-size="10" fill="#9a948e">${m.n} ${labelN}${m.n > 1 && labelN === 'job' ? 's' : ''}</text>`;
       svg += `</g>`;
@@ -3530,9 +3626,23 @@
     const tipo = document.getElementById('finTipoInput').value;
     document.getElementById('finCategoriasList').innerHTML =
       FIN_CATEGORIAS[amb][tipo].map(c => `<option value="${escRot(c)}">`).join('');
-    document.getElementById('finNfWrap').style.display = (amb === 'empresa' && tipo === 'entrada') ? 'block' : 'none';
+    const job = amb === 'empresa' && tipo === 'entrada';
+    document.getElementById('finNfWrap').style.display = job ? 'block' : 'none';
+    document.getElementById('finFechWrap').style.display = job ? 'block' : 'none';
+    document.getElementById('finPrazos').style.display = job ? 'flex' : 'none';
+    document.getElementById('finDataLabel').textContent = job ? 'Pagamento (previsto ou recebido)' : 'Data';
     finAtualizaNf();
     finAtualizaEspelho();
+  }
+
+  // Botões de prazo: pagamento = fechado em + N dias
+  function finPrazo(dias) {
+    const base = document.getElementById('finFechInput').value;
+    const [a, m, d] = (base || '').split('-').map(Number);
+    const dt = base ? new Date(a, m - 1, d) : new Date();
+    dt.setDate(dt.getDate() + dias);
+    document.getElementById('finDataInput').value =
+      `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
   }
 
   function finAtualizaNf() {
@@ -3569,6 +3679,7 @@
     document.getElementById('finDescricaoInput').value = r?.descricao || '';
     document.getElementById('finValorInput').value = r ? Number(r.valor).toFixed(2).replace('.', ',') : '';
     document.getElementById('finDataInput').value = r?.data || dataPadrao;
+    document.getElementById('finFechInput').value = r ? (r.data_fechamento || '') : dataPadrao;
     document.getElementById('finCategoriaInput').value = r?.categoria || '';
     document.getElementById('finStatusInput').value = r?.status || 'confirmado';
     document.getElementById('finObsInput').value = r?.obs || '';
@@ -3608,6 +3719,7 @@
       nf_numero: null,
       atualizado_em: new Date().toISOString()
     };
+    payload.data_fechamento = finUsaNf(payload) ? (document.getElementById('finFechInput').value || null) : null;
     if (finUsaNf(payload)) {
       payload.nf = document.getElementById('finNfInput').value || null;
       if (payload.nf === 'emitida') payload.nf_numero = document.getElementById('finNfNumeroInput').value.trim() || null;
