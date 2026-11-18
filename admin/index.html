@@ -658,6 +658,7 @@
     .fin-pill { font-size: 11px; font-weight: 600; border-radius: 10px; padding: 2px 8px; }
     .fin-pill.pend { background: #fbecd0; color: #b07a1c; }
     .fin-pill.ok { background: #e3eee6; color: var(--green-dark); }
+    .fin-pill.atras { background: #fbe0e3; color: var(--pink-dark); }
     .fin-valor { font-weight: 650; font-size: 15px; white-space: nowrap; font-variant-numeric: tabular-nums; }
     .fin-valor.in { color: #3f8a5c; }
     .fin-valor.out { color: var(--pink-dark); }
@@ -680,6 +681,25 @@
     .fin-receber-linha:hover { color: var(--green-dark); }
     .fin-receber-linha small { color: #9a948e; margin-left: 4px; }
     .fin-receber-linha.atrasado span:first-child { color: var(--pink-dark); }
+    .camp-card { background: #faf8f5; border: 1px solid var(--gray-light); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
+    .camp-card.aberta { background: white; border-color: var(--detail); }
+    .camp-head { display: flex; align-items: center; gap: 12px; padding: 12px 14px; }
+    .camp-head-main { flex: 1; min-width: 0; cursor: pointer; }
+    .camp-seta { color: #9a948e; width: 12px; display: inline-block; }
+    .camp-valores { text-align: right; cursor: pointer; }
+    .camp-progresso { height: 4px; background: var(--gray-light); }
+    .camp-progresso div { height: 100%; background: var(--green); }
+    .camp-detalhe { padding: 10px 14px 14px 38px; border-top: 1px solid var(--gray-light); }
+    .camp-parcela { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--gray-light); }
+    .camp-parcela.paga > div:first-child { opacity: 0.75; }
+    .camp-aviso { margin-top: 10px; padding: 10px 12px; background: #fbeeef; border-radius: 8px; font-size: 12px; line-height: 1.5; color: var(--pink-dark); display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+    .fin-tag.pend { background: #fbecd0; border-color: #f1e0c2; color: #b07a1c; }
+    @media (max-width: 600px) {
+      .camp-head { flex-wrap: wrap; }
+      .camp-head-main { flex-basis: 100%; }
+      .camp-valores { flex: 1; text-align: left; }
+      .camp-detalhe { padding-left: 14px; }
+    }
     .fin-nf-barra { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--paper); margin: 4px 0 10px; }
     .fin-cat { margin-bottom: 12px; }
     .fin-cat-top { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; margin-bottom: 5px; }
@@ -1137,6 +1157,128 @@
 
   <div class="content">
     <!-- Será preenchido por JavaScript -->
+  </div>
+</div>
+
+<!-- Modal: Adicionar/Editar campanha (job) -->
+<div class="modal" id="campanhaModal">
+  <div class="modal-content" style="max-width: 600px;">
+    <div class="modal-header">
+      <h2 id="campModalTitle">Nova campanha</h2>
+      <button class="modal-close" onclick="closeCampanhaModal()">×</button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+      <div class="form-group">
+        <label for="campNome">Campanha</label>
+        <input type="text" id="campNome" placeholder="Ex: Lançamento verão">
+      </div>
+      <div class="form-group">
+        <label for="campCliente">Marca / cliente</label>
+        <input type="text" id="campCliente" placeholder="Ex: Tostitos">
+      </div>
+      <div class="form-group">
+        <label for="campTipo">Tipo</label>
+        <select id="campTipo">
+          <option value="Job UGC">Job UGC</option>
+          <option value="Publi no perfil">Publi no perfil</option>
+          <option value="Evento / cobertura">Evento / cobertura</option>
+          <option value="Afiliados / comissão">Afiliados / comissão</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="campStatus">Etapa</label>
+        <select id="campStatus">
+          <option>Briefing</option><option>Roteiro</option><option>Aprovação</option><option>Gravação</option>
+          <option>Edição</option><option>Aprovado</option><option>Entregue</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="campQtd">Qtd de entregas</label>
+        <input type="number" id="campQtd" min="1" style="width: 100%;">
+      </div>
+      <div class="form-group">
+        <label for="campPrazo">Prazo de entrega</label>
+        <input type="date" id="campPrazo">
+      </div>
+      <div class="form-group">
+        <label for="campValor">Valor total (R$)</label>
+        <input type="text" id="campValor" inputmode="decimal" placeholder="2.500,00" oninput="campPreviewParcelas()">
+      </div>
+      <div class="form-group">
+        <label for="campFech">Fechado em</label>
+        <input type="date" id="campFech">
+      </div>
+      <div class="form-group">
+        <label for="campNf">Nota fiscal</label>
+        <select id="campNf" onchange="campAtualizaNf()">
+          <option value="emitida">Emiti NF</option>
+          <option value="nao_emitida">Não emiti NF</option>
+          <option value="">Ainda não sei</option>
+        </select>
+      </div>
+      <div class="form-group" id="campNfNumeroWrap">
+        <label for="campNfNumero">Nº da NF (opcional)</label>
+        <input type="text" id="campNfNumero" placeholder="Ex: 125">
+      </div>
+
+      <div id="campPagamentoWrap" style="grid-column: 1 / -1; background: var(--paper); border-radius: 8px; padding: 12px 14px;">
+        <div style="font-size: 13px; font-weight: 600; margin-bottom: 10px;">Como você vai receber</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group" style="margin: 0;">
+            <label for="campParcelasN">Em quantas vezes?</label>
+            <input type="number" id="campParcelasN" min="1" max="12" style="width: 100%;" oninput="campPreviewParcelas()">
+          </div>
+          <div class="form-group" style="margin: 0;">
+            <label for="campPrimeiroPag">1º pagamento</label>
+            <input type="date" id="campPrimeiroPag" onchange="campPreviewParcelas()">
+            <div class="fin-prazos">
+              <span>Prazo:</span>
+              <button type="button" onclick="campPrazo(0)">à vista</button>
+              <button type="button" onclick="campPrazo(30)">30</button>
+              <button type="button" onclick="campPrazo(60)">60</button>
+              <button type="button" onclick="campPrazo(90)">90 dias</button>
+            </div>
+          </div>
+        </div>
+        <div id="campPreview" style="font-size: 12px; color: #6b6661; margin-top: 10px; line-height: 1.6;"></div>
+        <div style="font-size: 11px; color: #9a948e; margin-top: 6px;">Os pagamentos entram em Finanças como “a receber”. Parcelas ficam a cada 30 dias.</div>
+      </div>
+      <div id="campEditNota" style="grid-column: 1 / -1; display: none; font-size: 12px; color: #8a847e;">
+        Os pagamentos desta campanha são editados na lista, abrindo a campanha. Mudanças de nome, fechamento e NF são levadas para eles.
+      </div>
+
+      <div class="form-group" style="grid-column: 1 / -1;">
+        <label for="campObs">Observações</label>
+        <textarea id="campObs" rows="2" placeholder="Briefing, contato, link do contrato..."></textarea>
+      </div>
+    </div>
+
+    <div id="campModalError" style="display: none; margin-top: 12px; padding: 10px 12px; background: #fbe9e9; color: #a33; border-radius: 6px; font-size: 13px;"></div>
+
+    <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px;">
+      <button class="btn btn-secondary" onclick="closeCampanhaModal()">Cancelar</button>
+      <button class="btn btn-primary" id="campSaveBtn" onclick="saveCampanha()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: marcar pagamento como pago, com a data -->
+<div class="modal" id="finPagoModal">
+  <div class="modal-content" style="max-width: 400px;">
+    <div class="modal-header">
+      <h2 id="finPagoTitulo">Marcar como recebido</h2>
+      <button class="modal-close" onclick="closePagoModal()">×</button>
+    </div>
+    <p id="finPagoTexto" style="font-size: 13px; line-height: 1.6; margin-bottom: 12px;"></p>
+    <div class="form-group">
+      <label for="finPagoData">Data do pagamento</label>
+      <input type="date" id="finPagoData">
+    </div>
+    <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px;">
+      <button class="btn btn-secondary" onclick="closePagoModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="confirmarPago()">Confirmar</button>
+    </div>
   </div>
 </div>
 
@@ -2803,91 +2945,459 @@
   // ABA 4: CAMPANHAS
   // ========================================================================
 
+  // Cada campanha é um job. Os pagamentos dela são linhas em "financas"
+  // com campanha_id = id da campanha — assim campanha e financeiro sempre batem.
+  let campCache = [];
+  let campParcelas = [];
+  let campFiltro = 'todas';
+  let campAbertas = new Set();
+  let editingCampId = null;
+  const CAMP_STATUS = ['Briefing', 'Roteiro', 'Aprovação', 'Gravação', 'Edição', 'Aprovado', 'Entregue'];
+  const CAMP_TIPOS = ['Job UGC', 'Publi no perfil', 'Evento / cobertura', 'Afiliados / comissão'];
+
+  function finHojeISO() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+  function finSomaDias(iso, dias) {
+    const [a, m, d] = iso.split('-').map(Number);
+    const dt = new Date(a, m - 1, d);
+    dt.setDate(dt.getDate() + dias);
+    return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
+  }
+  function campBadgeClass(status) {
+    return 'badge-' + String(status || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, '');
+  }
+  function campDescricaoBase(c) {
+    return c.cliente ? `${c.campanha} · ${c.cliente}` : c.campanha;
+  }
+
+  function campResumo(c) {
+    const parcelas = campParcelas.filter(p => p.campanha_id === c.id)
+      .sort((a, b) => String(a.vencimento || a.data).localeCompare(String(b.vencimento || b.data)));
+    const hoje = finHojeISO();
+    const valor = Number(c.valor) || 0;
+    const lancado = finSoma(parcelas, () => true);
+    const recebido = finSoma(parcelas, p => p.status !== 'pendente');
+    const pendentes = parcelas.filter(p => p.status === 'pendente');
+    const aReceber = finSoma(pendentes, () => true);
+    const atrasadas = pendentes.filter(p => p.data < hoje);
+    const atrasado = finSoma(atrasadas, () => true);
+    const diferenca = Math.round((valor - lancado) * 100) / 100;
+    let situacao;
+    if (!parcelas.length) situacao = ['Sem pagamento lançado', 'nf-no'];
+    else if (atrasadas.length) situacao = ['Atrasado', 'nf-no'];
+    else if (!pendentes.length) situacao = ['Pago', 'nf-ok'];
+    else if (recebido > 0) situacao = ['Pago em parte', 'pend'];
+    else situacao = ['A receber', 'pend'];
+    return { parcelas, valor, lancado, recebido, aReceber, atrasado, atrasadas, diferenca, situacao, proxima: pendentes[0] || null };
+  }
+
   async function loadCampanhas() {
     const content = document.querySelector('.content');
-
     try {
-      const { data: campanhas, error } = await supabase
-        .from('campanhas')
-        .select('*')
-        .order('prazo', { ascending: true });
+      const [r1, r2] = await Promise.all([
+        supabase.from('campanhas').select('*').order('criado_em', { ascending: false }),
+        supabase.from('financas').select('*').not('campanha_id', 'is', null)
+      ]);
+      if (r1.error) throw r1.error;
+      if (r2.error) throw r2.error;
+      campCache = r1.data || [];
+      campParcelas = r2.data || [];
 
-      if (error) throw error;
-
-      // Stats
-      const ativas = (campanhas || []).filter(c => c.ativa).length;
-      const totalValor = (campanhas || []).reduce((sum, c) => sum + (c.valor || 0), 0);
-      const recebido = (campanhas || []).filter(c => c.pagamento === 'Pago').reduce((sum, c) => sum + (c.valor || 0), 0);
-      const aReceber = totalValor - recebido;
-
-      let html = `
-        <div class="stats-bar">
-          <div class="stat-card">
-            <div class="stat-label">Total de campanhas</div>
-            <div class="stat-value">${campanhas?.length || 0}</div>
+      content.innerHTML = `
+        <div class="fin-top">
+          <p style="font-size: 14px; color: #77716b; max-width: 560px; line-height: 1.5;">Cada campanha é um job. Os pagamentos dela entram automaticamente na aba Finanças.</p>
+          <button class="btn btn-primary" style="padding: 9px 14px;" onclick="openCampanhaModal()">+ Nova campanha</button>
+        </div>
+        <div class="fin-cards" id="campCards"></div>
+        <div class="fin-panel">
+          <div class="fin-panel-head">
+            <input type="text" id="campBusca" placeholder="Buscar campanha ou marca..." oninput="renderCampanhas()" style="max-width: 280px;">
+            <div class="fin-chips" id="campFiltros"></div>
           </div>
-          <div class="stat-card">
-            <div class="stat-label">Ativas</div>
-            <div class="stat-value">${ativas}</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Valor total</div>
-            <div class="stat-value">R$ ${totalValor.toFixed(0)}</div>
-            <div style="font-size: 11px; color: var(--detail); margin-top: 4px;">Ticket médio: R$ ${campanhas?.length > 0 ? (totalValor / campanhas.length).toFixed(0) : 0}</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">A receber</div>
-            <div class="stat-value">R$ ${aReceber.toFixed(0)}</div>
-            <div style="font-size: 11px; color: var(--detail); margin-top: 4px;">Já recebido: R$ ${recebido.toFixed(0)}</div>
-          </div>
+          <div id="campLista"></div>
         </div>
       `;
-
-      html += '<div style="margin-bottom: 12px;"><button class="btn btn-primary" onclick="openCampanhaModal()">+ Adicionar</button></div>';
-
-      if (!campanhas || campanhas.length === 0) {
-        html += '<div class="empty-state">Nenhuma campanha ainda. Adicione uma para começar a rastrear seus projetos.</div>';
-      } else {
-        html += `
-          <table>
-            <thead>
-              <tr>
-                <th style="width: 30px;">★</th>
-                <th>Campanha</th>
-                <th>Cliente</th>
-                <th>Status</th>
-                <th style="width: 60px;">Qtd</th>
-                <th>Valor</th>
-                <th>Prazo</th>
-              </tr>
-            </thead>
-            <tbody>
-        `;
-        campanhas.forEach(c => {
-          const statusClass = `badge-${c.status.toLowerCase().replace(/\s+/g, '')}`;
-          html += `
-            <tr>
-              <td>${c.favorita ? '★' : '☆'}</td>
-              <td>${c.campanha}</td>
-              <td>${c.cliente || '-'}</td>
-              <td><span class="badge ${statusClass}">${c.status}</span></td>
-              <td>${c.qtd}</td>
-              <td>R$ ${c.valor.toFixed(2)}</td>
-              <td>${c.prazo ? c.prazo : '-'}</td>
-            </tr>
-          `;
-        });
-        html += `</tbody></table>`;
-      }
-
-      content.innerHTML = html;
+      renderCampanhas();
     } catch (err) {
-      content.innerHTML = `<div class="error-message">Erro ao carregar campanhas: ${err.message}</div>`;
       console.error(err);
+      const semColuna = /campanha_id|data_fechamento|vencimento|pago_em/i.test(err.message || '');
+      content.innerHTML = semColuna
+        ? '<div class="error-message">Falta atualizar o banco. Rode o arquivo <strong>ligar-campanhas-financas.sql</strong> no SQL Editor do Supabase e recarregue esta página.</div>'
+        : `<div class="error-message">Erro ao carregar campanhas: ${escRot(err.message)}</div>`;
     }
   }
 
-  function openCampanhaModal() { alert('Adicionar campanha'); }
+  function setCampFiltro(f) { campFiltro = f; renderCampanhas(); }
+  function toggleCampAberta(id) {
+    if (campAbertas.has(id)) campAbertas.delete(id); else campAbertas.add(id);
+    renderCampanhas();
+  }
+
+  function renderCampanhas() {
+    const box = document.getElementById('campLista');
+    if (!box) return;
+    const resumos = campCache.map(c => ({ c, r: campResumo(c) }));
+
+    const tot = k => resumos.reduce((s, x) => s + x.r[k], 0);
+    const nAtrasadas = resumos.filter(x => x.r.atrasadas.length).length;
+    const emProducao = campCache.filter(c => c.status !== 'Entregue').length;
+    const naoBatem = resumos.filter(x => x.r.diferenca !== 0).length;
+    document.getElementById('campCards').innerHTML = `
+      ${finCard('Total fechado', tot('valor'), '', `${campCache.length} ${campCache.length === 1 ? 'campanha' : 'campanhas'} · ${emProducao} em produção`)}
+      ${finCard('Recebido', tot('recebido'), 'c-green')}
+      ${finCard('A receber', tot('aReceber'), 'c-amber')}
+      ${finCard('Atrasado', tot('atrasado'), 'c-red', nAtrasadas ? `${nAtrasadas} ${nAtrasadas === 1 ? 'campanha' : 'campanhas'}` : 'nada atrasado')}
+      ${naoBatem ? finCard('Não batem', `${naoBatem}`, 'c-red', 'campanhas com valor diferente dos pagamentos') : ''}
+    `;
+
+    const filtros = [
+      ['todas', 'Todas', () => true],
+      ['receber', 'A receber', x => x.r.aReceber > 0],
+      ['atrasadas', 'Atrasadas', x => x.r.atrasadas.length > 0],
+      ['pagas', 'Pagas', x => x.r.situacao[0] === 'Pago'],
+      ['producao', 'Em produção', x => x.c.status !== 'Entregue'],
+      ['naobatem', 'Não batem', x => x.r.diferenca !== 0]
+    ];
+    document.getElementById('campFiltros').innerHTML = filtros.map(([k, l]) =>
+      `<button type="button" class="fin-chip ${campFiltro === k ? 'active' : ''}" onclick="setCampFiltro('${k}')">${l}</button>`).join('');
+
+    const q = (document.getElementById('campBusca').value || '').trim().toLowerCase();
+    const fn = (filtros.find(f => f[0] === campFiltro) || filtros[0])[2];
+    const lista = resumos.filter(fn).filter(x => !q || [x.c.campanha, x.c.cliente].some(t => (t || '').toLowerCase().includes(q)));
+
+    if (!campCache.length) {
+      box.innerHTML = '<div class="empty-state">Nenhuma campanha ainda.<br>Clique em “+ Nova campanha” para cadastrar o primeiro job.</div>';
+      return;
+    }
+    if (!lista.length) {
+      box.innerHTML = '<div class="empty-state">Nenhuma campanha neste filtro.</div>';
+      return;
+    }
+    box.innerHTML = lista.map(({ c, r }) => campCardHtml(c, r)).join('');
+  }
+
+  function campCardHtml(c, r) {
+    const aberta = campAbertas.has(c.id);
+    const pct = r.valor ? Math.min(100, r.recebido / r.valor * 100) : 0;
+    const meta = [];
+    if (c.cliente) meta.push(escRot(c.cliente));
+    if (c.tipo) meta.push(escRot(c.tipo));
+    if (c.qtd > 1) meta.push(`${c.qtd} entregas`);
+    if (c.data_fechamento) meta.push(`fechado ${finDataCurta(c.data_fechamento)}`);
+    if (c.prazo) meta.push(`entrega ${finDataCurta(c.prazo)}`);
+    const nf = c.nf === 'emitida' ? `<span class="fin-tag nf-ok">NF${c.nf_numero ? ' ' + escRot(c.nf_numero) : ''} ✓</span>`
+      : c.nf === 'nao_emitida' ? '<span class="fin-tag nf-no">Sem NF</span>' : '';
+    const proxima = r.proxima ? `próximo: ${finFmt(r.proxima.valor)} em ${finDataCurta(r.proxima.data)}` : '';
+
+    let detalhe = '';
+    if (aberta) {
+      const linhas = r.parcelas.map((p, i) => {
+        const pend = p.status === 'pendente';
+        const atrasada = pend && p.data < finHojeISO();
+        const quando = pend
+          ? `${atrasada ? '<span style="color: var(--pink-dark); font-weight: 600;">atrasado</span> · ' : ''}vence ${finDataBR(p.data)}`
+          : `pago em ${finDataBR(p.pago_em || p.data)}${p.vencimento && p.vencimento !== (p.pago_em || p.data) ? ` <span style="color: #9a948e;">(vencia ${finDataCurta(p.vencimento)})</span>` : ''}`;
+        return `
+          <div class="camp-parcela ${pend ? '' : 'paga'}">
+            <div style="flex: 1; min-width: 0;">
+              <div style="font-size: 13px; font-weight: 500;">Pagamento ${i + 1}${r.parcelas.length > 1 ? ' de ' + r.parcelas.length : ''} · ${finFmt(p.valor)}</div>
+              <div style="font-size: 12px; color: #8a847e; margin-top: 2px;">${quando}</div>
+            </div>
+            ${pend
+              ? `<button type="button" class="btn btn-primary btn-sm" onclick="openPagoModal(${p.id})">Marcar como pago</button>`
+              : `<button type="button" class="btn btn-sm" style="background: none; color: #8a847e;" onclick="desfazerPago(${p.id})">Desfazer</button>`}
+            <div class="fin-acoes">
+              <button type="button" title="Editar pagamento" aria-label="Editar pagamento" onclick="openFinModal(${p.id})">${ICON_EDIT}</button>
+              <button type="button" title="Apagar pagamento" aria-label="Apagar pagamento" style="color: var(--pink-dark);" onclick="deleteFin(${p.id})">${ICON_TRASH}</button>
+            </div>
+          </div>`;
+      }).join('');
+      const aviso = r.diferenca !== 0 ? `
+        <div class="camp-aviso">
+          ${r.diferenca > 0
+            ? `Os pagamentos somam <strong>${finFmt(r.lancado)}</strong>, mas a campanha vale <strong>${finFmt(r.valor)}</strong>. Faltam <strong>${finFmt(r.diferenca)}</strong> para lançar.`
+            : `Os pagamentos somam <strong>${finFmt(r.lancado)}</strong>, <strong>${finFmt(-r.diferenca)}</strong> a mais que o valor da campanha (${finFmt(r.valor)}).`}
+          ${r.diferenca > 0 ? `<button type="button" class="btn btn-sm btn-primary" onclick="openPagamentoCampanha(${c.id}, ${r.diferenca})">Lançar ${finFmt(r.diferenca)}</button>` : ''}
+        </div>` : '';
+      detalhe = `
+        <div class="camp-detalhe">
+          ${linhas || '<div style="font-size: 13px; color: #8a847e; padding: 6px 0;">Nenhum pagamento lançado.</div>'}
+          ${aviso}
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
+            <button type="button" class="btn btn-sm btn-secondary" onclick="openPagamentoCampanha(${c.id}, 0)">+ Adicionar pagamento</button>
+          </div>
+          ${c.obs ? `<div style="font-size: 12px; color: #6b6661; margin-top: 10px; white-space: pre-wrap;">${escRot(c.obs)}</div>` : ''}
+        </div>`;
+    }
+
+    return `
+      <div class="camp-card ${aberta ? 'aberta' : ''}">
+        <div class="camp-head">
+          <div class="camp-head-main" onclick="toggleCampAberta(${c.id})">
+            <div class="fin-row-title"><span class="camp-seta">${aberta ? '▾' : '▸'}</span><span style="font-weight: 600;">${escRot(c.campanha)}</span>
+              <span class="badge ${campBadgeClass(c.status)}">${escRot(c.status)}</span>
+              <span class="fin-tag ${r.situacao[1]}">${r.situacao[0]}</span>${nf}
+            </div>
+            <div class="fin-row-meta">${meta.join(' · ')}</div>
+          </div>
+          <div class="camp-valores" onclick="toggleCampAberta(${c.id})">
+            <div class="fin-valor in">${finFmt(r.valor)}</div>
+            <div style="font-size: 11px; color: #8a847e;">recebido ${finFmt(r.recebido)}${r.aReceber ? ` · falta ${finFmt(r.aReceber)}` : ''}</div>
+            ${proxima ? `<div style="font-size: 11px; color: #b07a1c;">${proxima}</div>` : ''}
+          </div>
+          <div class="fin-acoes">
+            <button type="button" title="Editar campanha" aria-label="Editar campanha" onclick="openCampanhaModal(${c.id})">${ICON_EDIT}</button>
+            <button type="button" title="Apagar campanha" aria-label="Apagar campanha" style="color: var(--pink-dark);" onclick="deleteCampanha(${c.id})">${ICON_TRASH}</button>
+          </div>
+        </div>
+        <div class="camp-progresso"><div style="width: ${pct.toFixed(1)}%;"></div></div>
+        ${detalhe}
+      </div>`;
+  }
+
+  // ---------------- Modal da campanha ----------------
+  function openCampanhaModal(id) {
+    editingCampId = id || null;
+    const c = editingCampId ? campCache.find(x => x.id === editingCampId) : null;
+    const hoje = finHojeISO();
+    const set = (k, v) => { document.getElementById(k).value = v; };
+    document.getElementById('campModalTitle').textContent = c ? 'Editar campanha' : 'Nova campanha';
+    document.getElementById('campModalError').style.display = 'none';
+    set('campNome', c?.campanha || '');
+    set('campCliente', c?.cliente || '');
+    set('campTipo', c?.tipo && c.tipo !== 'Conteúdo' ? c.tipo : 'Job UGC');
+    set('campQtd', c?.qtd || 1);
+    set('campStatus', c?.status || 'Briefing');
+    set('campPrazo', c?.prazo || '');
+    set('campValor', c ? Number(c.valor).toFixed(2).replace('.', ',') : '');
+    set('campFech', c ? (c.data_fechamento || '') : hoje);
+    set('campNf', c ? (c.nf || '') : 'emitida');
+    set('campNfNumero', c?.nf_numero || '');
+    set('campObs', c?.obs || '');
+    set('campParcelasN', 1);
+    set('campPrimeiroPag', finSomaDias(hoje, 30));
+    document.getElementById('campPagamentoWrap').style.display = c ? 'none' : 'block';
+    document.getElementById('campEditNota').style.display = c ? 'block' : 'none';
+    campAtualizaNf();
+    campPreviewParcelas();
+    document.getElementById('campanhaModal').classList.add('show');
+    setTimeout(() => document.getElementById('campNome').focus(), 50);
+  }
+  function closeCampanhaModal() { document.getElementById('campanhaModal').classList.remove('show'); }
+  function campAtualizaNf() {
+    document.getElementById('campNfNumeroWrap').style.display =
+      document.getElementById('campNf').value === 'emitida' ? 'block' : 'none';
+  }
+  function campPrazo(dias) {
+    const base = document.getElementById('campFech').value || finHojeISO();
+    document.getElementById('campPrimeiroPag').value = finSomaDias(base, dias);
+    campPreviewParcelas();
+  }
+  function campGerarParcelas() {
+    const total = finParseValor(document.getElementById('campValor').value);
+    const n = Math.max(1, Math.min(12, parseInt(document.getElementById('campParcelasN').value, 10) || 1));
+    const primeiro = document.getElementById('campPrimeiroPag').value;
+    if (!(total > 0) || !primeiro) return [];
+    const base = Math.floor(total / n * 100) / 100;
+    return Array.from({ length: n }, (_, i) => ({
+      valor: i === n - 1 ? Math.round((total - base * (n - 1)) * 100) / 100 : base,
+      data: finSomaDias(primeiro, i * 30)
+    }));
+  }
+  function campPreviewParcelas() {
+    const p = campGerarParcelas();
+    document.getElementById('campPreview').innerHTML = p.length
+      ? p.map((x, i) => `${p.length > 1 ? (i + 1) + 'ª · ' : ''}${finFmt(x.valor)} em ${finDataBR(x.data)}`).join('<br>')
+      : 'Preencha o valor e a data do 1º pagamento.';
+  }
+
+  async function saveCampanha() {
+    const errBox = document.getElementById('campModalError');
+    const erro = msg => { errBox.textContent = msg; errBox.style.display = 'block'; };
+    const v = k => document.getElementById(k).value.trim();
+    const nome = v('campNome');
+    const valor = finParseValor(v('campValor'));
+    if (!nome) return erro('Dê um nome para a campanha.');
+    if (!(valor > 0)) return erro('Informe o valor total da campanha (ex: 2.500,00).');
+    const parcelas = editingCampId ? [] : campGerarParcelas();
+    if (!editingCampId && !parcelas.length) return erro('Escolha a data do 1º pagamento.');
+
+    const status = v('campStatus');
+    const nf = v('campNf') || null;
+    const payload = {
+      campanha: nome,
+      cliente: v('campCliente') || null,
+      tipo: v('campTipo') || 'Job UGC',
+      qtd: Math.max(1, parseInt(v('campQtd'), 10) || 1),
+      status,
+      prazo: v('campPrazo') || null,
+      valor,
+      data_fechamento: v('campFech') || null,
+      nf,
+      nf_numero: nf === 'emitida' ? (v('campNfNumero') || null) : null,
+      obs: v('campObs') || null,
+      ativa: status !== 'Entregue',
+      atualizado_em: new Date().toISOString()
+    };
+
+    const btn = document.getElementById('campSaveBtn');
+    btn.disabled = true;
+    btn.textContent = 'Salvando...';
+    try {
+      const categoria = FIN_CATEGORIAS.empresa.entrada.includes(payload.tipo) ? payload.tipo : 'Job UGC';
+      if (editingCampId) {
+        const { error } = await supabase.from('campanhas').update(payload).eq('id', editingCampId);
+        if (error) throw error;
+        // Leva as mudanças para os pagamentos ligados (nome, fechamento, NF)
+        const base = campDescricaoBase(payload);
+        for (const p of campParcelas.filter(x => x.campanha_id === editingCampId)) {
+          const sufixo = (String(p.descricao).match(/\s\(\d+\/\d+\)$/) || [''])[0];
+          const { error: e2 } = await supabase.from('financas').update({
+            descricao: base + sufixo,
+            categoria,
+            data_fechamento: payload.data_fechamento,
+            nf: payload.nf,
+            nf_numero: payload.nf_numero,
+            atualizado_em: payload.atualizado_em
+          }).eq('id', p.id);
+          if (e2) throw e2;
+        }
+      } else {
+        const { data: nova, error } = await supabase.from('campanhas').insert(payload).select().single();
+        if (error) throw error;
+        const base = campDescricaoBase(payload);
+        const linhas = parcelas.map((p, i) => ({
+          ambito: 'empresa',
+          tipo: 'entrada',
+          descricao: parcelas.length > 1 ? `${base} (${i + 1}/${parcelas.length})` : base,
+          categoria,
+          valor: p.valor,
+          data: p.data,
+          vencimento: p.data,
+          status: 'pendente',
+          data_fechamento: payload.data_fechamento,
+          nf: payload.nf,
+          nf_numero: payload.nf_numero,
+          campanha_id: nova.id
+        }));
+        const { error: e2 } = await supabase.from('financas').insert(linhas);
+        if (e2) throw e2;
+        campAbertas.add(nova.id);
+      }
+      closeCampanhaModal();
+      loadCampanhas();
+    } catch (err) {
+      console.error(err);
+      erro('Erro ao salvar: ' + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Salvar';
+    }
+  }
+
+  async function deleteCampanha(id) {
+    const c = campCache.find(x => x.id === id);
+    if (!c) return;
+    const n = campParcelas.filter(p => p.campanha_id === id).length;
+    const msg = n
+      ? `Apagar a campanha "${c.campanha}" e os ${n} pagamento(s) dela no financeiro? Não dá para desfazer.`
+      : `Apagar a campanha "${c.campanha}"? Não dá para desfazer.`;
+    if (!confirm(msg)) return;
+    try {
+      if (n) {
+        const { error: e1 } = await supabase.from('financas').delete().eq('campanha_id', id);
+        if (e1) throw e1;
+      }
+      const { error } = await supabase.from('campanhas').delete().eq('id', id);
+      if (error) throw error;
+      loadCampanhas();
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao apagar: ' + err.message);
+    }
+  }
+
+  // Abre o formulário de lançamento já ligado à campanha
+  function openPagamentoCampanha(campId, valor) {
+    const c = campCache.find(x => x.id === campId);
+    if (!c) return;
+    openFinModal();
+    finNovoCampanhaId = campId;
+    document.getElementById('finModalTitle').textContent = 'Novo pagamento · ' + c.campanha;
+    document.getElementById('finAmbitoInput').value = 'empresa';
+    document.getElementById('finTipoInput').value = 'entrada';
+    finAtualizaCategorias();
+    document.getElementById('finDescricaoInput').value = campDescricaoBase(c);
+    document.getElementById('finValorInput').value = valor ? Number(valor).toFixed(2).replace('.', ',') : '';
+    document.getElementById('finCategoriaInput').value = FIN_CATEGORIAS.empresa.entrada.includes(c.tipo) ? c.tipo : 'Job UGC';
+    document.getElementById('finFechInput').value = c.data_fechamento || '';
+    document.getElementById('finDataInput').value = finSomaDias(finHojeISO(), 30);
+    document.getElementById('finStatusInput').value = 'pendente';
+    document.getElementById('finNfInput').value = c.nf || '';
+    document.getElementById('finNfNumeroInput').value = c.nf_numero || '';
+    finAtualizaNf();
+  }
+
+  // ---------------- Marcar como pago (com data) ----------------
+  let pagandoId = null;
+  function finAcharRow(id) {
+    return finCache.find(x => x.id === id) || campParcelas.find(x => x.id === id);
+  }
+  function finAtualizaLocal(id, campos) {
+    [finCache, campParcelas].forEach(lista => {
+      const r = lista.find(x => x.id === id);
+      if (r) Object.assign(r, campos);
+    });
+  }
+  function finRefresh() {
+    if (currentTab === 'campanhas') renderCampanhas();
+    else if (currentTab === 'financas') renderFin();
+  }
+  function openPagoModal(id) {
+    const r = finAcharRow(id);
+    if (!r) return;
+    pagandoId = id;
+    const entrada = r.tipo === 'entrada';
+    document.getElementById('finPagoTitulo').textContent = entrada ? 'Marcar como recebido' : 'Marcar como pago';
+    document.getElementById('finPagoTexto').innerHTML =
+      `<strong>${escRot(r.descricao)}</strong> · ${finFmt(r.valor)}<br>${entrada ? 'Em que dia o dinheiro caiu?' : 'Em que dia você pagou?'}`;
+    document.getElementById('finPagoData').value = finHojeISO();
+    document.getElementById('finPagoModal').classList.add('show');
+  }
+  function closePagoModal() { document.getElementById('finPagoModal').classList.remove('show'); }
+  async function confirmarPago() {
+    const r = finAcharRow(pagandoId);
+    const d = document.getElementById('finPagoData').value;
+    if (!r || !d) return;
+    const campos = { status: 'confirmado', pago_em: d, data: d, vencimento: r.vencimento || r.data, atualizado_em: new Date().toISOString() };
+    try {
+      const { error } = await supabase.from('financas').update(campos).eq('id', r.id);
+      if (error) throw error;
+      finAtualizaLocal(r.id, campos);
+      closePagoModal();
+      finRefresh();
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao salvar: ' + err.message);
+    }
+  }
+  async function desfazerPago(id) {
+    const r = finAcharRow(id);
+    if (!r) return;
+    if (!confirm(`Voltar "${r.descricao}" (${finFmt(r.valor)}) para pendente?`)) return;
+    const campos = { status: 'pendente', pago_em: null, data: r.vencimento || r.data, atualizado_em: new Date().toISOString() };
+    try {
+      const { error } = await supabase.from('financas').update(campos).eq('id', id);
+      if (error) throw error;
+      finAtualizaLocal(id, campos);
+      finRefresh();
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao atualizar: ' + err.message);
+    }
+  }
 
   // ========================================================================
   // ABA 5: CHECKLIST
@@ -3122,6 +3632,7 @@
   let finAno = new Date().getFullYear();
   let finFiltro = 'todos';
   let editingFinId = null;
+  let finNovoCampanhaId = null; // quando o lançamento novo é um pagamento de campanha
 
   const FIN_MESES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
   const FIN_MESES_CURTO = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
@@ -3157,6 +3668,7 @@
   function finParseValor(s) {
     let t = String(s || '').replace(/R\$|\s/g, '');
     if (t.includes(',')) t = t.replace(/\./g, '').replace(',', '.');
+    else if (/^\d{1,3}(\.\d{3})+$/.test(t)) t = t.replace(/\./g, ''); // "1.200" = mil e duzentos
     const n = Number(t);
     return isFinite(n) && t !== '' ? Math.round(n * 100) / 100 : NaN;
   }
@@ -3182,6 +3694,10 @@
   function finDataCurta(s) {
     const p = finParseData(s);
     return `${String(p.d).padStart(2, '0')}/${String(p.m + 1).padStart(2, '0')}/${String(p.a).slice(2)}`;
+  }
+  // Conta jobs: parcelas da mesma campanha contam como 1
+  function finContaJobs(rows) {
+    return new Set(rows.map(r => r.campanha_id ? 'c' + r.campanha_id : 'l' + r.id)).size;
   }
   function finIsRetirada(r) {
     return r.categoria === FIN_RETIRADA_EMPRESA || r.categoria === FIN_RETIRADA_PESSOAL;
@@ -3306,7 +3822,7 @@
     const gastos = finSoma(rows, sai);
     const aPagar = finSoma(rows, r => sai(r) && pend(r));
     const saldo = recebido - (gastos - aPagar);
-    const nEntradas = rows.filter(finConta).length;
+    const nEntradas = finContaJobs(rows.filter(finConta));
     const mostraNf = finAmbito !== 'pessoal';
 
     // Fechados no mês (pela data de fechamento, não importa quando vai cair)
@@ -3317,7 +3833,7 @@
       return p.a === finAno && p.m === finMes;
     });
     const fechadoV = finSoma(fechadosMes, () => true);
-    const fechadoN = fechadosMes.length;
+    const fechadoN = finContaJobs(fechadosMes);
 
     // A receber de todos os meses, agrupado pelo mês do pagamento
     const hojeD = new Date();
@@ -3464,7 +3980,9 @@
   function finRowHtml(r) {
     const entrada = r.tipo === 'entrada';
     const pend = r.status === 'pendente';
-    const pill = pend ? (entrada ? 'A receber' : 'A pagar') : (entrada ? 'Recebido' : 'Pago');
+    const atrasado = pend && r.data < finHojeISO();
+    const pill = atrasado ? 'Atrasado' : pend ? (entrada ? 'A receber' : 'A pagar') : (entrada ? 'Recebido' : 'Pago');
+    const tagCampanha = r.campanha_id ? `<span class="fin-tag" style="cursor: pointer;" title="Ver na aba Campanhas" onclick="event.stopPropagation(); loadTab('campanhas')">Campanha ↗</span>` : '';
     const tagAmbito = finAmbito === 'todos' ? `<span class="fin-tag">${r.ambito === 'empresa' ? 'Empresa' : 'Pessoal'}</span>` : '';
     const tagCat = r.categoria ? `<span class="fin-tag">${escRot(r.categoria)}</span>` : '';
     let tagNf = '';
@@ -3474,8 +3992,8 @@
     return `
       <div class="fin-row ${pend ? 'pend' : 'ok'} ${entrada ? 'in' : 'out'}">
         <div class="fin-row-main" onclick="openFinModal(${r.id})">
-          <div class="fin-row-title">${tagAmbito}${tagCat}<span>${escRot(r.descricao)}</span></div>
-          <div class="fin-row-meta"><span class="fin-pill ${pend ? 'pend' : 'ok'}">${pill}</span><span>${finFechamento(r) ? `fechado ${finDataCurta(finFechamento(r))} · pgto ${finDataCurta(r.data)}` : finDataBR(r.data)}</span>${tagNf}</div>
+          <div class="fin-row-title">${tagAmbito}${tagCat}<span>${escRot(r.descricao)}</span>${tagCampanha}</div>
+          <div class="fin-row-meta"><span class="fin-pill ${atrasado ? 'atras' : pend ? 'pend' : 'ok'}">${pill}</span><span>${finFechamento(r) ? `fechado ${finDataCurta(finFechamento(r))} · ${pend ? 'vence' : 'pago'} ${finDataCurta(r.data)}` : finDataBR(r.data)}</span>${tagNf}</div>
         </div>
         <div class="fin-valor ${entrada ? 'in' : 'out'}">${entrada ? '+' : '−'}${finFmt(r.valor)}</div>
         <div class="fin-acoes">
@@ -3500,10 +4018,10 @@
       return {
         i, nome, entrou, saiu,
         saldo: entrou - saiu,
-        n: doMes.filter(finConta).length,
+        n: finContaJobs(doMes.filter(finConta)),
         comNf: finResumoNf(doMes).com.v,
         fechado: finSoma(fechDoMes, () => true),
-        nFechado: fechDoMes.length,
+        nFechado: finContaJobs(fechDoMes),
         pendente: finSoma(doMes, r => r.tipo === 'entrada' && r.status === 'pendente'),
         temDados: doMes.length > 0 || fechDoMes.length > 0
       };
@@ -3661,7 +4179,8 @@
 
   function openFinModal(id) {
     editingFinId = id || null;
-    const r = editingFinId ? finCache.find(x => x.id === editingFinId) : null;
+    finNovoCampanhaId = null;
+    const r = editingFinId ? finAcharRow(editingFinId) : null;
     const ambitoPadrao = finAmbito === 'todos' ? 'empresa' : finAmbito;
 
     let dataPadrao;
@@ -3724,6 +4243,16 @@
       payload.nf = document.getElementById('finNfInput').value || null;
       if (payload.nf === 'emitida') payload.nf_numero = document.getElementById('finNfNumeroInput').value.trim() || null;
     }
+    // Pendente: "data" é o vencimento. Pago: "data" é o dia em que caiu.
+    const anterior = editingFinId ? finAcharRow(editingFinId) : null;
+    if (payload.status === 'pendente') {
+      payload.vencimento = data;
+      payload.pago_em = null;
+    } else {
+      payload.pago_em = data;
+      payload.vencimento = anterior?.vencimento || data;
+    }
+    if (!editingFinId && finNovoCampanhaId) payload.campanha_id = finNovoCampanhaId;
 
     const btn = document.getElementById('finSaveBtn');
     btn.disabled = true;
@@ -3744,11 +4273,15 @@
       }
       if (error) throw error;
 
-      const p = finParseData(data);
-      finAno = p.a;
-      finMes = p.m;
       closeFinModal();
-      loadFinancas();
+      if (currentTab === 'campanhas') {
+        loadCampanhas();
+      } else {
+        const p = finParseData(data);
+        finAno = p.a;
+        finMes = p.m;
+        loadFinancas();
+      }
     } catch (err) {
       console.error(err);
       mostrarErro('Erro ao salvar: ' + err.message);
@@ -3758,32 +4291,24 @@
     }
   }
 
-  async function toggleFinStatus(id) {
-    const r = finCache.find(x => x.id === id);
+  // ✓ na lista: pendente -> pergunta a data em que foi pago; pago -> desfaz
+  function toggleFinStatus(id) {
+    const r = finAcharRow(id);
     if (!r) return;
-    const novo = r.status === 'pendente' ? 'confirmado' : 'pendente';
-    try {
-      const { error } = await supabase.from('financas')
-        .update({ status: novo, atualizado_em: new Date().toISOString() })
-        .eq('id', id);
-      if (error) throw error;
-      r.status = novo;
-      renderFin();
-    } catch (err) {
-      console.error(err);
-      alert('Erro ao atualizar: ' + err.message);
-    }
+    if (r.status === 'pendente') openPagoModal(id);
+    else desfazerPago(id);
   }
 
   async function deleteFin(id) {
-    const r = finCache.find(x => x.id === id);
+    const r = finAcharRow(id);
     if (!r) return;
     if (!confirm(`Apagar "${r.descricao}" (${finFmt(r.valor)})? Não dá para desfazer.`)) return;
     try {
       const { error } = await supabase.from('financas').delete().eq('id', id);
       if (error) throw error;
       finCache = finCache.filter(x => x.id !== id);
-      renderFin();
+      campParcelas = campParcelas.filter(x => x.id !== id);
+      finRefresh();
     } catch (err) {
       console.error(err);
       alert('Erro ao apagar: ' + err.message);
