@@ -610,6 +610,10 @@
     }
     .fin-panel-head h3 { font-size: 16px; }
     .fin-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .camp-edit-pags { border: 1px solid var(--detail); border-radius: 6px; background: #faf8f5; }
+    .camp-edit-pag { display: flex; justify-content: space-between; gap: 10px; padding: 8px 12px; font-size: 13px; }
+    .camp-edit-pag + .camp-edit-pag { border-top: 1px solid var(--detail); }
+    .camp-edit-pag .quando { color: #6b6661; }
     .camp-etapas { align-items: center; margin: -4px 0 14px; }
     .camp-etapas .camp-etapas-label { font-size: 12px; color: #77716b; margin-right: 2px; }
     .fin-chip .n { opacity: 0.6; margin-left: 3px; }
@@ -1247,8 +1251,10 @@
         <div id="campPreview" style="font-size: 12px; color: #6b6661; margin-top: 10px; line-height: 1.6;"></div>
         <div style="font-size: 11px; color: #9a948e; margin-top: 6px;">Os pagamentos entram em Finanças como “a receber”. Parcelas ficam a cada 30 dias.</div>
       </div>
-      <div id="campEditNota" style="grid-column: 1 / -1; display: none; font-size: 12px; color: #8a847e;">
-        Os pagamentos desta campanha são editados na lista, abrindo a campanha. Mudanças de nome, fechamento e NF são levadas para eles.
+      <div id="campEditNota" style="grid-column: 1 / -1; display: none;">
+        <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Pagamentos</label>
+        <div id="campEditPagamentos" class="camp-edit-pags"></div>
+        <div style="font-size: 12px; color: #8a847e; margin-top: 6px;">Para mudar data ou valor, ou marcar como pago, abra a campanha na lista (setinha ▸). Mudanças de nome, fechamento e NF são levadas para os pagamentos.</div>
       </div>
 
       <div class="form-group" style="grid-column: 1 / -1;">
@@ -3256,10 +3262,27 @@
     set('campPrimeiroPag', finSomaDias(hoje, 30));
     document.getElementById('campPagamentoWrap').style.display = c ? 'none' : 'block';
     document.getElementById('campEditNota').style.display = c ? 'block' : 'none';
+    if (c) document.getElementById('campEditPagamentos').innerHTML = campEditPagamentosHtml(c);
     campAtualizaNf();
     campPreviewParcelas();
     document.getElementById('campanhaModal').classList.add('show');
     setTimeout(() => document.getElementById('campNome').focus(), 50);
+  }
+  // lista (só leitura) dos pagamentos da campanha, dentro da tela de editar
+  function campEditPagamentosHtml(c) {
+    const ps = campResumo(c).parcelas;
+    if (!ps.length) return '<div class="camp-edit-pag"><span class="quando">Nenhum pagamento lançado ainda.</span></div>';
+    const hoje = finHojeISO();
+    return ps.map((p, i) => {
+      const pago = p.status !== 'pendente';
+      const quando = pago
+        ? `<span style="color: var(--green);">pago em ${finDataBR(p.pago_em || p.data)}</span>`
+        : p.data < hoje
+          ? `vencia ${finDataBR(p.vencimento || p.data)} · <span style="color: var(--pink-dark); font-weight: 600;">atrasado</span>`
+          : `previsto para ${finDataBR(p.vencimento || p.data)}`;
+      const n = ps.length > 1 ? `${i + 1}/${ps.length} · ` : '';
+      return `<div class="camp-edit-pag"><span>${n}<strong>${finFmt(p.valor)}</strong></span><span class="quando">${quando}</span></div>`;
+    }).join('');
   }
   function closeCampanhaModal() { document.getElementById('campanhaModal').classList.remove('show'); }
   function campAtualizaNf() {
