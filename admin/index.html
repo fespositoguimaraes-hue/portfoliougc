@@ -3649,6 +3649,7 @@
     }
   };
 
+  const ICON_LOCK = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
   const ICON_CHECK = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><path d="M22 4 12 14l-3-3"/></svg>';
 
   const finBRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -3999,7 +4000,9 @@
         <div class="fin-acoes">
           <button type="button" title="${tituloCheck}" aria-label="${tituloCheck}" style="color: ${pend ? 'var(--detail)' : 'var(--green)'};" onclick="toggleFinStatus(${r.id})">${ICON_CHECK}</button>
           <button type="button" title="Editar" aria-label="Editar" onclick="openFinModal(${r.id})">${ICON_EDIT}</button>
-          <button type="button" title="Apagar" aria-label="Apagar" style="color: var(--pink-dark);" onclick="deleteFin(${r.id})">${ICON_TRASH}</button>
+          ${r.categoria === FIN_RESUMO
+            ? `<button type="button" title="Resumo protegido: pode editar, mas não apagar" aria-label="Resumo protegido" style="color: var(--detail); cursor: default;">${ICON_LOCK}</button>`
+            : `<button type="button" title="Apagar" aria-label="Apagar" style="color: var(--pink-dark);" onclick="deleteFin(${r.id})">${ICON_TRASH}</button>`}
         </div>
       </div>`;
   }
@@ -4302,6 +4305,7 @@
   async function deleteFin(id) {
     const r = finAcharRow(id);
     if (!r) return;
+    if (r.categoria === FIN_RESUMO) return alert('Este resumo importado é protegido e não pode ser apagado. Se precisar, edite o valor.');
     if (!confirm(`Apagar "${r.descricao}" (${finFmt(r.valor)})? Não dá para desfazer.`)) return;
     try {
       const { error } = await supabase.from('financas').delete().eq('id', id);
