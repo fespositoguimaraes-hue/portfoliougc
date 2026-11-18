@@ -3781,8 +3781,12 @@
   }
 
   function finAnosDisponiveis() {
-    const anos = new Set([new Date().getFullYear(), finAno]);
-    finCache.forEach(r => anos.add(finParseData(r.data).a));
+    const atual = new Date().getFullYear();
+    // sempre mostra o ano que vem: pagamentos de 60–90 dias caem nele
+    const anos = new Set([atual, atual + 1, finAno]);
+    finCache.forEach(r => {
+      [r.data, r.vencimento, r.data_fechamento].forEach(d => { if (d) anos.add(finParseData(d).a); });
+    });
     return [...anos].sort((a, b) => b - a);
   }
 
