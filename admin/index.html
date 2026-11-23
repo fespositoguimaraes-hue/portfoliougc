@@ -617,6 +617,70 @@
       .cal-post { font-size: 13px; padding: 7px 8px; }
     }
 
+    /* ==================== IDEIAS ==================== */
+    .ideia-nova {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .ideia-nova input[type="text"] { flex: 1; min-width: 0; background: white; font-size: 14px; padding: 10px 12px; }
+    .ideia-nova select { width: auto; background: white; }
+    .ideia-lista { display: flex; flex-direction: column; gap: 6px; }
+    .ideia {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: white;
+      border: 1px solid var(--gray-light);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+    .ideia input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      padding: 0;
+      flex-shrink: 0;
+      accent-color: var(--green);
+      cursor: pointer;
+    }
+    .ideia-texto {
+      flex: 1;
+      min-width: 0;
+      background: none;
+      border: none;
+      padding: 0;
+      font: inherit;
+      font-size: 14px;
+      text-align: left;
+      color: var(--ink);
+      cursor: text;
+      overflow-wrap: anywhere;
+    }
+    .ideia-texto-input { flex: 1; min-width: 0; font-size: 14px; background: white; }
+    .ideia.feita .ideia-texto { text-decoration: line-through; color: #8a847e; }
+    .ideia-meta { font-size: 11px; color: #8a847e; white-space: nowrap; }
+    .ideia-meta.agendada { color: var(--green-dark); }
+    .ideia-acao {
+      border: none;
+      background: none;
+      color: #8a847e;
+      cursor: pointer;
+      padding: 4px;
+      display: inline-flex;
+      border-radius: 4px;
+    }
+    .ideia-acao:hover { color: var(--ink); background: var(--paper); }
+    .ideia-agendar { font-size: 12px; font-family: inherit; gap: 4px; align-items: center; white-space: nowrap; }
+    @media (max-width: 600px) {
+      .ideia-nova { flex-wrap: wrap; }
+      .ideia-nova input[type="text"] { flex-basis: 100%; }
+      .ideia-nova select, .ideia-nova .btn { flex: 1; }
+      .ideia { flex-wrap: wrap; }
+      .ideia-texto { flex-basis: calc(100% - 30px); }
+      .ideia-meta { margin-left: 28px; margin-right: auto; }
+    }
+
     /* ==================== FINANÇAS ==================== */
     .fin-top {
       display: flex;
@@ -1215,6 +1279,12 @@
         <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2M3 9h18"/>
       </svg>
       Calendário
+    </button>
+    <button class="nav-item" data-tab="ideias">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V16h8v-1.3A7 7 0 0 0 12 2z"/>
+      </svg>
+      Ideias
     </button>
     <button class="nav-item" data-tab="campanhas">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1832,6 +1902,7 @@
       marcas: 'Marcas',
       prospeccao: 'Prospecção',
       calendario: 'Calendário',
+      ideias: 'Ideias',
       campanhas: 'Campanhas',
       checklist: 'Checklist',
       roteiros: 'Roteiros',
@@ -1850,6 +1921,7 @@
     else if (tab === 'marcas') loadMarcas();
     else if (tab === 'prospeccao') loadProspeccao();
     else if (tab === 'calendario') loadCalendario();
+    else if (tab === 'ideias') loadIdeias();
     else if (tab === 'campanhas') loadCampanhas();
     else if (tab === 'checklist') loadChecklist();
     else if (tab === 'roteiros') loadRoteiros();
@@ -3097,6 +3169,7 @@
   let calMes = { a: new Date().getFullYear(), m: new Date().getMonth() };
   let editingCalPostId = null;
   let calArrastando = null;
+  let calIdeiaId = null; // ideia que está sendo agendada pelo modal
   const CAL_TIPOS = ['Reels', 'Carrossel', 'Stories', 'Foto', 'Publi'];
   const CAL_SEMANA = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
 
@@ -3258,6 +3331,7 @@
 
   function openCalPostModal(id, dia) {
     editingCalPostId = id || null;
+    calIdeiaId = null;
     const p = editingCalPostId ? calCache.find(x => x.id === editingCalPostId) : null;
     const h = new Date();
     const padrao = (calMes.a === h.getFullYear() && calMes.m === h.getMonth()) ? finHojeISO() : calISO(calMes.a, calMes.m, 1);
@@ -3311,7 +3385,14 @@
       const d = finParseData(data);
       calMes = { a: d.a, m: d.m };
       closeCalPostModal();
-      loadCalendario();
+      if (calIdeiaId) {
+        const { error: e2 } = await supabase.from('ideias_conteudo')
+          .update({ feita: true, agendada_para: data }).eq('id', calIdeiaId);
+        if (e2) alert('O post foi para o calendário, mas não consegui marcar a ideia: ' + e2.message);
+        loadIdeias();
+      } else {
+        loadCalendario();
+      }
     } catch (err) {
       console.error(err);
       errBox.textContent = 'Erro ao salvar: ' + err.message;
@@ -3329,6 +3410,173 @@
       if (error) throw error;
       closeCalPostModal();
       loadCalendario();
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao apagar: ' + err.message);
+    }
+  }
+
+  // ========================================================================
+  // IDEIAS DE CONTEÚDO
+  // ========================================================================
+  // Banco de ideias para o @byfeguimaraes (tabela ideias_conteudo). Marque o
+  // check quando usar a ideia, clique no texto para editar e use "Agendar"
+  // para mandar a ideia para o calendário já com data.
+
+  let ideiasCache = [];
+  let ideiaFiltro = 'pendentes';
+  let editingIdeiaId = null;
+
+  async function loadIdeias() {
+    const content = document.querySelector('.content');
+    try {
+      const { data, error } = await supabase.from('ideias_conteudo').select('*')
+        .order('criado_em', { ascending: false });
+      if (error) throw error;
+      ideiasCache = data || [];
+      editingIdeiaId = null;
+      content.innerHTML = `
+        <p style="font-size: 14px; color: #77716b; max-width: 560px; line-height: 1.5; margin-bottom: 16px;">Anote as ideias de conteúdo para o @byfeguimaraes. Marque o check quando usar, clique no texto para editar e use Agendar para mandar para o calendário.</p>
+        <form class="ideia-nova" onsubmit="addIdeia(event)">
+          <input type="text" id="ideiaNovaTexto" placeholder="Nova ideia... ex: carrossel nichos diferentes UGC" autocomplete="off">
+          <select id="ideiaNovaFormato" aria-label="Formato">
+            <option value="">Formato</option>
+            ${CAL_TIPOS.map(t => `<option value="${t}">${t}</option>`).join('')}
+          </select>
+          <button type="submit" class="btn btn-primary" style="padding: 9px 14px;">Adicionar</button>
+        </form>
+        <div class="fin-chips" id="ideiaFiltros" style="margin-bottom: 12px;"></div>
+        <div id="ideiaLista"></div>
+      `;
+      renderIdeias();
+      document.getElementById('ideiaNovaTexto').focus();
+    } catch (err) {
+      console.error(err);
+      content.innerHTML = /ideias_conteudo/i.test(err.message || '')
+        ? '<div class="error-message">Falta criar a tabela de ideias. Rode o arquivo <strong>criar-ideias.sql</strong> no SQL Editor do Supabase e recarregue esta página.</div>'
+        : `<div class="error-message">Erro ao carregar as ideias: ${escRot(err.message)}</div>`;
+    }
+  }
+
+  function setIdeiaFiltro(f) { ideiaFiltro = f; renderIdeias(); }
+
+  function renderIdeias() {
+    const box = document.getElementById('ideiaLista');
+    if (!box) return;
+    const filtros = [
+      { key: 'pendentes', label: 'Para fazer', fn: i => !i.feita },
+      { key: 'feitas', label: 'Feitas', fn: i => i.feita },
+      { key: 'todas', label: 'Todas', fn: () => true }
+    ];
+    document.getElementById('ideiaFiltros').innerHTML = filtros.map(f =>
+      `<button type="button" class="fin-chip ${f.key === ideiaFiltro ? 'active' : ''}" onclick="setIdeiaFiltro('${f.key}')">${f.label}<span class="n">${ideiasCache.filter(f.fn).length}</span></button>`
+    ).join('');
+
+    const filtro = filtros.find(f => f.key === ideiaFiltro);
+    // as que faltam fazer primeiro, as feitas no fim
+    const lista = ideiasCache.filter(filtro.fn).sort((a, b) => Number(a.feita) - Number(b.feita));
+    if (!lista.length) {
+      box.innerHTML = `<div class="empty-state">${ideiaFiltro === 'feitas' ? 'Nenhuma ideia marcada como feita ainda.' : 'Nenhuma ideia por aqui. Escreva a primeira no campo acima.'}</div>`;
+      return;
+    }
+    box.innerHTML = `<div class="ideia-lista">${lista.map(ideiaHtml).join('')}</div>`;
+    if (editingIdeiaId) {
+      const inp = document.getElementById('ideiaEditInput');
+      if (inp) { inp.focus(); inp.select(); }
+    }
+  }
+
+  function ideiaHtml(i) {
+    const texto = editingIdeiaId === i.id
+      ? `<input type="text" class="ideia-texto-input" id="ideiaEditInput" value="${escRot(i.texto)}"
+           onkeydown="if (event.key === 'Enter') saveEditIdeia(${i.id}, this.value); if (event.key === 'Escape') cancelEditIdeia();"
+           onblur="saveEditIdeia(${i.id}, this.value)">`
+      : `<button type="button" class="ideia-texto" title="Clique para editar" onclick="startEditIdeia(${i.id})">${escRot(i.texto)}</button>`;
+    const meta = i.agendada_para
+      ? `<span class="ideia-meta agendada">no calendário · ${finDataBR(i.agendada_para)}</span>`
+      : (i.formato ? `<span class="ideia-meta">${escRot(i.formato)}</span>` : '');
+    return `
+      <div class="ideia ${i.feita ? 'feita' : ''}">
+        <input type="checkbox" ${i.feita ? 'checked' : ''} aria-label="Feita: ${escRot(i.texto)}" onchange="toggleIdeia(${i.id}, this.checked)">
+        ${texto}
+        ${meta}
+        ${i.agendada_para ? '' : `<button type="button" class="ideia-acao ideia-agendar" title="Mandar para o calendário" onclick="agendarIdeia(${i.id})">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2M3 9h18"/></svg>Agendar</button>`}
+        <button type="button" class="ideia-acao" title="Apagar ideia" aria-label="Apagar ideia" onclick="deleteIdeia(${i.id})">${ICON_TRASH}</button>
+      </div>`;
+  }
+
+  async function ideiaAtualiza(id, campos) {
+    const i = ideiasCache.find(x => x.id === id);
+    if (!i) return;
+    const antes = { ...i };
+    Object.assign(i, campos);
+    renderIdeias();
+    try {
+      const { error } = await supabase.from('ideias_conteudo').update(campos).eq('id', id);
+      if (error) throw error;
+    } catch (err) {
+      console.error(err);
+      Object.assign(i, antes);
+      renderIdeias();
+      alert('Erro ao salvar: ' + err.message);
+    }
+  }
+
+  async function addIdeia(ev) {
+    ev.preventDefault();
+    const input = document.getElementById('ideiaNovaTexto');
+    const texto = input.value.trim();
+    if (!texto) { input.focus(); return; }
+    const formato = document.getElementById('ideiaNovaFormato').value || null;
+    input.disabled = true;
+    try {
+      const { data, error } = await supabase.from('ideias_conteudo').insert({ texto, formato }).select().single();
+      if (error) throw error;
+      ideiasCache.unshift(data);
+      input.value = '';
+      if (ideiaFiltro === 'feitas') ideiaFiltro = 'pendentes';
+      renderIdeias();
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao salvar a ideia: ' + err.message);
+    } finally {
+      input.disabled = false;
+      input.focus();
+    }
+  }
+
+  function toggleIdeia(id, checked) { ideiaAtualiza(id, { feita: checked }); }
+
+  function startEditIdeia(id) { editingIdeiaId = id; renderIdeias(); }
+  function cancelEditIdeia() { editingIdeiaId = null; renderIdeias(); }
+  function saveEditIdeia(id, valor) {
+    if (editingIdeiaId !== id) return;
+    editingIdeiaId = null;
+    const texto = valor.trim();
+    const i = ideiasCache.find(x => x.id === id);
+    if (!texto || !i || texto === i.texto) { renderIdeias(); return; }
+    ideiaAtualiza(id, { texto });
+  }
+
+  function agendarIdeia(id) {
+    const i = ideiasCache.find(x => x.id === id);
+    if (!i) return;
+    openCalPostModal(null, finHojeISO());
+    calIdeiaId = id;
+    document.getElementById('calPostModalTitle').textContent = 'Agendar ideia';
+    document.getElementById('calPostTitulo').value = i.texto;
+    if (i.formato) document.getElementById('calPostTipo').value = i.formato;
+    document.getElementById('calPostData').focus();
+  }
+
+  async function deleteIdeia(id) {
+    if (!confirm('Apagar esta ideia? Não dá para desfazer.')) return;
+    try {
+      const { error } = await supabase.from('ideias_conteudo').delete().eq('id', id);
+      if (error) throw error;
+      ideiasCache = ideiasCache.filter(x => x.id !== id);
+      renderIdeias();
     } catch (err) {
       console.error(err);
       alert('Erro ao apagar: ' + err.message);
