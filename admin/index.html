@@ -652,16 +652,16 @@
       .cal-post { font-size: 13px; padding: 7px 8px; }
     }
 
-    /* ==================== IDEIAS ==================== */
-    .ideia-nova {
+    /* ==================== CHECKLIST ==================== */
+    .chk-nova {
       display: flex;
       gap: 8px;
       margin-bottom: 14px;
     }
-    .ideia-nova input[type="text"] { flex: 1; min-width: 0; background: white; font-size: 14px; padding: 10px 12px; }
-    .ideia-nova select { width: auto; background: white; }
-    .ideia-lista { display: flex; flex-direction: column; gap: 6px; }
-    .ideia {
+    .chk-nova input[type="text"] { flex: 1; min-width: 0; background: white; font-size: 14px; padding: 10px 12px; }
+    .chk-nova select { width: auto; background: white; }
+    .chk-lista { display: flex; flex-direction: column; gap: 6px; }
+    .chk {
       display: flex;
       align-items: center;
       gap: 10px;
@@ -670,7 +670,7 @@
       border-radius: 8px;
       padding: 10px 12px;
     }
-    .ideia input[type="checkbox"] {
+    .chk input[type="checkbox"] {
       width: 18px;
       height: 18px;
       margin: 0;
@@ -679,7 +679,7 @@
       accent-color: var(--green);
       cursor: pointer;
     }
-    .ideia-texto {
+    .chk-texto {
       flex: 1;
       min-width: 0;
       background: none;
@@ -692,11 +692,11 @@
       cursor: text;
       overflow-wrap: anywhere;
     }
-    .ideia-texto-input { flex: 1; min-width: 0; font-size: 14px; background: white; }
-    .ideia.feita .ideia-texto { text-decoration: line-through; color: #8a847e; }
-    .ideia-meta { font-size: 11px; color: #8a847e; white-space: nowrap; }
-    .ideia-meta.agendada { color: var(--green-dark); }
-    .ideia-acao {
+    .chk-texto-input { flex: 1; min-width: 0; font-size: 14px; background: white; }
+    .chk.feita .chk-texto { text-decoration: line-through; color: #8a847e; }
+    .chk-meta { font-size: 11px; color: #8a847e; white-space: nowrap; }
+    .chk-meta.agendada { color: var(--green-dark); }
+    .chk-acao {
       border: none;
       background: none;
       color: #8a847e;
@@ -705,15 +705,28 @@
       display: inline-flex;
       border-radius: 4px;
     }
-    .ideia-acao:hover { color: var(--ink); background: var(--paper); }
-    .ideia-agendar { font-size: 12px; font-family: inherit; gap: 4px; align-items: center; white-space: nowrap; }
+    .chk-acao:hover { color: var(--ink); background: var(--paper); }
+    .chk-agendar { font-size: 12px; font-family: inherit; gap: 4px; align-items: center; white-space: nowrap; }
+    .chk-colunas { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .chk-coluna { background: var(--paper-warm); border-radius: 10px; padding: 14px; min-width: 0; }
+    .chk-coluna h3 { font-size: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; }
+    .chk-coluna h3 span { font-weight: 400; font-size: 12px; color: #8a847e; }
+    .chk-coluna .chk-nova { margin-bottom: 10px; }
+    .chk-coluna .chk-nova input[type="text"] { font-size: 13px; padding: 8px 10px; }
+    .chk-dia-label { font-size: 15px; font-weight: 600; min-width: 150px; text-align: center; }
+    .chk-atrasadas { background: #fdf1f2; border: 1px solid #f0cdd2; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; }
+    .chk-atrasadas-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: var(--pink-dark); }
+    .chk-vazio { font-size: 13px; color: #8a847e; padding: 6px 2px; }
+    @media (max-width: 768px) {
+      .chk-colunas { grid-template-columns: 1fr; }
+    }
     @media (max-width: 600px) {
-      .ideia-nova { flex-wrap: wrap; }
-      .ideia-nova input[type="text"] { flex-basis: 100%; }
-      .ideia-nova select, .ideia-nova .btn { flex: 1; }
-      .ideia { flex-wrap: wrap; }
-      .ideia-texto { flex-basis: calc(100% - 30px); }
-      .ideia-meta { margin-left: 28px; margin-right: auto; }
+      .chk-nova { flex-wrap: wrap; }
+      .chk-nova input[type="text"] { flex-basis: 100%; }
+      .chk-nova select, .chk-nova .btn { flex: 1; }
+      .chk { flex-wrap: wrap; }
+      .chk-texto { flex-basis: calc(100% - 30px); }
+      .chk-meta { margin-left: 28px; margin-right: auto; }
     }
 
     /* ==================== FINANÇAS ==================== */
@@ -1314,12 +1327,6 @@
         <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2M3 9h18"/>
       </svg>
       Calendário
-    </button>
-    <button class="nav-item" data-tab="ideias">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V16h8v-1.3A7 7 0 0 0 12 2z"/>
-      </svg>
-      Ideias
     </button>
     <button class="nav-item" data-tab="campanhas">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1940,7 +1947,6 @@
       marcas: 'Marcas',
       prospeccao: 'Prospecção',
       calendario: 'Calendário',
-      ideias: 'Ideias',
       campanhas: 'Campanhas',
       checklist: 'Checklist',
       roteiros: 'Roteiros',
@@ -1959,7 +1965,6 @@
     else if (tab === 'marcas') loadMarcas();
     else if (tab === 'prospeccao') loadProspeccao();
     else if (tab === 'calendario') loadCalendario();
-    else if (tab === 'ideias') loadIdeias();
     else if (tab === 'campanhas') loadCampanhas();
     else if (tab === 'checklist') loadChecklist();
     else if (tab === 'roteiros') loadRoteiros();
@@ -3454,10 +3459,10 @@
       calMes = { a: d.a, m: d.m };
       closeCalPostModal();
       if (calIdeiaId) {
-        const { error: e2 } = await supabase.from('ideias_conteudo')
+        const { error: e2 } = await supabase.from('checklist_itens')
           .update({ feita: true, agendada_para: data }).eq('id', calIdeiaId);
         if (e2) alert('O post foi para o calendário, mas não consegui marcar a ideia: ' + e2.message);
-        loadIdeias();
+        loadChecklist();
       } else {
         loadCalendario();
       }
@@ -3478,173 +3483,6 @@
       if (error) throw error;
       closeCalPostModal();
       loadCalendario();
-    } catch (err) {
-      console.error(err);
-      alert('Erro ao apagar: ' + err.message);
-    }
-  }
-
-  // ========================================================================
-  // IDEIAS DE CONTEÚDO
-  // ========================================================================
-  // Banco de ideias para o @byfeguimaraes (tabela ideias_conteudo). Marque o
-  // check quando usar a ideia, clique no texto para editar e use "Agendar"
-  // para mandar a ideia para o calendário já com data.
-
-  let ideiasCache = [];
-  let ideiaFiltro = 'pendentes';
-  let editingIdeiaId = null;
-
-  async function loadIdeias() {
-    const content = document.querySelector('.content');
-    try {
-      const { data, error } = await supabase.from('ideias_conteudo').select('*')
-        .order('criado_em', { ascending: false });
-      if (error) throw error;
-      ideiasCache = data || [];
-      editingIdeiaId = null;
-      content.innerHTML = `
-        <p style="font-size: 14px; color: #77716b; max-width: 560px; line-height: 1.5; margin-bottom: 16px;">Anote as ideias de conteúdo para o @byfeguimaraes. Marque o check quando usar, clique no texto para editar e use Agendar para mandar para o calendário.</p>
-        <form class="ideia-nova" onsubmit="addIdeia(event)">
-          <input type="text" id="ideiaNovaTexto" placeholder="Nova ideia... ex: carrossel nichos diferentes UGC" autocomplete="off">
-          <select id="ideiaNovaFormato" aria-label="Formato">
-            <option value="">Formato</option>
-            ${CAL_TIPOS.map(t => `<option value="${t}">${t}</option>`).join('')}
-          </select>
-          <button type="submit" class="btn btn-primary" style="padding: 9px 14px;">Adicionar</button>
-        </form>
-        <div class="fin-chips" id="ideiaFiltros" style="margin-bottom: 12px;"></div>
-        <div id="ideiaLista"></div>
-      `;
-      renderIdeias();
-      document.getElementById('ideiaNovaTexto').focus();
-    } catch (err) {
-      console.error(err);
-      content.innerHTML = /ideias_conteudo/i.test(err.message || '')
-        ? '<div class="error-message">Falta criar a tabela de ideias. Rode o arquivo <strong>criar-ideias.sql</strong> no SQL Editor do Supabase e recarregue esta página.</div>'
-        : `<div class="error-message">Erro ao carregar as ideias: ${escRot(err.message)}</div>`;
-    }
-  }
-
-  function setIdeiaFiltro(f) { ideiaFiltro = f; renderIdeias(); }
-
-  function renderIdeias() {
-    const box = document.getElementById('ideiaLista');
-    if (!box) return;
-    const filtros = [
-      { key: 'pendentes', label: 'Para fazer', fn: i => !i.feita },
-      { key: 'feitas', label: 'Feitas', fn: i => i.feita },
-      { key: 'todas', label: 'Todas', fn: () => true }
-    ];
-    document.getElementById('ideiaFiltros').innerHTML = filtros.map(f =>
-      `<button type="button" class="fin-chip ${f.key === ideiaFiltro ? 'active' : ''}" onclick="setIdeiaFiltro('${f.key}')">${f.label}<span class="n">${ideiasCache.filter(f.fn).length}</span></button>`
-    ).join('');
-
-    const filtro = filtros.find(f => f.key === ideiaFiltro);
-    // as que faltam fazer primeiro, as feitas no fim
-    const lista = ideiasCache.filter(filtro.fn).sort((a, b) => Number(a.feita) - Number(b.feita));
-    if (!lista.length) {
-      box.innerHTML = `<div class="empty-state">${ideiaFiltro === 'feitas' ? 'Nenhuma ideia marcada como feita ainda.' : 'Nenhuma ideia por aqui. Escreva a primeira no campo acima.'}</div>`;
-      return;
-    }
-    box.innerHTML = `<div class="ideia-lista">${lista.map(ideiaHtml).join('')}</div>`;
-    if (editingIdeiaId) {
-      const inp = document.getElementById('ideiaEditInput');
-      if (inp) { inp.focus(); inp.select(); }
-    }
-  }
-
-  function ideiaHtml(i) {
-    const texto = editingIdeiaId === i.id
-      ? `<input type="text" class="ideia-texto-input" id="ideiaEditInput" value="${escRot(i.texto)}"
-           onkeydown="if (event.key === 'Enter') saveEditIdeia(${i.id}, this.value); if (event.key === 'Escape') cancelEditIdeia();"
-           onblur="saveEditIdeia(${i.id}, this.value)">`
-      : `<button type="button" class="ideia-texto" title="Clique para editar" onclick="startEditIdeia(${i.id})">${escRot(i.texto)}</button>`;
-    const meta = i.agendada_para
-      ? `<span class="ideia-meta agendada">no calendário · ${finDataBR(i.agendada_para)}</span>`
-      : (i.formato ? `<span class="ideia-meta">${escRot(i.formato)}</span>` : '');
-    return `
-      <div class="ideia ${i.feita ? 'feita' : ''}">
-        <input type="checkbox" ${i.feita ? 'checked' : ''} aria-label="Feita: ${escRot(i.texto)}" onchange="toggleIdeia(${i.id}, this.checked)">
-        ${texto}
-        ${meta}
-        ${i.agendada_para ? '' : `<button type="button" class="ideia-acao ideia-agendar" title="Mandar para o calendário" onclick="agendarIdeia(${i.id})">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2M3 9h18"/></svg>Agendar</button>`}
-        <button type="button" class="ideia-acao" title="Apagar ideia" aria-label="Apagar ideia" onclick="deleteIdeia(${i.id})">${ICON_TRASH}</button>
-      </div>`;
-  }
-
-  async function ideiaAtualiza(id, campos) {
-    const i = ideiasCache.find(x => x.id === id);
-    if (!i) return;
-    const antes = { ...i };
-    Object.assign(i, campos);
-    renderIdeias();
-    try {
-      const { error } = await supabase.from('ideias_conteudo').update(campos).eq('id', id);
-      if (error) throw error;
-    } catch (err) {
-      console.error(err);
-      Object.assign(i, antes);
-      renderIdeias();
-      alert('Erro ao salvar: ' + err.message);
-    }
-  }
-
-  async function addIdeia(ev) {
-    ev.preventDefault();
-    const input = document.getElementById('ideiaNovaTexto');
-    const texto = input.value.trim();
-    if (!texto) { input.focus(); return; }
-    const formato = document.getElementById('ideiaNovaFormato').value || null;
-    input.disabled = true;
-    try {
-      const { data, error } = await supabase.from('ideias_conteudo').insert({ texto, formato }).select().single();
-      if (error) throw error;
-      ideiasCache.unshift(data);
-      input.value = '';
-      if (ideiaFiltro === 'feitas') ideiaFiltro = 'pendentes';
-      renderIdeias();
-    } catch (err) {
-      console.error(err);
-      alert('Erro ao salvar a ideia: ' + err.message);
-    } finally {
-      input.disabled = false;
-      input.focus();
-    }
-  }
-
-  function toggleIdeia(id, checked) { ideiaAtualiza(id, { feita: checked }); }
-
-  function startEditIdeia(id) { editingIdeiaId = id; renderIdeias(); }
-  function cancelEditIdeia() { editingIdeiaId = null; renderIdeias(); }
-  function saveEditIdeia(id, valor) {
-    if (editingIdeiaId !== id) return;
-    editingIdeiaId = null;
-    const texto = valor.trim();
-    const i = ideiasCache.find(x => x.id === id);
-    if (!texto || !i || texto === i.texto) { renderIdeias(); return; }
-    ideiaAtualiza(id, { texto });
-  }
-
-  function agendarIdeia(id) {
-    const i = ideiasCache.find(x => x.id === id);
-    if (!i) return;
-    openCalPostModal(null, finHojeISO());
-    calIdeiaId = id;
-    document.getElementById('calPostModalTitle').textContent = 'Agendar ideia';
-    document.getElementById('calPostTitulo').value = i.texto;
-    if (i.formato) document.getElementById('calPostTipo').value = i.formato;
-    document.getElementById('calPostData').focus();
-  }
-
-  async function deleteIdeia(id) {
-    if (!confirm('Apagar esta ideia? Não dá para desfazer.')) return;
-    try {
-      const { error } = await supabase.from('ideias_conteudo').delete().eq('id', id);
-      if (error) throw error;
-      ideiasCache = ideiasCache.filter(x => x.id !== id);
-      renderIdeias();
     } catch (err) {
       console.error(err);
       alert('Erro ao apagar: ' + err.message);
@@ -4203,15 +4041,290 @@
   // ABA 5: CHECKLIST
   // ========================================================================
 
+  // Três listas na tabela checklist_itens, separadas pela coluna "lista":
+  //   dia    → tarefas de um dia, em duas colunas (area: pessoal | trabalho)
+  //   macro  → tarefas grandes, sem data
+  //   ideias → ideias de conteúdo, que podem ir para o calendário (Agendar)
+  let chkCache = [];
+  let chkLista = 'dia';
+  let chkDia = null;
+  let chkFiltro = 'pendentes';
+  let editingChkId = null;
+  const CHK_LISTAS = [
+    { key: 'dia', label: 'Tarefas do dia' },
+    { key: 'macro', label: 'Tarefas macro' },
+    { key: 'ideias', label: 'Ideias de conteúdo' }
+  ];
+  const CHK_AREAS = [
+    { key: 'pessoal', label: 'Pessoal' },
+    { key: 'trabalho', label: 'Trabalho' }
+  ];
+  const CHK_SEMANA = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
+
   async function loadChecklist() {
     const content = document.querySelector('.content');
+    try {
+      const { data, error } = await supabase.from('checklist_itens').select('*').order('criado_em');
+      if (error) throw error;
+      chkCache = data || [];
+      editingChkId = null;
+      if (!chkDia) chkDia = finHojeISO();
+      try { chkLista = localStorage.getItem('chkLista') || chkLista; } catch (e) {}
+      if (!CHK_LISTAS.some(l => l.key === chkLista)) chkLista = 'dia';
+      content.innerHTML = `
+        <div class="fin-top">
+          <div class="fin-seg" id="chkAbas"></div>
+        </div>
+        <div id="chkCorpo"></div>
+      `;
+      renderChecklist();
+    } catch (err) {
+      console.error(err);
+      content.innerHTML = /checklist_itens/i.test(err.message || '')
+        ? '<div class="error-message">Falta criar a tabela do checklist. Rode o arquivo <strong>criar-checklist.sql</strong> no SQL Editor do Supabase e recarregue esta página.</div>'
+        : `<div class="error-message">Erro ao carregar o checklist: ${escRot(err.message)}</div>`;
+    }
+  }
 
-    if (!window.Biblioteca) {
-      content.innerHTML = '<div class="error-message">Biblioteca de checklist não carregou. Verifique se js/biblioteca.js está no lugar certo.</div>';
-      return;
+  function setChkLista(key) {
+    chkLista = key;
+    chkFiltro = 'pendentes';
+    editingChkId = null;
+    try { localStorage.setItem('chkLista', key); } catch (e) {}
+    renderChecklist();
+  }
+
+  // pendentes primeiro, na ordem em que foram criados
+  function chkOrdena(lista) {
+    return lista.slice().sort((a, b) => Number(a.feita) - Number(b.feita) || String(a.criado_em).localeCompare(String(b.criado_em)));
+  }
+
+  function renderChecklist() {
+    const corpo = document.getElementById('chkCorpo');
+    if (!corpo) return;
+    document.getElementById('chkAbas').innerHTML = CHK_LISTAS.map(l =>
+      `<button type="button" class="${l.key === chkLista ? 'active' : ''}" onclick="setChkLista('${l.key}')">${l.label}</button>`
+    ).join('');
+    corpo.innerHTML = chkLista === 'dia' ? chkDiaHtml() : chkListaSimplesHtml();
+    if (editingChkId) {
+      const inp = document.getElementById('chkEditInput');
+      if (inp) { inp.focus(); inp.select(); }
+    }
+  }
+
+  // ---------- tarefas do dia ----------
+  function chkMudaDia(delta) {
+    chkDia = finSomaDias(chkDia, delta);
+    renderChecklist();
+  }
+  function chkHoje() { chkDia = finHojeISO(); renderChecklist(); }
+
+  function chkDiaHtml() {
+    const hoje = finHojeISO();
+    const p = finParseData(chkDia);
+    const semana = CHK_SEMANA[new Date(p.a, p.m, p.d).getDay()];
+    const rotulo = chkDia === hoje ? `Hoje · ${semana}`
+      : chkDia === finSomaDias(hoje, 1) ? `Amanhã · ${semana}`
+      : chkDia === finSomaDias(hoje, -1) ? `Ontem · ${semana}` : semana;
+    const doDia = chkCache.filter(i => i.lista === 'dia' && i.dia === chkDia);
+
+    // o que ficou sem fazer em dias anteriores aparece no dia de hoje
+    let atrasadas = '';
+    if (chkDia === hoje) {
+      const velhas = chkCache.filter(i => i.lista === 'dia' && !i.feita && i.dia && i.dia < hoje)
+        .sort((a, b) => a.dia.localeCompare(b.dia));
+      if (velhas.length) {
+        atrasadas = `
+          <div class="chk-atrasadas">
+            <div class="chk-atrasadas-head">
+              <span>Ficaram de dias anteriores (${velhas.length})</span>
+              <button type="button" class="fin-chip" onclick="chkTrazerTodas()">Trazer todas para hoje</button>
+            </div>
+            <div class="chk-lista">${velhas.map(i => chkItemHtml(i,
+              `${CHK_AREAS.find(a => a.key === i.area)?.label || ''} · ${finDataBR(i.dia).slice(0, 5)}`,
+              `<button type="button" class="chk-acao chk-agendar" title="Mudar para hoje" onclick="chkAtualiza(${i.id}, { dia: '${hoje}' })">Trazer para hoje</button>`
+            )).join('')}</div>
+          </div>`;
+      }
     }
 
-    content.innerHTML = '<div class="empty-state">Seção de Checklist em desenvolvimento</div>';
+    const colunas = CHK_AREAS.map(area => {
+      const itens = chkOrdena(doDia.filter(i => i.area === area.key));
+      const feitas = itens.filter(i => i.feita).length;
+      return `
+        <div class="chk-coluna">
+          <h3>${area.label}<span>${feitas}/${itens.length}</span></h3>
+          <form class="chk-nova" onsubmit="addChk(event, '${area.key}')">
+            <input type="text" id="chkNova-${area.key}" placeholder="Nova tarefa ${area.label.toLowerCase()}..." autocomplete="off">
+          </form>
+          ${itens.length
+            ? `<div class="chk-lista">${itens.map(i => chkItemHtml(i)).join('')}</div>`
+            : '<div class="chk-vazio">Nada por aqui ainda.</div>'}
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="fin-periodo">
+        <button type="button" class="fin-seta" title="Dia anterior" aria-label="Dia anterior" onclick="chkMudaDia(-1)">‹</button>
+        <span class="chk-dia-label">${rotulo}, ${finDataBR(chkDia).slice(0, 5)}</span>
+        <button type="button" class="fin-seta" title="Próximo dia" aria-label="Próximo dia" onclick="chkMudaDia(1)">›</button>
+        ${chkDia === hoje ? '' : '<button type="button" class="fin-chip" onclick="chkHoje()">Hoje</button>'}
+      </div>
+      ${atrasadas}
+      <div class="chk-colunas">${colunas}</div>`;
+  }
+
+  async function chkTrazerTodas() {
+    const hoje = finHojeISO();
+    const ids = chkCache.filter(i => i.lista === 'dia' && !i.feita && i.dia && i.dia < hoje).map(i => i.id);
+    if (!ids.length) return;
+    try {
+      const { error } = await supabase.from('checklist_itens').update({ dia: hoje }).in('id', ids);
+      if (error) throw error;
+      chkCache.forEach(i => { if (ids.includes(i.id)) i.dia = hoje; });
+      renderChecklist();
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao mover as tarefas: ' + err.message);
+    }
+  }
+
+  // ---------- tarefas macro e ideias ----------
+  function setChkFiltro(f) { chkFiltro = f; renderChecklist(); }
+
+  function chkListaSimplesHtml() {
+    const ehIdeia = chkLista === 'ideias';
+    const todas = chkCache.filter(i => i.lista === chkLista);
+    const filtros = [
+      { key: 'pendentes', label: 'Para fazer', fn: i => !i.feita },
+      { key: 'feitas', label: 'Feitas', fn: i => i.feita },
+      { key: 'todas', label: 'Todas', fn: () => true }
+    ];
+    const filtro = filtros.find(f => f.key === chkFiltro) || filtros[0];
+    const lista = chkOrdena(todas.filter(filtro.fn));
+    const vazio = chkFiltro === 'feitas' ? 'Nada marcado como feito ainda.'
+      : ehIdeia ? 'Nenhuma ideia por aqui. Escreva a primeira no campo acima.' : 'Nenhuma tarefa por aqui. Escreva a primeira no campo acima.';
+
+    return `
+      <form class="chk-nova" onsubmit="addChk(event)">
+        <input type="text" id="chkNova" placeholder="${ehIdeia ? 'Nova ideia... ex: carrossel nichos diferentes UGC' : 'Nova tarefa macro... ex: atualizar mídia kit'}" autocomplete="off">
+        ${ehIdeia ? `<select id="chkNovaFormato" aria-label="Formato">
+          <option value="">Formato</option>
+          ${CAL_TIPOS.map(t => `<option value="${t}">${t}</option>`).join('')}
+        </select>` : ''}
+        <button type="submit" class="btn btn-primary" style="padding: 9px 14px;">Adicionar</button>
+      </form>
+      <div class="fin-chips" style="margin-bottom: 12px;">${filtros.map(f =>
+        `<button type="button" class="fin-chip ${f.key === filtro.key ? 'active' : ''}" onclick="setChkFiltro('${f.key}')">${f.label}<span class="n">${todas.filter(f.fn).length}</span></button>`
+      ).join('')}</div>
+      ${lista.length
+        ? `<div class="chk-lista">${lista.map(i => ehIdeia ? chkIdeiaHtml(i) : chkItemHtml(i)).join('')}</div>`
+        : `<div class="empty-state">${vazio}</div>`}`;
+  }
+
+  function chkIdeiaHtml(i) {
+    const meta = i.agendada_para
+      ? `<span class="chk-meta agendada">no calendário · ${finDataBR(i.agendada_para)}</span>`
+      : (i.formato || '');
+    const agendar = i.agendada_para ? '' : `<button type="button" class="chk-acao chk-agendar" title="Mandar para o calendário" onclick="agendarIdeia(${i.id})">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2M3 9h18"/></svg>Agendar</button>`;
+    return chkItemHtml(i, meta, agendar);
+  }
+
+  // ---------- item (igual nas três listas) ----------
+  function chkItemHtml(i, meta, acoes) {
+    const texto = editingChkId === i.id
+      ? `<input type="text" class="chk-texto-input" id="chkEditInput" value="${escRot(i.texto)}"
+           onkeydown="if (event.key === 'Enter') saveEditChk(${i.id}, this.value); if (event.key === 'Escape') cancelEditChk();"
+           onblur="saveEditChk(${i.id}, this.value)">`
+      : `<button type="button" class="chk-texto" title="Clique para editar" onclick="startEditChk(${i.id})">${escRot(i.texto)}</button>`;
+    const metaHtml = !meta ? '' : meta.startsWith('<') ? meta : `<span class="chk-meta">${escRot(meta)}</span>`;
+    return `
+      <div class="chk ${i.feita ? 'feita' : ''}">
+        <input type="checkbox" ${i.feita ? 'checked' : ''} aria-label="Feita: ${escRot(i.texto)}" onchange="chkAtualiza(${i.id}, { feita: this.checked })">
+        ${texto}
+        ${metaHtml}
+        ${acoes || ''}
+        <button type="button" class="chk-acao" title="Apagar" aria-label="Apagar" onclick="deleteChk(${i.id})">${ICON_TRASH}</button>
+      </div>`;
+  }
+
+  async function chkAtualiza(id, campos) {
+    const i = chkCache.find(x => x.id === id);
+    if (!i) return;
+    const antes = { ...i };
+    Object.assign(i, campos);
+    renderChecklist();
+    try {
+      const { error } = await supabase.from('checklist_itens').update(campos).eq('id', id);
+      if (error) throw error;
+    } catch (err) {
+      console.error(err);
+      Object.assign(i, antes);
+      renderChecklist();
+      alert('Erro ao salvar: ' + err.message);
+    }
+  }
+
+  async function addChk(ev, area) {
+    ev.preventDefault();
+    const input = document.getElementById(area ? `chkNova-${area}` : 'chkNova');
+    const texto = input.value.trim();
+    if (!texto) { input.focus(); return; }
+    const payload = { lista: chkLista, texto };
+    if (chkLista === 'dia') { payload.area = area; payload.dia = chkDia; }
+    if (chkLista === 'ideias') payload.formato = document.getElementById('chkNovaFormato').value || null;
+    input.disabled = true;
+    try {
+      const { data, error } = await supabase.from('checklist_itens').insert(payload).select().single();
+      if (error) throw error;
+      chkCache.push(data);
+      if (chkFiltro === 'feitas') chkFiltro = 'pendentes';
+      renderChecklist();
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao salvar: ' + err.message);
+      input.disabled = false;
+      return;
+    }
+    // a lista foi redesenhada: volta o cursor para o campo, pronto para a próxima
+    const novo = document.getElementById(area ? `chkNova-${area}` : 'chkNova');
+    if (novo) novo.focus();
+  }
+
+  function startEditChk(id) { editingChkId = id; renderChecklist(); }
+  function cancelEditChk() { editingChkId = null; renderChecklist(); }
+  function saveEditChk(id, valor) {
+    if (editingChkId !== id) return;
+    editingChkId = null;
+    const texto = valor.trim();
+    const i = chkCache.find(x => x.id === id);
+    if (!texto || !i || texto === i.texto) { renderChecklist(); return; }
+    chkAtualiza(id, { texto });
+  }
+
+  function agendarIdeia(id) {
+    const i = chkCache.find(x => x.id === id);
+    if (!i) return;
+    openCalPostModal(null, finHojeISO());
+    calIdeiaId = id;
+    document.getElementById('calPostModalTitle').textContent = 'Agendar ideia';
+    document.getElementById('calPostTitulo').value = i.texto;
+    if (i.formato) document.getElementById('calPostTipo').value = i.formato;
+    document.getElementById('calPostData').focus();
+  }
+
+  async function deleteChk(id) {
+    if (!confirm('Apagar este item? Não dá para desfazer.')) return;
+    try {
+      const { error } = await supabase.from('checklist_itens').delete().eq('id', id);
+      if (error) throw error;
+      chkCache = chkCache.filter(x => x.id !== id);
+      renderChecklist();
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao apagar: ' + err.message);
+    }
   }
 
   // ========================================================================
