@@ -27,3 +27,6 @@ create policy "posts_calendario: so a dona"
   to authenticated
   using (true)
   with check (true);
+
+-- Marca dos posts que performaram bem (referência para os próximos conteúdos)
+alter table posts_calendario add column if not exists performou_bem boolean not null default false;
