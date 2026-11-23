@@ -510,6 +510,113 @@
       line-height: 1.6;
     }
 
+    /* ==================== CALENDÁRIO ==================== */
+    .cal-resumo { font-size: 13px; color: #77716b; margin-left: auto; }
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      background: white;
+      border: 1px solid var(--detail);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .cal-semana {
+      background: var(--paper-warm);
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 10px 4px;
+      border-bottom: 1px solid var(--detail);
+    }
+    .cal-dia {
+      min-height: 118px;
+      padding: 6px;
+      border-right: 1px solid var(--gray-light);
+      border-bottom: 1px solid var(--gray-light);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+      min-width: 0;
+    }
+    .cal-dia:nth-child(7n) { border-right: none; }
+    .cal-dia.fora { background: #faf9f7; }
+    .cal-dia.hoje { background: #fdf1f2; }
+    .cal-dia.hoje .cal-num { background: var(--pink); color: white; }
+    .cal-dia.alvo { outline: 2px dashed var(--pink); outline-offset: -3px; }
+    .cal-dia-head { display: flex; justify-content: space-between; align-items: center; }
+    .cal-num {
+      font-size: 12px;
+      font-weight: 600;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cal-semana-mob { display: none; }
+    .cal-vazio-mob { display: none; }
+    .cal-add {
+      border: none;
+      background: none;
+      color: var(--detail);
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0 4px;
+      opacity: 0;
+    }
+    .cal-dia:hover .cal-add, .cal-add:focus { opacity: 1; }
+    .cal-add:hover { color: var(--pink); }
+    .cal-post {
+      display: flex;
+      align-items: flex-start;
+      gap: 5px;
+      padding: 4px 5px;
+      border-radius: 5px;
+      background: var(--paper);
+      font-size: 12px;
+      line-height: 1.3;
+      cursor: grab;
+    }
+    .cal-post.publi { background: #fbe7ea; }
+    .cal-post.publi .cal-post-titulo { color: var(--pink-dark); }
+    .cal-post.feito { opacity: 0.55; }
+    .cal-post.feito .cal-post-titulo { text-decoration: line-through; }
+    .cal-post input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      margin: 1px 0 0;
+      padding: 0;
+      flex-shrink: 0;
+      accent-color: var(--green);
+      cursor: pointer;
+    }
+    .cal-post-titulo {
+      background: none;
+      border: none;
+      padding: 0;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      color: var(--ink);
+      overflow-wrap: anywhere;
+      flex: 1;
+    }
+    .cal-post-tipo { display: block; font-size: 10px; color: #8a847e; text-decoration: none; }
+    .cal-aviso { margin-bottom: 12px; }
+    @media (max-width: 768px) {
+      .cal-grid { grid-template-columns: 1fr; }
+      .cal-semana, .cal-dia.fora, .cal-dia.vazio:not(.hoje) { display: none; }
+      .cal-dia { min-height: 0; border-right: none; padding: 10px; }
+      .cal-semana-mob { display: inline; font-size: 12px; color: #77716b; margin-left: 6px; }
+      .cal-vazio-mob { display: block; }
+      .cal-add { opacity: 1; }
+      .cal-post { font-size: 13px; padding: 7px 8px; }
+    }
+
     /* ==================== FINANÇAS ==================== */
     .fin-top {
       display: flex;
@@ -1441,6 +1548,44 @@
     <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px;">
       <button class="btn btn-secondary" onclick="closeRoteiroModal()">Cancelar</button>
       <button class="btn btn-primary" id="roteiroSaveBtn" onclick="saveRoteiro()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Adicionar/Editar post do calendário -->
+<div class="modal" id="calPostModal">
+  <div class="modal-content" style="max-width: 480px;">
+    <div class="modal-header">
+      <h2 id="calPostModalTitle">Novo post</h2>
+      <button class="modal-close" onclick="closeCalPostModal()">×</button>
+    </div>
+
+    <div class="form-group">
+      <label for="calPostTitulo">Conteúdo</label>
+      <input type="text" id="calPostTitulo" placeholder="Ex: carrossel fotos viagem">
+    </div>
+    <div class="form-group">
+      <label for="calPostData">Data</label>
+      <input type="date" id="calPostData">
+    </div>
+    <div class="form-group">
+      <label for="calPostTipo">Formato</label>
+      <select id="calPostTipo"></select>
+    </div>
+    <div class="form-group">
+      <label for="calPostObs">Observações</label>
+      <textarea id="calPostObs" rows="3" placeholder="Legenda, ideias, links..."></textarea>
+    </div>
+    <label style="display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;">
+      <input type="checkbox" id="calPostPublicado" style="width: auto; padding: 0;"> Já publiquei
+    </label>
+
+    <div id="calPostModalError" style="display: none; margin-top: 12px; padding: 10px 12px; background: #fbe9e9; color: #a33; border-radius: 6px; font-size: 13px;"></div>
+
+    <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px;">
+      <button class="btn btn-secondary" id="calPostDeleteBtn" onclick="deleteCalPost()" style="margin-right: auto;">Apagar</button>
+      <button class="btn btn-secondary" onclick="closeCalPostModal()">Cancelar</button>
+      <button class="btn btn-primary" id="calPostSaveBtn" onclick="saveCalPost()">Salvar</button>
     </div>
   </div>
 </div>
@@ -2945,9 +3090,249 @@
   // ABA 3: CALENDÁRIO
   // ========================================================================
 
+  // Posts planejados para o @byfeguimaraes (tabela posts_calendario).
+  // Clique no título para editar (nome, data, formato), marque o check quando
+  // publicar e arraste um post para outro dia para mudar a data.
+  let calCache = [];
+  let calMes = { a: new Date().getFullYear(), m: new Date().getMonth() };
+  let editingCalPostId = null;
+  let calArrastando = null;
+  const CAL_TIPOS = ['Reels', 'Carrossel', 'Stories', 'Foto', 'Publi'];
+  const CAL_SEMANA = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+
+  function calISO(a, m, d) {
+    return `${a}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  }
+
   async function loadCalendario() {
     const content = document.querySelector('.content');
-    content.innerHTML = '<div class="empty-state">Seção de Calendário em desenvolvimento</div>';
+    try {
+      const { data, error } = await supabase.from('posts_calendario').select('*')
+        .order('data').order('criado_em');
+      if (error) throw error;
+      calCache = data || [];
+      content.innerHTML = `
+        <div class="fin-top">
+          <p style="font-size: 14px; color: #77716b; max-width: 560px; line-height: 1.5;">Posts do @byfeguimaraes. Clique no nome para editar, marque o check quando publicar e arraste para outro dia para mudar a data.</p>
+          <button class="btn btn-primary" style="padding: 9px 14px;" onclick="openCalPostModal()">+ Novo post</button>
+        </div>
+        <div class="fin-periodo" id="calPeriodo"></div>
+        <div id="calGrid"></div>
+      `;
+      renderCalendario();
+    } catch (err) {
+      console.error(err);
+      content.innerHTML = /posts_calendario/i.test(err.message || '')
+        ? '<div class="error-message">Falta criar a tabela do calendário. Rode o arquivo <strong>criar-calendario.sql</strong> no SQL Editor do Supabase e recarregue esta página.</div>'
+        : `<div class="error-message">Erro ao carregar o calendário: ${escRot(err.message)}</div>`;
+    }
+  }
+
+  function calMudaMes(delta) {
+    let { a, m } = calMes;
+    m += delta;
+    if (m < 0) { m = 11; a--; }
+    if (m > 11) { m = 0; a++; }
+    calMes = { a, m };
+    renderCalendario();
+  }
+  function setCalPeriodo() {
+    calMes = { a: Number(document.getElementById('calAnoSel').value), m: Number(document.getElementById('calMesSel').value) };
+    renderCalendario();
+  }
+  function calHoje() {
+    const h = new Date();
+    calMes = { a: h.getFullYear(), m: h.getMonth() };
+    renderCalendario();
+  }
+
+  function renderCalendario() {
+    const grid = document.getElementById('calGrid');
+    if (!grid) return;
+    const { a, m } = calMes;
+    const h = new Date();
+    const hoje = finHojeISO();
+
+    // anos no seletor: este, o próximo, 2027 e qualquer ano que já tenha post
+    const anos = new Set([h.getFullYear(), h.getFullYear() + 1, 2027, a]);
+    calCache.forEach(p => anos.add(finParseData(p.data).a));
+    const doMes = calCache.filter(p => { const d = finParseData(p.data); return d.a === a && d.m === m; });
+    const feitos = doMes.filter(p => p.publicado).length;
+    document.getElementById('calPeriodo').innerHTML = `
+      <button type="button" class="fin-seta" title="Mês anterior" aria-label="Mês anterior" onclick="calMudaMes(-1)">‹</button>
+      <select id="calMesSel" onchange="setCalPeriodo()">${FIN_MESES.map((nome, i) =>
+        `<option value="${i}" ${i === m ? 'selected' : ''}>${nome}</option>`).join('')}</select>
+      <select id="calAnoSel" onchange="setCalPeriodo()">${[...anos].sort().map(ano =>
+        `<option value="${ano}" ${ano === a ? 'selected' : ''}>${ano}</option>`).join('')}</select>
+      <button type="button" class="fin-seta" title="Próximo mês" aria-label="Próximo mês" onclick="calMudaMes(1)">›</button>
+      <button type="button" class="fin-chip" onclick="calHoje()">Hoje</button>
+      <span class="cal-resumo">${doMes.length} ${doMes.length === 1 ? 'post' : 'posts'} · ${feitos} ${feitos === 1 ? 'publicado' : 'publicados'}</span>
+    `;
+
+    // grade de semanas completas (domingo a sábado), com os dias vizinhos apagados
+    const inicio = new Date(a, m, 1);
+    inicio.setDate(1 - inicio.getDay());
+    const fim = new Date(a, m + 1, 0);
+    fim.setDate(fim.getDate() + (6 - fim.getDay()));
+
+    let html = CAL_SEMANA.map(s => `<div class="cal-semana">${s}</div>`).join('');
+    for (const d = new Date(inicio); d <= fim; d.setDate(d.getDate() + 1)) {
+      const iso = calISO(d.getFullYear(), d.getMonth(), d.getDate());
+      const posts = calCache.filter(p => p.data === iso);
+      const classes = ['cal-dia'];
+      if (d.getMonth() !== m) classes.push('fora');
+      if (iso === hoje) classes.push('hoje');
+      if (!posts.length) classes.push('vazio');
+      html += `
+        <div class="${classes.join(' ')}" data-dia="${iso}"
+             ondragover="calDragOver(event)" ondragleave="calDragLeave(event)" ondrop="calDrop(event)">
+          <div class="cal-dia-head">
+            <span><span class="cal-num">${d.getDate()}</span><span class="cal-semana-mob">${CAL_SEMANA[d.getDay()].toLowerCase()}</span></span>
+            <button type="button" class="cal-add" title="Novo post neste dia" aria-label="Novo post em ${finDataBR(iso)}" onclick="openCalPostModal(null, '${iso}')">+</button>
+          </div>
+          ${posts.map(calPostHtml).join('')}
+        </div>`;
+    }
+    grid.innerHTML = `<div class="cal-grid">${html}</div>` + (doMes.length ? '' :
+      `<div class="empty-state cal-vazio-mob">Nenhum post em ${FIN_MESES[m].toLowerCase()}. Toque em + Novo post para começar.</div>`);
+  }
+
+  function calPostHtml(p) {
+    const classes = ['cal-post'];
+    if (p.tipo === 'Publi') classes.push('publi');
+    if (p.publicado) classes.push('feito');
+    return `
+      <div class="${classes.join(' ')}" draggable="true" ondragstart="calDragStart(event, ${p.id})" ondragend="calDragEnd()">
+        <input type="checkbox" ${p.publicado ? 'checked' : ''} title="Publicado" aria-label="Publicado: ${escRot(p.titulo)}" onchange="toggleCalPublicado(${p.id}, this.checked)">
+        <button type="button" class="cal-post-titulo" onclick="openCalPostModal(${p.id})">
+          ${escRot(p.titulo)}<span class="cal-post-tipo">${escRot(p.tipo)}</span>
+        </button>
+      </div>`;
+  }
+
+  async function calAtualizaPost(id, campos) {
+    const p = calCache.find(x => x.id === id);
+    if (!p) return;
+    const antes = { ...p };
+    Object.assign(p, campos);
+    renderCalendario();
+    try {
+      const { error } = await supabase.from('posts_calendario')
+        .update({ ...campos, atualizado_em: new Date().toISOString() }).eq('id', id);
+      if (error) throw error;
+    } catch (err) {
+      console.error(err);
+      Object.assign(p, antes);
+      renderCalendario();
+      alert('Erro ao salvar: ' + err.message);
+    }
+  }
+
+  function toggleCalPublicado(id, checked) { calAtualizaPost(id, { publicado: checked }); }
+
+  function calDragStart(ev, id) {
+    calArrastando = id;
+    ev.dataTransfer.effectAllowed = 'move';
+    ev.dataTransfer.setData('text/plain', String(id));
+  }
+  function calDragEnd() {
+    calArrastando = null;
+    document.querySelectorAll('.cal-dia.alvo').forEach(el => el.classList.remove('alvo'));
+  }
+  function calDragOver(ev) {
+    if (calArrastando == null) return;
+    ev.preventDefault();
+    ev.currentTarget.classList.add('alvo');
+  }
+  function calDragLeave(ev) {
+    if (!ev.currentTarget.contains(ev.relatedTarget)) ev.currentTarget.classList.remove('alvo');
+  }
+  function calDrop(ev) {
+    ev.preventDefault();
+    const id = calArrastando;
+    const dia = ev.currentTarget.dataset.dia;
+    calDragEnd();
+    const p = calCache.find(x => x.id === id);
+    if (p && p.data !== dia) calAtualizaPost(id, { data: dia });
+  }
+
+  function openCalPostModal(id, dia) {
+    editingCalPostId = id || null;
+    const p = editingCalPostId ? calCache.find(x => x.id === editingCalPostId) : null;
+    const h = new Date();
+    const padrao = (calMes.a === h.getFullYear() && calMes.m === h.getMonth()) ? finHojeISO() : calISO(calMes.a, calMes.m, 1);
+
+    document.getElementById('calPostModalTitle').textContent = p ? 'Editar post' : 'Novo post';
+    document.getElementById('calPostModalError').style.display = 'none';
+    document.getElementById('calPostTipo').innerHTML = CAL_TIPOS.map(t => `<option value="${t}">${t}</option>`).join('');
+    document.getElementById('calPostTitulo').value = p?.titulo || '';
+    document.getElementById('calPostData').value = p?.data || dia || padrao;
+    document.getElementById('calPostTipo').value = p?.tipo || 'Reels';
+    document.getElementById('calPostObs').value = p?.obs || '';
+    document.getElementById('calPostPublicado').checked = !!p?.publicado;
+    document.getElementById('calPostDeleteBtn').style.display = p ? '' : 'none';
+    document.getElementById('calPostModal').classList.add('show');
+    document.getElementById('calPostTitulo').focus();
+  }
+
+  function closeCalPostModal() {
+    document.getElementById('calPostModal').classList.remove('show');
+  }
+
+  async function saveCalPost() {
+    const titulo = document.getElementById('calPostTitulo').value.trim();
+    const data = document.getElementById('calPostData').value;
+    const errBox = document.getElementById('calPostModalError');
+    if (!titulo || !data) {
+      errBox.textContent = !titulo ? 'Dê um nome ao conteúdo.' : 'Escolha a data do post.';
+      errBox.style.display = 'block';
+      return;
+    }
+
+    const payload = {
+      titulo: titulo,
+      data: data,
+      tipo: document.getElementById('calPostTipo').value,
+      obs: document.getElementById('calPostObs').value.trim() || null,
+      publicado: document.getElementById('calPostPublicado').checked,
+      atualizado_em: new Date().toISOString()
+    };
+
+    const btn = document.getElementById('calPostSaveBtn');
+    btn.disabled = true;
+    btn.textContent = 'Salvando...';
+
+    try {
+      const { error } = editingCalPostId
+        ? await supabase.from('posts_calendario').update(payload).eq('id', editingCalPostId)
+        : await supabase.from('posts_calendario').insert(payload);
+      if (error) throw error;
+      // abre o calendário no mês do post salvo, para ver onde ele caiu
+      const d = finParseData(data);
+      calMes = { a: d.a, m: d.m };
+      closeCalPostModal();
+      loadCalendario();
+    } catch (err) {
+      console.error(err);
+      errBox.textContent = 'Erro ao salvar: ' + err.message;
+      errBox.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Salvar';
+    }
+  }
+
+  async function deleteCalPost() {
+    if (!editingCalPostId || !confirm('Apagar este post do calendário? Não dá para desfazer.')) return;
+    try {
+      const { error } = await supabase.from('posts_calendario').delete().eq('id', editingCalPostId);
+      if (error) throw error;
+      closeCalPostModal();
+      loadCalendario();
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao apagar: ' + err.message);
+    }
   }
 
   // ========================================================================
