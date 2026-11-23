@@ -443,6 +443,7 @@
     input[type="text"],
     input[type="email"],
     input[type="tel"],
+    input[type="url"],
     input[type="date"],
     textarea,
     select {
@@ -728,6 +729,61 @@
       .chk-texto { flex-basis: calc(100% - 30px); }
       .chk-meta { margin-left: 28px; margin-right: auto; }
     }
+
+    /* ==================== AFILIADOS ==================== */
+    .afil-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+    .afil-card {
+      background: white;
+      border: 1px solid var(--gray-light);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+    }
+    .afil-card.encerrado { opacity: 0.6; }
+    .afil-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+    .afil-marca { font-weight: 600; font-size: 16px; margin-bottom: 4px; overflow-wrap: anywhere; }
+    .afil-desconto {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      background: #fbe7ea;
+      color: var(--pink-dark);
+      border-radius: 20px;
+      padding: 2px 9px;
+      margin-right: 4px;
+    }
+    .afil-tag-encerrado { background: var(--gray-light); color: #6b6661; }
+    .afil-campo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--paper);
+      border-radius: 8px;
+      padding: 8px 10px;
+      min-width: 0;
+    }
+    .afil-rotulo { font-size: 11px; color: #8a847e; width: 42px; flex-shrink: 0; }
+    .afil-cupom { flex: 1; font-size: 14px; font-weight: 700; letter-spacing: 0.04em; overflow-wrap: anywhere; }
+    .afil-link { flex: 1; min-width: 0; font-size: 13px; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .afil-copiar {
+      border: 1px solid var(--detail);
+      background: white;
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-family: inherit;
+      cursor: pointer;
+      flex-shrink: 0;
+      color: var(--ink);
+    }
+    .afil-copiar:hover { border-color: var(--ink); }
+    .afil-copiar.ok { background: var(--green); border-color: var(--green); color: white; }
+    .afil-meta { font-size: 12px; color: #8a847e; }
+    .afil-vencido { color: #a33; }
+    .afil-obs { font-size: 13px; color: #55504b; line-height: 1.4; white-space: pre-wrap; }
 
     /* ==================== FINANÇAS ==================== */
     .fin-top {
@@ -1358,6 +1414,12 @@
       </svg>
       Finanças
     </button>
+    <button class="nav-item" data-tab="afiliados">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/>
+      </svg>
+      Afiliados
+    </button>
   </div>
 
   <div class="sidebar-footer">
@@ -1705,6 +1767,55 @@
   </div>
 </div>
 
+<!-- Modal: Adicionar/Editar afiliado -->
+<div class="modal" id="afilModal">
+  <div class="modal-content" style="max-width: 520px;">
+    <div class="modal-header">
+      <h2 id="afilModalTitle">Nova marca</h2>
+      <button class="modal-close" onclick="closeAfilModal()">×</button>
+    </div>
+
+    <div class="form-group">
+      <label for="afilMarca">Marca</label>
+      <input type="text" id="afilMarca" placeholder="Ex: Sleepo">
+    </div>
+    <div class="form-group">
+      <label for="afilCupom">Cupom</label>
+      <input type="text" id="afilCupom" placeholder="Ex: FE10">
+    </div>
+    <div class="form-group">
+      <label for="afilDesconto">Desconto para quem usa</label>
+      <input type="text" id="afilDesconto" placeholder="Ex: 10% off, frete grátis">
+    </div>
+    <div class="form-group">
+      <label for="afilLink">Link de afiliada</label>
+      <input type="url" id="afilLink" placeholder="https://...">
+    </div>
+    <div class="form-group">
+      <label for="afilComissao">Sua comissão</label>
+      <input type="text" id="afilComissao" placeholder="Ex: 15% por venda">
+    </div>
+    <div class="form-group">
+      <label for="afilValidade">Válido até (opcional)</label>
+      <input type="date" id="afilValidade">
+    </div>
+    <div class="form-group">
+      <label for="afilObs">Observações</label>
+      <textarea id="afilObs" rows="2" placeholder="Regras, contato, onde divulgar..."></textarea>
+    </div>
+    <label style="display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;">
+      <input type="checkbox" id="afilAtivo" style="width: auto; padding: 0;"> Parceria ativa
+    </label>
+
+    <div id="afilModalError" style="display: none; margin-top: 12px; padding: 10px 12px; background: #fbe9e9; color: #a33; border-radius: 6px; font-size: 13px;"></div>
+
+    <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px;">
+      <button class="btn btn-secondary" onclick="closeAfilModal()">Cancelar</button>
+      <button class="btn btn-primary" id="afilSaveBtn" onclick="saveAfiliado()">Salvar</button>
+    </div>
+  </div>
+</div>
+
 <!-- Modal: Adicionar/Editar marca -->
 <div class="modal" id="marcaModal">
   <div class="modal-content" style="max-width: 560px;">
@@ -1950,7 +2061,8 @@
       campanhas: 'Campanhas',
       checklist: 'Checklist',
       roteiros: 'Roteiros',
-      financas: 'Finanças'
+      financas: 'Finanças',
+      afiliados: 'Afiliados'
     };
 
     document.getElementById('pageTitle').textContent = titles[tab];
@@ -1969,6 +2081,7 @@
     else if (tab === 'checklist') loadChecklist();
     else if (tab === 'roteiros') loadRoteiros();
     else if (tab === 'financas') loadFinancas();
+    else if (tab === 'afiliados') loadAfiliados();
   }
 
   // ========================================================================
@@ -4525,6 +4638,197 @@
       const { error } = await supabase.from('roteiros').delete().eq('id', id);
       if (error) throw error;
       loadRoteiros();
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao apagar: ' + err.message);
+    }
+  }
+
+  // ========================================================================
+  // AFILIADOS
+  // ========================================================================
+  // Links e cupons de afiliada, um cartão por marca (tabela afiliados).
+  // Os botões de copiar deixam o link ou o cupom prontos para colar no story.
+
+  let afilCache = [];
+  let afilFiltro = 'ativos';
+  let editingAfilId = null;
+
+  async function loadAfiliados() {
+    const content = document.querySelector('.content');
+    try {
+      const { data, error } = await supabase.from('afiliados').select('*').order('marca');
+      if (error) throw error;
+      afilCache = data || [];
+      content.innerHTML = `
+        <div class="fin-top">
+          <input type="text" id="afilBusca" placeholder="Buscar marca ou cupom..." oninput="renderAfiliados()" style="max-width: 280px; background: white;">
+          <button class="btn btn-primary" style="padding: 9px 14px;" onclick="openAfilModal()">+ Nova marca</button>
+        </div>
+        <div class="fin-chips" id="afilFiltros" style="margin-bottom: 14px;"></div>
+        <div id="afilLista"></div>
+      `;
+      renderAfiliados();
+    } catch (err) {
+      console.error(err);
+      content.innerHTML = /afiliados/i.test(err.message || '')
+        ? '<div class="error-message">Falta criar a tabela de afiliados. Rode o arquivo <strong>criar-afiliados.sql</strong> no SQL Editor do Supabase e recarregue esta página.</div>'
+        : `<div class="error-message">Erro ao carregar afiliados: ${escRot(err.message)}</div>`;
+    }
+  }
+
+  function setAfilFiltro(f) { afilFiltro = f; renderAfiliados(); }
+
+  function renderAfiliados() {
+    const box = document.getElementById('afilLista');
+    if (!box) return;
+    const filtros = [
+      { key: 'ativos', label: 'Ativos', fn: a => a.ativo },
+      { key: 'encerrados', label: 'Encerrados', fn: a => !a.ativo },
+      { key: 'todos', label: 'Todos', fn: () => true }
+    ];
+    document.getElementById('afilFiltros').innerHTML = filtros.map(f =>
+      `<button type="button" class="fin-chip ${f.key === afilFiltro ? 'active' : ''}" onclick="setAfilFiltro('${f.key}')">${f.label}<span class="n">${afilCache.filter(f.fn).length}</span></button>`
+    ).join('');
+
+    const q = (document.getElementById('afilBusca').value || '').trim().toLowerCase();
+    const filtro = filtros.find(f => f.key === afilFiltro);
+    const lista = afilCache.filter(filtro.fn).filter(a => !q ||
+      [a.marca, a.cupom, a.obs].some(v => String(v || '').toLowerCase().includes(q)));
+
+    if (!afilCache.length) {
+      box.innerHTML = '<div class="empty-state">Nenhuma marca ainda. Clique em "+ Nova marca" para guardar o primeiro link ou cupom.</div>';
+      return;
+    }
+    if (!lista.length) {
+      box.innerHTML = '<div class="empty-state">Nenhuma marca encontrada.</div>';
+      return;
+    }
+    box.innerHTML = `<div class="afil-grid">${lista.map(afilCardHtml).join('')}</div>`;
+  }
+
+  function afilCardHtml(a) {
+    const hoje = finHojeISO();
+    let validade = '';
+    if (a.validade) {
+      const venceu = a.validade < hoje;
+      validade = `<span class="${venceu ? 'afil-vencido' : ''}">${venceu ? 'Venceu em' : 'Válido até'} ${finDataBR(a.validade)}</span>`;
+    }
+    const meta = [a.comissao ? `Comissão: ${escRot(a.comissao)}` : '', validade].filter(Boolean).join(' · ');
+    return `
+      <div class="afil-card ${a.ativo ? '' : 'encerrado'}">
+        <div class="afil-head">
+          <div style="min-width: 0;">
+            <div class="afil-marca">${escRot(a.marca)}</div>
+            ${a.desconto ? `<span class="afil-desconto">${escRot(a.desconto)}</span>` : ''}
+            ${a.ativo ? '' : '<span class="afil-desconto afil-tag-encerrado">Encerrado</span>'}
+          </div>
+          <div style="display: flex; flex-shrink: 0;">
+            <button type="button" class="chk-acao" title="Editar" aria-label="Editar ${escRot(a.marca)}" onclick="openAfilModal(${a.id})">${ICON_EDIT}</button>
+            <button type="button" class="chk-acao" title="Apagar" aria-label="Apagar ${escRot(a.marca)}" onclick="deleteAfiliado(${a.id})">${ICON_TRASH}</button>
+          </div>
+        </div>
+        ${a.cupom ? `
+          <div class="afil-campo">
+            <span class="afil-rotulo">Cupom</span>
+            <code class="afil-cupom">${escRot(a.cupom)}</code>
+            <button type="button" class="afil-copiar" onclick="copyAfil(${a.id}, 'cupom', this)">Copiar</button>
+          </div>` : ''}
+        ${a.link ? `
+          <div class="afil-campo">
+            <span class="afil-rotulo">Link</span>
+            <a class="afil-link" href="${escRot(a.link)}" target="_blank" rel="noopener" title="${escRot(a.link)}">${escRot(a.link.replace(/^https?:\/\/(www\.)?/, ''))}</a>
+            <button type="button" class="afil-copiar" onclick="copyAfil(${a.id}, 'link', this)">Copiar</button>
+          </div>` : ''}
+        ${meta ? `<div class="afil-meta">${meta}</div>` : ''}
+        ${a.obs ? `<div class="afil-obs">${escRot(a.obs)}</div>` : ''}
+      </div>`;
+  }
+
+  async function copyAfil(id, campo, btn) {
+    const a = afilCache.find(x => x.id === id);
+    if (!a || !a[campo]) return;
+    try {
+      await navigator.clipboard.writeText(a[campo]);
+      btn.textContent = 'Copiado!';
+      btn.classList.add('ok');
+      setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('ok'); }, 1400);
+    } catch (e) {
+      alert('Não consegui copiar. Selecione o texto e copie manualmente.');
+    }
+  }
+
+  function openAfilModal(id) {
+    editingAfilId = id || null;
+    const a = editingAfilId ? afilCache.find(x => x.id === editingAfilId) : null;
+    document.getElementById('afilModalTitle').textContent = a ? 'Editar afiliado' : 'Nova marca';
+    document.getElementById('afilModalError').style.display = 'none';
+    document.getElementById('afilMarca').value = a?.marca || '';
+    document.getElementById('afilCupom').value = a?.cupom || '';
+    document.getElementById('afilDesconto').value = a?.desconto || '';
+    document.getElementById('afilLink').value = a?.link || '';
+    document.getElementById('afilComissao').value = a?.comissao || '';
+    document.getElementById('afilValidade').value = a?.validade || '';
+    document.getElementById('afilObs').value = a?.obs || '';
+    document.getElementById('afilAtivo').checked = a ? !!a.ativo : true;
+    document.getElementById('afilModal').classList.add('show');
+    document.getElementById('afilMarca').focus();
+  }
+
+  function closeAfilModal() {
+    document.getElementById('afilModal').classList.remove('show');
+  }
+
+  async function saveAfiliado() {
+    const marca = document.getElementById('afilMarca').value.trim();
+    const errBox = document.getElementById('afilModalError');
+    const cupom = document.getElementById('afilCupom').value.trim();
+    let link = document.getElementById('afilLink').value.trim();
+    if (!marca || (!cupom && !link)) {
+      errBox.textContent = !marca ? 'Escreva o nome da marca.' : 'Coloque pelo menos o cupom ou o link.';
+      errBox.style.display = 'block';
+      return;
+    }
+    if (link && !/^https?:\/\//i.test(link)) link = 'https://' + link;
+
+    const payload = {
+      marca,
+      cupom: cupom || null,
+      link: link || null,
+      desconto: document.getElementById('afilDesconto').value.trim() || null,
+      comissao: document.getElementById('afilComissao').value.trim() || null,
+      validade: document.getElementById('afilValidade').value || null,
+      obs: document.getElementById('afilObs').value.trim() || null,
+      ativo: document.getElementById('afilAtivo').checked
+    };
+
+    const btn = document.getElementById('afilSaveBtn');
+    btn.disabled = true;
+    btn.textContent = 'Salvando...';
+    try {
+      const { error } = editingAfilId
+        ? await supabase.from('afiliados').update(payload).eq('id', editingAfilId)
+        : await supabase.from('afiliados').insert(payload);
+      if (error) throw error;
+      closeAfilModal();
+      loadAfiliados();
+    } catch (err) {
+      console.error(err);
+      errBox.textContent = 'Erro ao salvar: ' + err.message;
+      errBox.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Salvar';
+    }
+  }
+
+  async function deleteAfiliado(id) {
+    const a = afilCache.find(x => x.id === id);
+    if (!confirm(`Apagar ${a ? a.marca : 'este afiliado'}? Não dá para desfazer.`)) return;
+    try {
+      const { error } = await supabase.from('afiliados').delete().eq('id', id);
+      if (error) throw error;
+      loadAfiliados();
     } catch (err) {
       console.error(err);
       alert('Erro ao apagar: ' + err.message);
