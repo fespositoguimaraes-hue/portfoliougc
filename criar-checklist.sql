@@ -37,3 +37,6 @@ create policy "checklist_itens: so a dona"
 insert into checklist_itens (lista, texto, formato, feita, agendada_para, criado_em)
 select 'ideias', texto, formato, feita, agendada_para, criado_em from ideias_conteudo
 where not exists (select 1 from checklist_itens where lista = 'ideias');
+
+-- Roteiro de cada ideia de conteúdo (abre ao clicar na ideia)
+alter table checklist_itens add column if not exists roteiro text;

@@ -718,6 +718,12 @@
     .chk-atrasadas { background: #fdf1f2; border: 1px solid #f0cdd2; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; }
     .chk-atrasadas-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: var(--pink-dark); }
     .chk-vazio { font-size: 13px; color: #8a847e; padding: 6px 2px; }
+    .chk.aberta { border-color: var(--green); border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+    .chk-tem-roteiro { color: var(--green-dark); }
+    .chk-roteiro { background: white; border: 1px solid var(--green); border-top: none; border-radius: 0 0 8px 8px; margin-top: -6px; padding: 12px 14px; }
+    .chk-roteiro label { display: block; font-size: 12px; font-weight: 600; color: #8a847e; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
+    .chk-roteiro textarea { width: 100%; min-height: 180px; resize: vertical; font-family: inherit; font-size: 14px; line-height: 1.6; background: var(--paper); }
+    .chk-roteiro-rodape { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 8px; font-size: 12px; color: #8a847e; }
     @media (max-width: 768px) {
       .chk-colunas { grid-template-columns: 1fr; }
     }
@@ -4168,6 +4174,8 @@
   let chkDia = null;
   let chkFiltro = 'pendentes';
   let editingChkId = null;
+  let chkAbertoId = null;   // ideia com o roteiro aberto
+  let chkRoteiroTimer = null;
   const CHK_LISTAS = [
     { key: 'dia', label: 'Tarefas do dia' },
     { key: 'macro', label: 'Tarefas macro' },
@@ -4205,6 +4213,8 @@
   }
 
   function setChkLista(key) {
+    chkSalvaRoteiroJa();
+    chkAbertoId = null;
     chkLista = key;
     chkFiltro = 'pendentes';
     editingChkId = null;
@@ -4228,6 +4238,7 @@
       const inp = document.getElementById('chkEditInput');
       if (inp) { inp.focus(); inp.select(); }
     }
+    chkAjustaAltura(document.getElementById('chkRoteiroInput'));
   }
 
   // ---------- tarefas do dia ----------
@@ -4341,24 +4352,92 @@
   }
 
   function chkIdeiaHtml(i) {
-    const meta = i.agendada_para
+    const temRoteiro = (i.roteiro || '').trim()
+      ? `<span class="chk-meta chk-tem-roteiro" title="Tem roteiro">✎ roteiro</span>` : '';
+    const meta = temRoteiro + (i.agendada_para
       ? `<span class="chk-meta agendada">no calendário · ${finDataBR(i.agendada_para)}</span>`
-      : (i.formato || '');
+      : i.formato ? `<span class="chk-meta">${escRot(i.formato)}</span>` : '');
     const agendar = i.agendada_para ? '' : `<button type="button" class="chk-acao chk-agendar" title="Mandar para o calendário" onclick="agendarIdeia(${i.id})">
       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2M3 9h18"/></svg>Agendar</button>`;
-    return chkItemHtml(i, meta, agendar);
+    const editar = `<button type="button" class="chk-acao" title="Editar nome" aria-label="Editar nome" onclick="startEditChk(${i.id})">${ICON_EDIT}</button>`;
+    const aberto = chkAbertoId === i.id;
+    const roteiro = aberto ? `
+      <div class="chk-roteiro">
+        <label for="chkRoteiroInput">Roteiro</label>
+        <textarea id="chkRoteiroInput" placeholder="Escreva aqui o roteiro: gancho, falas, cenas, CTA..."
+          oninput="chkRoteiroDigitando(${i.id}, this)">${escRot(i.roteiro || '')}</textarea>
+        <div class="chk-roteiro-rodape">
+          <span id="chkRoteiroStatus">${(i.roteiro || '').trim() ? 'Salvo' : 'Salva sozinho enquanto você escreve'}</span>
+          <button type="button" class="btn btn-secondary" style="padding: 7px 14px;" onclick="toggleChkRoteiro(${i.id})">Fechar</button>
+        </div>
+      </div>` : '';
+    return chkItemHtml(i, meta, editar + agendar, { onclick: `toggleChkRoteiro(${i.id})`, titulo: aberto ? 'Fechar roteiro' : 'Abrir roteiro', aberto }) + roteiro;
+  }
+
+  // ---------- roteiro da ideia ----------
+  function toggleChkRoteiro(id) {
+    chkSalvaRoteiroJa();
+    chkAbertoId = chkAbertoId === id ? null : id;
+    editingChkId = null;
+    renderChecklist();
+    const ta = document.getElementById('chkRoteiroInput');
+    if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }
+  }
+
+  function chkAjustaAltura(ta) {
+    if (!ta) return;
+    ta.style.height = 'auto';
+    ta.style.height = Math.max(180, ta.scrollHeight + 2) + 'px';
+  }
+
+  function chkRoteiroDigitando(id, ta) {
+    const i = chkCache.find(x => x.id === id);
+    if (!i) return;
+    i.roteiro = ta.value;
+    i._roteiroSujo = true;
+    chkAjustaAltura(ta);
+    const st = document.getElementById('chkRoteiroStatus');
+    if (st) st.textContent = 'Salvando...';
+    clearTimeout(chkRoteiroTimer);
+    chkRoteiroTimer = setTimeout(() => chkSalvaRoteiro(id), 900);
+  }
+
+  // salva na hora o que ainda não foi salvo (ao fechar ou trocar de ideia)
+  function chkSalvaRoteiroJa() {
+    clearTimeout(chkRoteiroTimer);
+    chkCache.filter(x => x._roteiroSujo).forEach(x => chkSalvaRoteiro(x.id));
+  }
+
+  async function chkSalvaRoteiro(id) {
+    const i = chkCache.find(x => x.id === id);
+    if (!i || !i._roteiroSujo) return;
+    i._roteiroSujo = false;
+    const texto = (i.roteiro || '').trim() ? i.roteiro : null;
+    const st = () => document.getElementById('chkRoteiroStatus');
+    try {
+      const { error } = await supabase.from('checklist_itens').update({ roteiro: texto }).eq('id', id);
+      if (error) throw error;
+      if (st() && chkAbertoId === id && !i._roteiroSujo) st().textContent = 'Salvo';
+    } catch (err) {
+      console.error(err);
+      i._roteiroSujo = true;
+      if (st() && chkAbertoId === id) st().textContent = 'Não consegui salvar: ' + err.message;
+      else alert('Erro ao salvar o roteiro: ' + err.message);
+    }
   }
 
   // ---------- item (igual nas três listas) ----------
-  function chkItemHtml(i, meta, acoes) {
+  function chkItemHtml(i, meta, acoes, opc) {
     const texto = editingChkId === i.id
       ? `<input type="text" class="chk-texto-input" id="chkEditInput" value="${escRot(i.texto)}"
            onkeydown="if (event.key === 'Enter') saveEditChk(${i.id}, this.value); if (event.key === 'Escape') cancelEditChk();"
            onblur="saveEditChk(${i.id}, this.value)">`
-      : `<button type="button" class="chk-texto" title="Clique para editar" onclick="startEditChk(${i.id})">${escRot(i.texto)}</button>`;
+      : opc
+        ? `<button type="button" class="chk-texto" title="${opc.titulo}" aria-expanded="${opc.aberto}" onclick="${opc.onclick}">${escRot(i.texto)}</button>`
+        : `<button type="button" class="chk-texto" title="Clique para editar" onclick="startEditChk(${i.id})">${escRot(i.texto)}</button>`;
     const metaHtml = !meta ? '' : meta.startsWith('<') ? meta : `<span class="chk-meta">${escRot(meta)}</span>`;
     return `
-      <div class="chk ${i.feita ? 'feita' : ''}">
+      <div class="chk ${i.feita ? 'feita' : ''} ${opc?.aberto ? 'aberta' : ''}">
         <input type="checkbox" ${i.feita ? 'checked' : ''} aria-label="Feita: ${escRot(i.texto)}" onchange="chkAtualiza(${i.id}, { feita: this.checked })">
         ${texto}
         ${metaHtml}
@@ -4429,6 +4508,7 @@
     document.getElementById('calPostModalTitle').textContent = 'Agendar ideia';
     document.getElementById('calPostTitulo').value = i.texto;
     if (i.formato) document.getElementById('calPostTipo').value = i.formato;
+    if ((i.roteiro || '').trim()) document.getElementById('calPostObs').value = i.roteiro;
     document.getElementById('calPostData').focus();
   }
 
