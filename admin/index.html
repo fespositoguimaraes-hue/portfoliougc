@@ -737,6 +737,22 @@
     }
 
     /* ==================== AFILIADOS ==================== */
+    .est-atalhos { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+    .est-secao { background: var(--paper-warm); border-radius: 12px; padding: 16px 18px; margin-bottom: 16px; scroll-margin-top: 80px; }
+    .est-secao-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+    .est-secao-head h3 { font-size: 17px; margin: 0 0 3px; }
+    .est-secao-head p { font-size: 12px; color: #8a847e; margin: 0; line-height: 1.45; }
+    .est-add { flex-shrink: 0; padding: 7px 12px !important; font-size: 13px; }
+    .est-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+    .est-card { background: white; border: 1px solid var(--gray-light); border-radius: 10px; padding: 12px 14px; text-align: left; font: inherit; color: inherit; cursor: pointer; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .est-card:hover { border-color: var(--detail); }
+    .est-card-titulo { font-weight: 600; font-size: 15px; overflow-wrap: anywhere; }
+    .est-card-detalhe { align-self: flex-start; font-size: 11px; background: var(--paper); color: var(--green-dark); border-radius: 20px; padding: 2px 9px; }
+    .est-card-texto { font-size: 13px; color: #55504b; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .est-vazio { font-size: 13px; color: #8a847e; padding: 4px 2px; }
+    .est-marcas { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 12px; font-size: 12px; color: #8a847e; }
+    .est-marca { background: white; border: 1px solid var(--gray-light); border-radius: 20px; padding: 3px 10px; font-size: 12px; color: var(--ink); }
+    @media (max-width: 640px) { .est-secao { padding: 14px; } }
     .afil-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
     .afil-card {
       background: white;
@@ -1389,6 +1405,12 @@
 
   <div class="sidebar-section">
     <div class="sidebar-section-title">Minha rotina</div>
+    <button class="nav-item" data-tab="estrategia">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+      </svg>
+      Estratégia
+    </button>
     <button class="nav-item" data-tab="calendario">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2M3 9h18"/>
@@ -1779,6 +1801,42 @@
 </div>
 
 <!-- Modal: Adicionar/Editar afiliado -->
+<div class="modal" id="estModal">
+  <div class="modal-content" style="max-width: 560px;">
+    <div class="modal-header">
+      <h2 id="estModalTitle">Novo item</h2>
+      <button class="modal-close" onclick="closeEstModal()">×</button>
+    </div>
+
+    <div class="form-group">
+      <label for="estSecao">Seção</label>
+      <select id="estSecao" onchange="estAtualizaRotulos()"></select>
+    </div>
+    <div class="form-group">
+      <label for="estTitulo">Título</label>
+      <input type="text" id="estTitulo">
+    </div>
+    <div class="form-group">
+      <label for="estDetalhe" id="estDetalheLabel">Detalhe (opcional)</label>
+      <input type="text" id="estDetalhe">
+    </div>
+    <div class="form-group">
+      <label for="estTexto">Descrição</label>
+      <textarea id="estTexto" rows="6"></textarea>
+    </div>
+
+    <div id="estModalError" style="display: none; margin-top: 12px; padding: 10px 12px; background: #fbe9e9; color: #a33; border-radius: 6px; font-size: 13px;"></div>
+
+    <div style="display: flex; gap: 8px; justify-content: space-between; margin-top: 20px; flex-wrap: wrap;">
+      <button class="btn btn-secondary" id="estDeleteBtn" style="color: #a33;" onclick="deleteEstItem()">Apagar</button>
+      <div style="display: flex; gap: 8px; margin-left: auto;">
+        <button class="btn btn-secondary" onclick="closeEstModal()">Cancelar</button>
+        <button class="btn btn-primary" id="estSaveBtn" onclick="saveEstItem()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal" id="afilModal">
   <div class="modal-content" style="max-width: 520px;">
     <div class="modal-header">
@@ -2068,6 +2126,7 @@
       portfolio: 'Portfólio',
       marcas: 'Marcas',
       prospeccao: 'Prospecção',
+      estrategia: 'Estratégia de conteúdo',
       calendario: 'Calendário',
       campanhas: 'Campanhas',
       checklist: 'Checklist',
@@ -2087,6 +2146,7 @@
     if (tab === 'portfolio') loadPortfolio();
     else if (tab === 'marcas') loadMarcas();
     else if (tab === 'prospeccao') loadProspeccao();
+    else if (tab === 'estrategia') loadEstrategia();
     else if (tab === 'calendario') loadCalendario();
     else if (tab === 'campanhas') loadCampanhas();
     else if (tab === 'checklist') loadChecklist();
@@ -4723,6 +4783,155 @@
       const { error } = await supabase.from('roteiros').delete().eq('id', id);
       if (error) throw error;
       loadRoteiros();
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao apagar: ' + err.message);
+    }
+  }
+
+  // ========================================================================
+  // ESTRATÉGIA DE CONTEÚDO
+  // ========================================================================
+  // Um mapa da estratégia do @byfeguimaraes, dividido em seções
+  // (tabela estrategia_itens, coluna "secao"). Cada item é um cartão.
+
+  let estCache = [];
+  let estMarcas = [];
+  let editingEstId = null;
+  const EST_SECOES = [
+    { key: 'objetivos', label: 'Objetivos', dica: 'Onde você quer chegar com o perfil.', titulo: 'Ex: Chegar a 10 mil seguidores', detalhe: 'Prazo ou meta', exDetalhe: 'Ex: até junho/2027', exTexto: 'Por que isso importa, como vai medir...' },
+    { key: 'publico', label: 'Público', dica: 'Para quem você fala: quem te segue e quem você quer atrair.', titulo: 'Ex: Mulheres de 25 a 35 que querem virar UGC', detalhe: 'Detalhe', exDetalhe: 'Ex: público principal', exTexto: 'O que essa pessoa busca, dores, desejos...' },
+    { key: 'temas', label: 'Temas e pilares', dica: 'Os grandes temas do perfil. Tudo o que você posta cabe em um deles.', titulo: 'Ex: Bastidores de UGC', detalhe: 'Quanto do conteúdo', exDetalhe: 'Ex: 40% dos posts', exTexto: 'O que entra neste tema...' },
+    { key: 'quadros', label: 'Quadros', dica: 'Séries fixas que se repetem e o público reconhece.', titulo: 'Ex: Terça do Recebidinho', detalhe: 'Frequência e formato', exDetalhe: 'Ex: toda terça · Reels', exTexto: 'Como funciona o quadro, estrutura, gancho padrão...' },
+    { key: 'assuntos', label: 'Assuntos', dica: 'Os assuntos que você fala dentro de cada tema.', titulo: 'Ex: Quanto cobrar por um vídeo UGC', detalhe: 'Tema', exDetalhe: 'Ex: Bastidores de UGC', exTexto: 'Ângulos, referências, o que já falou...' },
+    { key: 'afiliados', label: 'Afiliados no conteúdo', dica: 'Como as marcas de afiliada entram nos seus posts e stories.', titulo: 'Ex: Sleepo no conteúdo de rotina da noite', detalhe: 'Onde divulgar', exDetalhe: 'Ex: stories 2x por semana', exTexto: 'Como encaixar sem parecer propaganda...' },
+    { key: 'tom', label: 'Tom de voz e estética', dica: 'Como você fala e como o feed se parece.', titulo: 'Ex: Próxima, como amiga contando um segredo', detalhe: 'Detalhe', exDetalhe: 'Ex: cores, fonte, filtro', exTexto: 'Palavras que você usa, o que evita...' },
+    { key: 'rotina', label: 'Rotina de postagem', dica: 'Quantas vezes e em quais formatos você posta.', titulo: 'Ex: 3 Reels por semana', detalhe: 'Quando', exDetalhe: 'Ex: seg, qua e sex às 19h', exTexto: 'Stories diários, carrossel quinzenal...' }
+  ];
+
+  async function loadEstrategia() {
+    const content = document.querySelector('.content');
+    try {
+      const { data, error } = await supabase.from('estrategia_itens').select('*').order('criado_em');
+      if (error) throw error;
+      estCache = data || [];
+      // marcas de afiliada ativas, só para mostrar como referência
+      try {
+        const r = await supabase.from('afiliados').select('marca').eq('ativo', true).order('marca');
+        estMarcas = (r.data || []).map(a => a.marca);
+      } catch (e) { estMarcas = []; }
+      renderEstrategia();
+    } catch (err) {
+      console.error(err);
+      content.innerHTML = /estrategia_itens/i.test(err.message || '')
+        ? '<div class="error-message">Falta criar a tabela da estratégia. Rode o arquivo <strong>criar-estrategia.sql</strong> no SQL Editor do Supabase e recarregue esta página.</div>'
+        : `<div class="error-message">Erro ao carregar a estratégia: ${escRot(err.message)}</div>`;
+    }
+  }
+
+  function renderEstrategia() {
+    const content = document.querySelector('.content');
+    const atalhos = EST_SECOES.map(sec => {
+      const n = estCache.filter(i => i.secao === sec.key).length;
+      return `<button type="button" class="fin-chip" onclick="document.getElementById('est-${sec.key}').scrollIntoView({ behavior: 'smooth' })">${sec.label}<span class="n">${n}</span></button>`;
+    }).join('');
+    const secoes = EST_SECOES.map(sec => {
+      const itens = estCache.filter(i => i.secao === sec.key);
+      const marcas = sec.key === 'afiliados' && estMarcas.length
+        ? `<div class="est-marcas">Afiliadas ativas: ${estMarcas.map(m => `<span class="est-marca">${escRot(m)}</span>`).join('')}</div>` : '';
+      return `
+        <section class="est-secao" id="est-${sec.key}">
+          <div class="est-secao-head">
+            <div><h3>${sec.label}</h3><p>${sec.dica}</p></div>
+            <button type="button" class="btn btn-secondary est-add" onclick="openEstModal(null, '${sec.key}')">+ Adicionar</button>
+          </div>
+          ${marcas}
+          ${itens.length
+            ? `<div class="est-grid">${itens.map(i => `
+                <button type="button" class="est-card" onclick="openEstModal(${i.id})" title="Clique para editar">
+                  <span class="est-card-titulo">${escRot(i.titulo)}</span>
+                  ${i.detalhe ? `<span class="est-card-detalhe">${escRot(i.detalhe)}</span>` : ''}
+                  ${i.texto ? `<span class="est-card-texto">${escRot(i.texto)}</span>` : ''}
+                </button>`).join('')}</div>`
+            : '<div class="est-vazio">Nada aqui ainda.</div>'}
+        </section>`;
+    }).join('');
+    content.innerHTML = `<div class="est-atalhos">${atalhos}</div>${secoes}`;
+  }
+
+  function estAtualizaRotulos() {
+    const sec = EST_SECOES.find(x => x.key === document.getElementById('estSecao').value) || EST_SECOES[0];
+    document.getElementById('estTitulo').placeholder = sec.titulo;
+    document.getElementById('estDetalheLabel').textContent = sec.detalhe + ' (opcional)';
+    document.getElementById('estDetalhe').placeholder = sec.exDetalhe;
+    document.getElementById('estTexto').placeholder = sec.exTexto;
+  }
+
+  function openEstModal(id, secao) {
+    editingEstId = id || null;
+    const i = editingEstId ? estCache.find(x => x.id === editingEstId) : null;
+    const sel = document.getElementById('estSecao');
+    sel.innerHTML = EST_SECOES.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
+    sel.value = i ? i.secao : (secao || EST_SECOES[0].key);
+    const nomeSec = EST_SECOES.find(x => x.key === sel.value)?.label || '';
+    document.getElementById('estModalTitle').textContent = i ? 'Editar' : `Novo em ${nomeSec}`;
+    document.getElementById('estTitulo').value = i?.titulo || '';
+    document.getElementById('estDetalhe').value = i?.detalhe || '';
+    document.getElementById('estTexto').value = i?.texto || '';
+    document.getElementById('estDeleteBtn').style.display = i ? '' : 'none';
+    document.getElementById('estModalError').style.display = 'none';
+    estAtualizaRotulos();
+    document.getElementById('estModal').classList.add('show');
+    document.getElementById('estTitulo').focus();
+  }
+
+  function closeEstModal() {
+    document.getElementById('estModal').classList.remove('show');
+  }
+
+  async function saveEstItem() {
+    const titulo = document.getElementById('estTitulo').value.trim();
+    const errBox = document.getElementById('estModalError');
+    if (!titulo) {
+      errBox.textContent = 'Escreva um título.';
+      errBox.style.display = 'block';
+      return;
+    }
+    const payload = {
+      secao: document.getElementById('estSecao').value,
+      titulo,
+      detalhe: document.getElementById('estDetalhe').value.trim() || null,
+      texto: document.getElementById('estTexto').value.trim() || null
+    };
+    const btn = document.getElementById('estSaveBtn');
+    btn.disabled = true;
+    btn.textContent = 'Salvando...';
+    try {
+      const { error } = editingEstId
+        ? await supabase.from('estrategia_itens').update(payload).eq('id', editingEstId)
+        : await supabase.from('estrategia_itens').insert(payload);
+      if (error) throw error;
+      closeEstModal();
+      loadEstrategia();
+    } catch (err) {
+      console.error(err);
+      errBox.textContent = 'Erro ao salvar: ' + err.message;
+      errBox.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Salvar';
+    }
+  }
+
+  async function deleteEstItem() {
+    if (!editingEstId) return;
+    const i = estCache.find(x => x.id === editingEstId);
+    if (!confirm(`Apagar "${i ? i.titulo : 'este item'}"? Não dá para desfazer.`)) return;
+    try {
+      const { error } = await supabase.from('estrategia_itens').delete().eq('id', editingEstId);
+      if (error) throw error;
+      closeEstModal();
+      loadEstrategia();
     } catch (err) {
       console.error(err);
       alert('Erro ao apagar: ' + err.message);
