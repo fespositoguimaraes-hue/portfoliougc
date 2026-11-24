@@ -988,6 +988,11 @@
     .fin-cat-top small { color: #9a948e; margin-left: 4px; }
     .fin-cat-track { background: var(--paper); border-radius: 4px; height: 8px; overflow: hidden; }
     .fin-cat-bar { background: var(--pink); height: 100%; border-radius: 4px; }
+    .fin-cat-track.ent { display: flex; }
+    .fin-cat-track.ent .fin-cat-bar { background: var(--green); border-radius: 0; }
+    .fin-cat-track.ent .fin-cat-bar.pend { background: #e2b25c; }
+    .fin-cat-sub { display: block; font-size: 11px; color: #b07a1c; margin-top: 3px; }
+    .fin-tabela td.cat-nome { white-space: nowrap; }
     .fin-legenda { display: flex; gap: 16px; font-size: 12px; color: #6b6661; flex-wrap: wrap; }
     .fin-legenda span { display: inline-flex; align-items: center; gap: 6px; }
     .fin-legenda i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
@@ -5027,6 +5032,25 @@
   }
 
   // ---------------- Mês a mês ----------------
+  // Entradas agrupadas por categoria (Job UGC, Publi, Afiliados...)
+  function finNomeCat(r) {
+    let c = r.categoria || 'Sem categoria';
+    if (finAmbito === 'todos') c += r.ambito === 'empresa' ? ' · Empresa' : ' · Pessoal';
+    return c;
+  }
+  function finEntradasPorCategoria(rows) {
+    const porCat = {};
+    rows.filter(r => r.tipo === 'entrada').forEach(r => {
+      const c = finNomeCat(r);
+      porCat[c] = porCat[c] || { total: 0, pend: 0, n: 0 };
+      const v = Number(r.valor) || 0;
+      porCat[c].total += v;
+      if (r.status === 'pendente') porCat[c].pend += v;
+      porCat[c].n++;
+    });
+    return Object.entries(porCat).sort((a, b) => b[1].total - a[1].total);
+  }
+
   function renderFinMes() {
     const body = document.getElementById('finBody');
     const rows = finDoAmbito().filter(r => {
@@ -5105,6 +5129,21 @@
             <div class="fin-cat-track"><div class="fin-cat-bar" style="width: ${(v / maxCat * 100).toFixed(1)}%"></div></div>
           </div>`).join('')
       : '<div class="empty-state" style="padding: 16px;">Nenhum gasto lançado neste mês.</div>';
+
+    // Entradas por categoria
+    const entCats = finEntradasPorCategoria(rows);
+    const maxEnt = entCats.length ? entCats[0][1].total : 0;
+    const entCatHtml = entCats.length
+      ? entCats.map(([c, g]) => `
+          <div class="fin-cat">
+            <div class="fin-cat-top"><span>${escRot(c)}</span><span>${finFmt(g.total)}<small>${previsto ? Math.round(g.total / previsto * 100) : 0}%</small></span></div>
+            <div class="fin-cat-track ent"><div style="display: flex; width: ${maxEnt ? (g.total / maxEnt * 100).toFixed(1) : 0}%;">
+              <div class="fin-cat-bar" style="width: ${g.total ? ((g.total - g.pend) / g.total * 100).toFixed(1) : 0}%"></div>
+              <div class="fin-cat-bar pend" style="width: ${g.total ? (g.pend / g.total * 100).toFixed(1) : 0}%"></div>
+            </div></div>
+            ${g.pend > 0 ? `<span class="fin-cat-sub">${finFmt(g.pend)} ainda a receber</span>` : ''}
+          </div>`).join('')
+      : '<div class="empty-state" style="padding: 16px;">Nenhuma entrada lançada neste mês.</div>';
 
     // Lista
     const filtros = [
@@ -5186,6 +5225,11 @@
           ${listaHtml}
         </div>
         <div style="min-width: 0;">
+          <div class="fin-panel">
+            <div class="fin-panel-head"><h3>De onde veio o dinheiro</h3><strong style="color: var(--green-dark);">${finFmt(previsto)}</strong></div>
+            ${entCatHtml}
+            ${entCats.some(([, g]) => g.pend > 0) ? '<p style="font-size: 11px; color: #9a948e; margin-top: 8px; line-height: 1.5;">Verde = já recebido · amarelo = ainda a receber.</p>' : ''}
+          </div>
           ${receberHtml}
           ${nfHtml}
           <div class="fin-panel">
@@ -5260,6 +5304,33 @@
     const melhor = comDados.length ? comDados.reduce((a, b) => (b.entrou > a.entrou ? b : a)) : null;
     const labelN = finAmbito === 'empresa' ? 'Jobs' : 'Entradas';
 
+    // Entradas por categoria, mês a mês (só o que já foi recebido)
+    const recebidas = rows.filter(r => r.tipo === 'entrada' && r.status !== 'pendente');
+    const catsAno = finEntradasPorCategoria(recebidas).map(([c]) => c);
+    const mesesComEnt = meses.filter(m => recebidas.some(r => finParseData(r.data).m === m.i));
+    const celula = (c, i) => finSoma(recebidas, r => finNomeCat(r) === c && (i === null || finParseData(r.data).m === i));
+    const catAnoHtml = catsAno.length ? `
+      <div class="fin-panel">
+        <div class="fin-panel-head"><h3>De onde veio o dinheiro, mês a mês</h3><span style="font-size: 12px; color: #9a948e;">Só o que já foi recebido</span></div>
+        <div class="fin-scroll">
+          <table class="fin-tabela">
+            <thead><tr><th>Categoria</th>${mesesComEnt.map(m => `<th class="num">${m.nome}</th>`).join('')}<th class="num">Total</th><th class="num">%</th></tr></thead>
+            <tbody>
+              ${catsAno.map(c => {
+                const tot = celula(c, null);
+                return `<tr>
+                  <td class="cat-nome">${escRot(c)}</td>
+                  ${mesesComEnt.map(m => { const v = celula(c, m.i); return `<td class="num" style="${v ? 'color: #3f8a5c;' : 'color: #b9b4ae;'}">${v ? finFmt(v) : '—'}</td>`; }).join('')}
+                  <td class="num" style="font-weight: 600;">${finFmt(tot)}</td>
+                  <td class="num" style="color: #9a948e;">${totalEntrou ? Math.round(tot / totalEntrou * 100) : 0}%</td>
+                </tr>`;
+              }).join('')}
+            </tbody>
+            <tfoot><tr><td>Total</td>${mesesComEnt.map(m => `<td class="num">${finFmt(m.entrou)}</td>`).join('')}<td class="num">${finFmt(totalEntrou)}</td><td class="num">100%</td></tr></tfoot>
+          </table>
+        </div>
+      </div>` : '';
+
     body.innerHTML = `
       <div class="fin-periodo">${finSelectsPeriodo(false)}</div>
       <div class="fin-cards">
@@ -5307,6 +5378,7 @@
           </table>
         </div>
       </div>
+      ${catAnoHtml}
     `;
   }
 
