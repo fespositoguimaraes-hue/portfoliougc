@@ -718,6 +718,9 @@
     .chk-atrasadas { background: #fdf1f2; border: 1px solid #f0cdd2; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; }
     .chk-atrasadas-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: var(--pink-dark); }
     .chk-vazio { font-size: 13px; color: #8a847e; padding: 6px 2px; }
+    .chk-acao.ativo { color: var(--green-dark); background: var(--paper); }
+    .chk-mover { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; background: white; border: 1px solid var(--green); border-radius: 8px; padding: 8px 10px; font-size: 12px; color: #8a847e; margin-top: -2px; }
+    .chk-mover input[type="date"] { width: auto; padding: 5px 8px; font-size: 12px; background: var(--paper); }
     .chk.aberta { border-color: var(--green); border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
     .chk-tem-roteiro { color: var(--green-dark); }
     .chk-roteiro { background: white; border: 1px solid var(--green); border-top: none; border-radius: 0 0 8px 8px; margin-top: -6px; padding: 12px 14px; }
@@ -4235,6 +4238,7 @@
   let chkFiltro = 'pendentes';
   let editingChkId = null;
   let chkAbertoId = null;   // ideia com o roteiro aberto
+  let chkMoverId = null;    // tarefa do dia com o "passar para outro dia" aberto
   let chkRoteiroTimer = null;
   const CHK_LISTAS = [
     { key: 'dia', label: 'Tarefas do dia' },
@@ -4331,8 +4335,8 @@
             </div>
             <div class="chk-lista">${velhas.map(i => chkItemHtml(i,
               `${CHK_AREAS.find(a => a.key === i.area)?.label || ''} · ${finDataBR(i.dia).slice(0, 5)}`,
-              `<button type="button" class="chk-acao chk-agendar" title="Mudar para hoje" onclick="chkAtualiza(${i.id}, { dia: '${hoje}' })">Trazer para hoje</button>`
-            )).join('')}</div>
+              `<button type="button" class="chk-acao chk-agendar" title="Mudar para hoje" onclick="chkAtualiza(${i.id}, { dia: '${hoje}' })">Trazer para hoje</button>` + chkBotaoMover(i)
+            ) + chkMoverHtml(i)).join('')}</div>
           </div>`;
       }
     }
@@ -4347,7 +4351,7 @@
             <input type="text" id="chkNova-${area.key}" placeholder="Nova tarefa ${area.label.toLowerCase()}..." autocomplete="off">
           </form>
           ${itens.length
-            ? `<div class="chk-lista">${itens.map(i => chkItemHtml(i)).join('')}</div>`
+            ? `<div class="chk-lista">${itens.map(i => chkItemHtml(i, '', i.feita ? '' : chkBotaoMover(i)) + chkMoverHtml(i)).join('')}</div>`
             : '<div class="chk-vazio">Nada por aqui ainda.</div>'}
         </div>`;
     }).join('');
@@ -4361,6 +4365,43 @@
       </div>
       ${atrasadas}
       <div class="chk-colunas">${colunas}</div>`;
+  }
+
+  // ---------- passar tarefa para outro dia ----------
+  function chkBotaoMover(i) {
+    return `<button type="button" class="chk-acao chk-agendar ${chkMoverId === i.id ? 'ativo' : ''}" title="Passar para outro dia" aria-label="Passar para outro dia" onclick="toggleChkMover(${i.id})">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>`;
+  }
+
+  function chkMoverHtml(i) {
+    if (chkMoverId !== i.id) return '';
+    const hoje = finHojeISO();
+    const p = finParseData(hoje);
+    const dow = new Date(p.a, p.m, p.d).getDay();
+    const segunda = finSomaDias(hoje, ((8 - dow) % 7) || 7);
+    const opcoes = [
+      { dia: finSomaDias(hoje, 1), label: 'Amanhã' },
+      { dia: finSomaDias(hoje, 2), label: 'Depois de amanhã' },
+      { dia: segunda, label: 'Próxima segunda' }
+    ].filter((o, idx, arr) => o.dia !== i.dia && arr.findIndex(x => x.dia === o.dia) === idx);
+    if (i.dia > hoje) opcoes.unshift({ dia: hoje, label: 'Hoje' });
+    return `
+      <div class="chk-mover">
+        <span>Passar para:</span>
+        ${opcoes.map(o => `<button type="button" class="fin-chip" onclick="chkMoverPara(${i.id}, '${o.dia}')">${o.label}<span class="n">${finDataBR(o.dia).slice(0, 5)}</span></button>`).join('')}
+        <input type="date" aria-label="Escolher outro dia" min="${hoje}" onchange="if (this.value) chkMoverPara(${i.id}, this.value)">
+        <button type="button" class="chk-acao" title="Cancelar" aria-label="Cancelar" onclick="toggleChkMover(${i.id})">×</button>
+      </div>`;
+  }
+
+  function toggleChkMover(id) {
+    chkMoverId = chkMoverId === id ? null : id;
+    renderChecklist();
+  }
+
+  function chkMoverPara(id, dia) {
+    chkMoverId = null;
+    chkAtualiza(id, { dia });
   }
 
   async function chkTrazerTodas() {
